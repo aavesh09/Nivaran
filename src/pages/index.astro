@@ -1,11 +1,135 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import StatCard from '../components/StatCard.astro';
+import PilotCard from '../components/PilotCard.astro';
+import ProblemCard from '../components/ProblemCard.astro';
+import Badge from '../components/Badge.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import problems from '../data/problems.json';
+import startups from '../data/startups.json';
+import pilots from '../data/pilots.json';
+
+const activePilots = pilots.filter(p => p.status === 'active');
+const completedPilots = pilots.filter(p => p.status === 'completed');
+const scaledPilots = completedPilots.filter(p => p.outcome === 'scale');
+const successRate = completedPilots.length > 0 ? Math.round((scaledPilots.length / completedPilots.length) * 100) : 0;
+const openProblems = problems.filter(p => p.status === 'open');
+const recentProblems = problems.slice(0, 3);
+
+const breadcrumbs = [{ label: 'Dashboard' }];
 ---
 
-<Layout>
-	<Welcome />
+<Layout pageTitle="Dashboard" breadcrumbs={breadcrumbs}>
+  <!-- Page heading -->
+  <div class="mb-8 animate-fade-in">
+    <h1 class="font-display text-3xl font-bold">
+      Welcome to <span class="gradient-text">GovPilot</span>
+    </h1>
+    <p class="text-text-secondary mt-2">Government innovation pilot management at a glance.</p>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+    <StatCard label="Total Problems" value={problems.length} icon="📋" trend="+2 this week" trendUp={true} delay={0} />
+    <StatCard label="Active Pilots" value={activePilots.length} icon="🚀" trend="On track" trendUp={true} delay={100} />
+    <StatCard label="Matched Startups" value={pilots.length} icon="🤝" delay={200} />
+    <StatCard label="Success Rate" value={`${successRate}%`} icon="🎯" trend={`${scaledPilots.length} scaled`} trendUp={successRate > 50} delay={300} />
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <!-- Active Pilots -->
+    <div class="xl:col-span-2 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-xl font-bold text-text-primary">Active Pilots</h2>
+        <a href="/pilots" class="text-sm text-teal-400 hover:text-teal-300 transition-colors flex items-center gap-1">
+          View all
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+      </div>
+      <div class="space-y-3">
+        {activePilots.map((pilot, i) => {
+          const problem = problems.find(p => p.id === pilot.problemId);
+          const startup = startups.find(s => s.id === pilot.startupId);
+          return (
+            <div class="animate-slide-up opacity-0" style={`animation-delay: ${(i + 1) * 100}ms; animation-fill-mode: forwards;`}>
+              <PilotCard {...pilot} problemTitle={problem?.title} startupName={startup?.name} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Right sidebar: Recent Activity & Quick Actions -->
+    <div class="space-y-6">
+      <!-- Quick Actions -->
+      <div class="glass p-5 space-y-3 animate-slide-up opacity-0" style="animation-delay: 200ms; animation-fill-mode: forwards;">
+        <h3 class="font-display font-bold text-text-primary">Quick Actions</h3>
+        <div class="space-y-2">
+          <a href="/problems/new" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-500/20 text-sm text-teal-400 hover:from-teal-500/20 hover:to-blue-500/20 transition-all group">
+            <svg class="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Submit New Problem
+          </a>
+          <a href="/startups/match" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-text-secondary hover:bg-white/[0.06] hover:text-text-primary transition-all">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            Find Startup Match
+          </a>
+          <a href="/pilots/new" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-text-secondary hover:bg-white/[0.06] hover:text-text-primary transition-all">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75z" />
+            </svg>
+            Launch New Pilot
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent Problems -->
+      <div class="animate-slide-up opacity-0" style="animation-delay: 350ms; animation-fill-mode: forwards;">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-display font-bold text-text-primary">Recent Problems</h3>
+          <a href="/problems" class="text-xs text-teal-400 hover:text-teal-300 transition-colors">View all</a>
+        </div>
+        <div class="space-y-3">
+          {recentProblems.map(problem => (
+            <ProblemCard {...problem} />
+          ))}
+        </div>
+      </div>
+
+      <!-- Completed Pilots Summary -->
+      <div class="glass p-5 space-y-3 animate-slide-up opacity-0" style="animation-delay: 450ms; animation-fill-mode: forwards;">
+        <h3 class="font-display font-bold text-text-primary">Completed Pilots</h3>
+        <div class="space-y-3">
+          {completedPilots.map(pilot => (
+            <a href={`/pilots/${pilot.id}`} class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/[0.04] transition-colors group">
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-text-primary truncate group-hover:text-teal-400 transition-colors">{pilot.title.split(' — ')[0]}</p>
+              </div>
+              {pilot.outcome && (
+                <Badge variant={pilot.outcome === 'scale' ? 'success' : pilot.outcome === 'extend' ? 'info' : 'danger'}>
+                  {pilot.outcome === 'scale' ? '🚀 Scale' : pilot.outcome === 'extend' ? '🔄 Extend' : '⏹️ Stop'}
+                </Badge>
+              )}
+            </a>
+          ))}
+        </div>
+        <a href="/reports" class="block text-center text-xs text-teal-400 hover:text-teal-300 transition-colors pt-2 border-t border-white/[0.06]">
+          View Full Reports →
+        </a>
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<script>
+  import { initStore } from '../scripts/store.js';
+  import problemsData from '../data/problems.json';
+  import pilotsData from '../data/pilots.json';
+
+  initStore(problemsData, pilotsData);
+</script>
