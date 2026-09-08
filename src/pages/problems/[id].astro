@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
+
+import problems from '../../data/problems.json';
+import pilots from '../../data/pilots.json';
+import startups from '../../data/startups.json';
+
+export function getStaticPaths() {
+  return problems.map(p => ({ params: { id: p.id } }));
+}
+
+const { id } = Astro.params;
+const problem = problems.find(p => p.id === id);
+
+if (!problem) {
+  return Astro.redirect('/problems');
+}
+
+const breadcrumbs = [
+  { label: 'Dashboard', href: '/' },
+  { label: 'Problems', href: '/problems' },
+  { label: problem.title },
+];
+
+const relatedPilots = pilots.filter(p => p.problemId === problem.id);
+
+const urgencyVariant = {
+  critical: 'danger',
+  high: 'warning',
+  medium: 'info',
+  low: 'neutral',
+} as const;
+
+const statusVariant = {
+  open: 'accent',
+  matched: 'info',
+  'pilot-active': 'success',
+  'pilot-completed': 'neutral',
+} as const;
+
+const domainIcons: Record<string, string> = {
+  traffic: '🚦', waste: '♻️', water: '💧', safety: '🛡️',
+  energy: '⚡', digital: '💻', environment: '🌿',
+};
+
+const formatBudget = (b: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(b);
+const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+---
+
+<Layout pageTitle={problem.title} breadcrumbs={breadcrumbs}>
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 animate-fade-in">
+      <div class="flex items-start gap-4">
+        <span class="text-4xl">{domainIcons[problem.domain] || '📋'}</span>
+        <div class="flex-1">
+          <h1 class="font-display text-2xl lg:text-3xl font-bold text-text-primary">{problem.title}</h1>
+          <p class="text-text-secondary mt-1">{problem.department} · Submitted {formatDate(problem.submittedAt)}</p>
+          <div class="flex items-center gap-2 mt-3">
+            <Badge variant={urgencyVariant[problem.urgency as keyof typeof urgencyVariant] || 'neutral'} size="md">{problem.urgency} urgency</Badge>
+            <Badge variant={statusVariant[problem.status as keyof typeof statusVariant] || 'neutral'} size="md">{problem.status.replace('-', ' ')}</Badge>
+            <Badge variant="accent" size="md">{problem.domain}</Badge>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Main -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="glass p-6 space-y-4 animate-slide-up opacity-0" style="animation-fill-mode: forwards;">
+          <h2 class="font-display text-lg font-bold text-text-primary">Problem Description</h2>
+          <p class="text-text-secondary leading-relaxed">{problem.description}</p>
+        </div>
+
+        <!-- Related Pilots -->
+        {relatedPilots.length > 0 && (
+          <div class="glass p-6 space-y-4 animate-slide-up opacity-0" style="animation-delay: 100ms; animation-fill-mode: forwards;">
+            <h2 class="font-display text-lg font-bold text-text-primary">Related Pilots</h2>
+            <div class="space-y-3">
+              {relatedPilots.map(pilot => {
+                const startup = startups.find(s => s.id === pilot.startupId);
+                return (
+                  <a href={`/pilots/${pilot.id}`} class="block glass-sm glass-hover p-4">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="font-medium text-text-primary">{pilot.title}</p>
+                        <p class="text-xs text-text-muted mt-1">{startup?.name} · {pilot.status}</p>
+                      </div>
+                      <Badge variant={pilot.status === 'active' ? 'success' : 'neutral'}>{pilot.status}</Badge>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <div class="glass p-5 space-y-4 animate-slide-right opacity-0" style="animation-delay: 100ms; animation-fill-mode: forwards;">
+          <h3 class="font-display font-bold text-sm uppercase tracking-wider text-text-muted">Details</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-text-secondary">Budget</span>
+              <span class="font-bold text-text-primary">{formatBudget(problem.budget)}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-text-secondary">Domain</span>
+              <span class="font-medium text-teal-400 capitalize">{problem.domain}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-text-secondary">Urgency</span>
+              <Badge variant={urgencyVariant[problem.urgency as keyof typeof urgencyVariant] || 'neutral'}>{problem.urgency}</Badge>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-text-secondary">Status</span>
+              <Badge variant={statusVariant[problem.status as keyof typeof statusVariant] || 'neutral'}>{problem.status.replace('-', ' ')}</Badge>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="glass p-5 space-y-3 animate-slide-right opacity-0" style="animation-delay: 200ms; animation-fill-mode: forwards;">
+          <h3 class="font-display font-bold text-sm uppercase tracking-wider text-text-muted">Actions</h3>
+          <a href={`/startups/match`} class="flex items-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-500/20 text-sm text-teal-400 hover:from-teal-500/20 hover:to-blue-500/20 transition-all">
+            🔍 Find Startup Matches
+          </a>
+          <a href={`/pilots/new?problem=${problem.id}`} class="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-text-secondary hover:bg-white/[0.06] hover:text-text-primary transition-all">
+            🚀 Create Pilot
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

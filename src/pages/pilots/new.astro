@@ -1,0 +1,214 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
+
+import problems from '../../data/problems.json';
+import startups from '../../data/startups.json';
+
+const breadcrumbs = [
+  { label: 'Dashboard', href: '/' },
+  { label: 'Pilots', href: '/pilots' },
+  { label: 'New Pilot' },
+];
+
+// Get query params for pre-selection
+const url = Astro.url;
+const preselectedProblem = url.searchParams.get('problem') || '';
+const preselectedStartup = url.searchParams.get('startup') || '';
+
+const openProblems = problems.filter(p => ['open', 'matched'].includes(p.status));
+
+const domainIcons: Record<string, string> = {
+  traffic: '🚦', waste: '♻️', water: '💧', safety: '🛡️',
+  energy: '⚡', digital: '💻', environment: '🌿',
+};
+---
+
+<Layout pageTitle="Launch Pilot" breadcrumbs={breadcrumbs}>
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-8 animate-fade-in">
+      <h1 class="font-display text-3xl font-bold text-text-primary">Launch a New <span class="gradient-text">Pilot</span></h1>
+      <p class="text-text-secondary mt-2">Create a time-bound pilot program with defined KPIs to evaluate a startup solution.</p>
+    </div>
+
+    <form id="pilot-form" class="space-y-8 animate-slide-up opacity-0" style="animation-fill-mode: forwards;">
+      <!-- Step 1: Problem & Startup -->
+      <div class="glass p-6 space-y-4">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="w-8 h-8 rounded-lg bg-teal-500/15 flex items-center justify-center text-teal-400 font-bold text-sm">1</span>
+          <h2 class="font-display text-lg font-bold text-text-primary">Select Problem & Startup</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="problemId" class="block text-sm font-medium text-text-primary">Problem</label>
+            <select id="problemId" name="problemId" required class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all appearance-none cursor-pointer">
+              <option value="" class="bg-navy-900">Select a problem...</option>
+              {openProblems.map(p => (
+                <option value={p.id} selected={p.id === preselectedProblem} class="bg-navy-900">
+                  {domainIcons[p.domain]} {p.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label for="startupId" class="block text-sm font-medium text-text-primary">Startup</label>
+            <select id="startupId" name="startupId" required class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all appearance-none cursor-pointer">
+              <option value="" class="bg-navy-900">Select a startup...</option>
+              {startups.map(s => (
+                <option value={s.id} selected={s.id === preselectedStartup} class="bg-navy-900">
+                  {s.name} ({s.domains.join(', ')})
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Pilot Details -->
+      <div class="glass p-6 space-y-4">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="w-8 h-8 rounded-lg bg-teal-500/15 flex items-center justify-center text-teal-400 font-bold text-sm">2</span>
+          <h2 class="font-display text-lg font-bold text-text-primary">Pilot Details</h2>
+        </div>
+
+        <div class="space-y-2">
+          <label for="pilotTitle" class="block text-sm font-medium text-text-primary">Pilot Title</label>
+          <input type="text" id="pilotTitle" name="title" required placeholder="e.g., Water Quality Monitoring Pilot" class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="startDate" class="block text-sm font-medium text-text-primary">Start Date</label>
+            <input type="date" id="startDate" name="startDate" required class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all" />
+          </div>
+          <div class="space-y-2">
+            <label for="endDate" class="block text-sm font-medium text-text-primary">End Date</label>
+            <input type="date" id="endDate" name="endDate" required class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: KPIs -->
+      <div class="glass p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-teal-500/15 flex items-center justify-center text-teal-400 font-bold text-sm">3</span>
+            <h2 class="font-display text-lg font-bold text-text-primary">Define KPIs</h2>
+          </div>
+          <button type="button" id="add-kpi-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-500/10 text-teal-400 text-xs font-medium hover:bg-teal-500/20 transition-all">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add KPI
+          </button>
+        </div>
+
+        <div id="kpi-list" class="space-y-3">
+          <!-- KPI template gets cloned here -->
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="flex items-center gap-4">
+        <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-teal-500 to-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-teal-500/25 hover:-translate-y-0.5 active:translate-y-0">
+          🚀 Launch Pilot
+        </button>
+        <a href="/pilots" class="px-6 py-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-all">Cancel</a>
+      </div>
+    </form>
+
+    <!-- Success -->
+    <div id="success-msg" class="hidden mt-8 glass p-8 text-center space-y-4 animate-scale-in">
+      <div class="text-5xl">🚀</div>
+      <h2 class="font-display text-xl font-bold text-text-primary">Pilot Launched!</h2>
+      <p class="text-sm text-text-secondary">Your pilot has been created and is now active. Track its progress on the pilots page.</p>
+      <a href="/pilots" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-blue-500 text-white font-medium text-sm">
+        View Pilots
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { addPilot, initStore } from '../../scripts/store.js';
+  import problemsData from '../../data/problems.json';
+  import pilotsData from '../../data/pilots.json';
+
+  initStore(problemsData, pilotsData);
+
+  let kpiCount = 0;
+  const kpiList = document.getElementById('kpi-list');
+  const addBtn = document.getElementById('add-kpi-btn');
+
+  function addKpiRow() {
+    kpiCount++;
+    const div = document.createElement('div');
+    div.className = 'glass-sm p-4 space-y-3 animate-scale-in';
+    div.innerHTML = `
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-text-muted">KPI #${kpiCount}</span>
+        <button type="button" class="remove-kpi text-xs text-red-400 hover:text-red-300 transition-colors">Remove</button>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="col-span-2 sm:col-span-1">
+          <input type="text" name="kpi_name_${kpiCount}" placeholder="Name" required class="w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-xs focus:outline-none focus:border-teal-500/50 transition-all" />
+        </div>
+        <div>
+          <input type="number" name="kpi_baseline_${kpiCount}" placeholder="Baseline" required class="w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-xs focus:outline-none focus:border-teal-500/50 transition-all" />
+        </div>
+        <div>
+          <input type="number" name="kpi_target_${kpiCount}" placeholder="Target" required class="w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-xs focus:outline-none focus:border-teal-500/50 transition-all" />
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <input type="text" name="kpi_unit_${kpiCount}" placeholder="Unit (%, hrs)" required class="w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-xs focus:outline-none focus:border-teal-500/50 transition-all" />
+        </div>
+      </div>
+    `;
+
+    div.querySelector('.remove-kpi')?.addEventListener('click', () => div.remove());
+    kpiList?.appendChild(div);
+  }
+
+  // Add initial KPI row
+  addKpiRow();
+  addBtn?.addEventListener('click', addKpiRow);
+
+  const form = document.getElementById('pilot-form') as HTMLFormElement;
+  const successMsg = document.getElementById('success-msg');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    // Collect KPIs
+    const kpis: any[] = [];
+    const kpiRows = kpiList?.children || [];
+    for (let i = 0; i < kpiRows.length; i++) {
+      const row = kpiRows[i];
+      const inputs = row.querySelectorAll('input');
+      if (inputs.length >= 4) {
+        kpis.push({
+          name: (inputs[0] as HTMLInputElement).value,
+          baseline: parseFloat((inputs[1] as HTMLInputElement).value) || 0,
+          target: parseFloat((inputs[2] as HTMLInputElement).value) || 0,
+          current: parseFloat((inputs[1] as HTMLInputElement).value) || 0, // current starts at baseline
+          unit: (inputs[3] as HTMLInputElement).value,
+        });
+      }
+    }
+
+    addPilot({
+      problemId: formData.get('problemId'),
+      startupId: formData.get('startupId'),
+      title: formData.get('title'),
+      startDate: formData.get('startDate'),
+      endDate: formData.get('endDate'),
+      kpis,
+    });
+
+    form.style.display = 'none';
+    successMsg?.classList.remove('hidden');
+  });
+</script>
