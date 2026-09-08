@@ -1,0 +1,90 @@
+[
+  {
+    "id": "prob-001",
+    "title": "Urban Traffic Congestion Monitoring",
+    "description": "The city experiences severe traffic congestion during peak hours, costing an estimated $2.3M annually in lost productivity. We need real-time monitoring and predictive analytics to optimize signal timing and route management.",
+    "department": "Department of Transportation",
+    "domain": "traffic",
+    "urgency": "high",
+    "budget": 150000,
+    "status": "open",
+    "submittedAt": "2026-08-15T09:30:00Z"
+  },
+  {
+    "id": "prob-002",
+    "title": "Smart Waste Collection Optimization",
+    "description": "Current waste collection routes are static and inefficient, leading to overflowing bins in some areas and unnecessary pickups in others. Looking for IoT-based monitoring and route optimization solutions.",
+    "department": "Department of Sanitation",
+    "domain": "waste",
+    "urgency": "medium",
+    "budget": 80000,
+    "status": "matched",
+    "submittedAt": "2026-08-20T14:15:00Z"
+  },
+  {
+    "id": "prob-003",
+    "title": "Water Quality Real-Time Monitoring",
+    "description": "Multiple water quality incidents have occurred in the past year due to delayed detection. Need continuous monitoring sensors and an alert system across the municipal water supply network.",
+    "department": "Water Authority",
+    "domain": "water",
+    "urgency": "critical",
+    "budget": 200000,
+    "status": "pilot-active",
+    "submittedAt": "2026-07-10T11:00:00Z"
+  },
+  {
+    "id": "prob-004",
+    "title": "Public Safety Incident Response",
+    "description": "Emergency response times average 12 minutes, above the 8-minute target. Need a predictive deployment system that positions resources based on historical incident patterns and real-time data.",
+    "department": "Public Safety",
+    "domain": "safety",
+    "urgency": "critical",
+    "budget": 250000,
+    "status": "open",
+    "submittedAt": "2026-08-25T16:45:00Z"
+  },
+  {
+    "id": "prob-005",
+    "title": "Energy Efficiency in Municipal Buildings",
+    "description": "Municipal buildings consume 40% more energy than comparable private sector buildings. Seeking smart building management solutions to reduce consumption and carbon footprint.",
+    "department": "Department of Energy",
+    "domain": "energy",
+    "urgency": "medium",
+    "budget": 120000,
+    "status": "open",
+    "submittedAt": "2026-09-01T10:20:00Z"
+  },
+  {
+    "id": "prob-006",
+    "title": "Citizen Service Portal Modernization",
+    "description": "Current citizen services portal has a 35% abandonment rate. Need a modern, accessible digital platform that simplifies permit applications, payments, and service requests.",
+    "department": "Department of Digital Services",
+    "domain": "digital",
+    "urgency": "high",
+    "budget": 180000,
+    "status": "matched",
+    "submittedAt": "2026-08-12T08:00:00Z"
+  },
+  {
+    "id": "prob-007",
+    "title": "Stormwater Management System",
+    "description": "Flooding during heavy rain events causes significant property damage. Need predictive flood modeling and smart drainage control systems to mitigate urban flooding risks.",
+    "department": "Department of Public Works",
+    "domain": "water",
+    "urgency": "high",
+    "budget": 175000,
+    "status": "open",
+    "submittedAt": "2026-09-03T13:30:00Z"
+  },
+  {
+    "id": "prob-008",
+    "title": "Air Quality Monitoring Network",
+    "description": "Limited air quality data makes it difficult to enforce regulations and inform citizens. Need a distributed sensor network providing real-time AQI data and health advisories.",
+    "department": "Environmental Protection",
+    "domain": "environment",
+    "urgency": "medium",
+    "budget": 95000,
+    "status": "pilot-completed",
+    "submittedAt": "2026-06-28T09:15:00Z"
+  }
+]

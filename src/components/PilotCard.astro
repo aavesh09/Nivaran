@@ -1,0 +1,114 @@
+---
+import Badge from './Badge.astro';
+
+interface Props {
+  id: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  kpis: Array<{ name: string; baseline: number; target: number; current: number; unit: string }>;
+  outcome: string | null;
+  problemTitle?: string;
+  startupName?: string;
+}
+
+const { id, title, startDate, endDate, status, kpis, outcome, problemTitle, startupName } = Astro.props;
+
+const statusVariant = {
+  active: 'success',
+  completed: 'neutral',
+  extended: 'info',
+} as const;
+
+const outcomeVariant = {
+  scale: 'success',
+  extend: 'info',
+  'do-not-scale': 'danger',
+} as const;
+
+const outcomeLabels: Record<string, string> = {
+  scale: '🚀 Scale',
+  extend: '🔄 Extend',
+  'do-not-scale': '⏹️ Do Not Scale',
+};
+
+// Calculate overall pilot progress from KPIs
+const avgProgress = kpis.length > 0
+  ? Math.round(kpis.reduce((sum, kpi) => {
+      const isLowerBetter = kpi.target < kpi.baseline;
+      let p: number;
+      if (isLowerBetter) {
+        const range = kpi.baseline - kpi.target;
+        const achieved = kpi.baseline - kpi.current;
+        p = range > 0 ? (achieved / range) * 100 : 0;
+      } else {
+        const range = kpi.target - kpi.baseline;
+        const achieved = kpi.current - kpi.baseline;
+        p = range > 0 ? (achieved / range) * 100 : 0;
+      }
+      return sum + Math.max(0, Math.min(p, 100));
+    }, 0) / kpis.length)
+  : 0;
+
+const formatDate = (d: string) =>
+  new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+// Calculate days remaining
+const daysLeft = Math.max(0, Math.ceil((new Date(endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+---
+
+<a href={`/pilots/${id}`} class="block">
+  <div class="glass glass-hover p-5 space-y-4 group cursor-pointer">
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex-1 min-w-0">
+        <h3 class="font-display font-bold text-text-primary group-hover:text-teal-400 transition-colors line-clamp-1">
+          {title}
+        </h3>
+        <p class="text-xs text-text-muted mt-1">
+          {formatDate(startDate)} → {formatDate(endDate)}
+          {status === 'active' && <span class="text-teal-400 ml-2">· {daysLeft}d left</span>}
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <Badge variant={statusVariant[status as keyof typeof statusVariant] || 'neutral'}>
+          {status}
+        </Badge>
+        {outcome && (
+          <Badge variant={outcomeVariant[outcome as keyof typeof outcomeVariant] || 'neutral'}>
+            {outcomeLabels[outcome] || outcome}
+          </Badge>
+        )}
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="space-y-1.5">
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-text-muted">Overall Progress</span>
+        <span class="font-bold text-text-primary">{avgProgress}%</span>
+      </div>
+      <div class="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+        <div
+          class={`h-full rounded-full transition-all duration-1000 ease-out ${
+            avgProgress >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' :
+            avgProgress >= 50 ? 'bg-gradient-to-r from-blue-400 to-blue-500' :
+            avgProgress >= 25 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
+            'bg-gradient-to-r from-red-400 to-red-500'
+          }`}
+          style={`width: ${avgProgress}%;`}
+        />
+      </div>
+    </div>
+
+    <!-- KPI summary -->
+    <div class="flex items-center gap-4 text-xs text-text-secondary">
+      <span class="flex items-center gap-1">
+        <svg class="w-3.5 h-3.5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        {kpis.length} KPIs
+      </span>
+    </div>
+  </div>
+</a>

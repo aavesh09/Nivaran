@@ -1,0 +1,86 @@
+---
+import Badge from './Badge.astro';
+import ProgressRing from './ProgressRing.astro';
+
+interface Props {
+  id: string;
+  name: string;
+  description: string;
+  domains: string[];
+  stage: string;
+  teamSize: number;
+  location: string;
+  founded: string;
+  matchScore?: number;
+  showMatchScore?: boolean;
+}
+
+const { id, name, description, domains, stage, teamSize, location, founded, matchScore = 0, showMatchScore = false } = Astro.props;
+
+const stageVariant = {
+  early: 'warning',
+  growth: 'success',
+} as const;
+
+const domainIcons: Record<string, string> = {
+  traffic: '🚦',
+  waste: '♻️',
+  water: '💧',
+  safety: '🛡️',
+  energy: '⚡',
+  digital: '💻',
+  environment: '🌿',
+};
+
+const getScoreColor = (score: number) => {
+  if (score >= 80) return '#22c55e';
+  if (score >= 60) return '#3b82f6';
+  if (score >= 40) return '#f59e0b';
+  return '#ef4444';
+};
+
+// Generate initials from startup name
+const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+---
+
+<div class="glass glass-hover p-5 space-y-4 group">
+  <div class="flex items-start justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-500/20 to-blue-500/20 border border-white/10 flex items-center justify-center font-display font-bold text-sm text-teal-400 shrink-0">
+        {initials}
+      </div>
+      <div>
+        <h3 class="font-display font-bold text-text-primary group-hover:text-teal-400 transition-colors">
+          {name}
+        </h3>
+        <p class="text-xs text-text-muted mt-0.5">{location} · Est. {founded}</p>
+      </div>
+    </div>
+    {showMatchScore && (
+      <div class="flex flex-col items-center shrink-0">
+        <ProgressRing size={48} progress={matchScore} color={getScoreColor(matchScore)} strokeWidth={4} />
+        <span class="text-xs font-bold mt-1" style={`color: ${getScoreColor(matchScore)}`}>
+          {matchScore}%
+        </span>
+      </div>
+    )}
+  </div>
+
+  <p class="text-sm text-text-secondary line-clamp-2">{description}</p>
+
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2 flex-wrap">
+      {domains.map(d => (
+        <Badge variant="accent" size="sm">
+          {domainIcons[d] || '📋'} {d}
+        </Badge>
+      ))}
+    </div>
+    <div class="flex items-center gap-2">
+      <Badge variant={stageVariant[stage as keyof typeof stageVariant] || 'neutral'} size="sm">
+        {stage}
+      </Badge>
+      <span class="text-xs text-text-muted">{teamSize} people</span>
+    </div>
+  </div>
+</div>

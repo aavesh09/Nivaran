@@ -1,0 +1,26 @@
+---
+interface Props {
+  variant?: 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'accent';
+  size?: 'sm' | 'md';
+}
+
+const { variant = 'neutral', size = 'sm' } = Astro.props;
+
+const colorMap = {
+  success: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
+  warning: 'bg-amber-500/15 text-amber-400 border-amber-500/20',
+  danger: 'bg-red-500/15 text-red-400 border-red-500/20',
+  info: 'bg-blue-500/15 text-blue-400 border-blue-500/20',
+  neutral: 'bg-slate-500/15 text-slate-400 border-slate-500/20',
+  accent: 'bg-teal-500/15 text-teal-400 border-teal-500/20',
+};
+
+const sizeMap = {
+  sm: 'text-xs px-2.5 py-0.5',
+  md: 'text-sm px-3 py-1',
+};
+---
+
+<span class={`inline-flex items-center font-medium rounded-full border ${colorMap[variant]} ${sizeMap[size]}`}>
+  <slot />
+</span>

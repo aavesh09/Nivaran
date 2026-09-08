@@ -1,0 +1,134 @@
+[
+  {
+    "id": "startup-001",
+    "name": "FlowState Analytics",
+    "description": "AI-powered traffic flow optimization platform using computer vision and IoT sensors to reduce congestion by up to 30%.",
+    "domains": ["traffic", "safety"],
+    "stage": "growth",
+    "teamSize": 25,
+    "location": "Austin, TX",
+    "founded": "2023",
+    "website": "https://flowstate.example.com"
+  },
+  {
+    "id": "startup-002",
+    "name": "BinSense",
+    "description": "Smart waste management solution with IoT-enabled bin sensors and dynamic route optimization for collection vehicles.",
+    "domains": ["waste", "environment"],
+    "stage": "early",
+    "teamSize": 8,
+    "location": "Denver, CO",
+    "founded": "2024",
+    "website": "https://binsense.example.com"
+  },
+  {
+    "id": "startup-003",
+    "name": "AquaWatch Pro",
+    "description": "Continuous water quality monitoring platform with predictive contamination detection and automated regulatory reporting.",
+    "domains": ["water", "environment"],
+    "stage": "growth",
+    "teamSize": 32,
+    "location": "Portland, OR",
+    "founded": "2022",
+    "website": "https://aquawatch.example.com"
+  },
+  {
+    "id": "startup-004",
+    "name": "SafeGrid Technologies",
+    "description": "Predictive public safety platform that optimizes emergency resource deployment using historical incident analysis and real-time feeds.",
+    "domains": ["safety"],
+    "stage": "growth",
+    "teamSize": 40,
+    "location": "Chicago, IL",
+    "founded": "2021",
+    "website": "https://safegrid.example.com"
+  },
+  {
+    "id": "startup-005",
+    "name": "GreenPulse Energy",
+    "description": "Smart building energy management system using IoT sensors and machine learning to reduce consumption by 25-40%.",
+    "domains": ["energy", "environment"],
+    "stage": "early",
+    "teamSize": 12,
+    "location": "San Francisco, CA",
+    "founded": "2024",
+    "website": "https://greenpulse.example.com"
+  },
+  {
+    "id": "startup-006",
+    "name": "CivicConnect",
+    "description": "Modern citizen engagement platform with AI-powered chatbots, streamlined permit processing, and multi-channel service delivery.",
+    "domains": ["digital"],
+    "stage": "growth",
+    "teamSize": 28,
+    "location": "Boston, MA",
+    "founded": "2023",
+    "website": "https://civicconnect.example.com"
+  },
+  {
+    "id": "startup-007",
+    "name": "UrbanFlow Systems",
+    "description": "Integrated urban mobility platform combining traffic signal optimization, public transit coordination, and pedestrian safety analytics.",
+    "domains": ["traffic", "digital"],
+    "stage": "early",
+    "teamSize": 15,
+    "location": "Seattle, WA",
+    "founded": "2024",
+    "website": "https://urbanflow.example.com"
+  },
+  {
+    "id": "startup-008",
+    "name": "FloodShield AI",
+    "description": "Predictive stormwater management platform with real-time flood modeling, smart drainage control, and emergency alert systems.",
+    "domains": ["water", "safety"],
+    "stage": "early",
+    "teamSize": 10,
+    "location": "Miami, FL",
+    "founded": "2025",
+    "website": "https://floodshield.example.com"
+  },
+  {
+    "id": "startup-009",
+    "name": "ClearSky Sensors",
+    "description": "Distributed air quality monitoring network with low-cost sensors, real-time AQI mapping, and public health advisory integration.",
+    "domains": ["environment"],
+    "stage": "growth",
+    "teamSize": 20,
+    "location": "Los Angeles, CA",
+    "founded": "2022",
+    "website": "https://clearsky.example.com"
+  },
+  {
+    "id": "startup-010",
+    "name": "WasteZero Tech",
+    "description": "Circular economy platform for municipal waste reduction, featuring material recovery optimization and citizen recycling engagement tools.",
+    "domains": ["waste", "digital"],
+    "stage": "growth",
+    "teamSize": 18,
+    "location": "Minneapolis, MN",
+    "founded": "2023",
+    "website": "https://wastezero.example.com"
+  },
+  {
+    "id": "startup-011",
+    "name": "HydroSafe Networks",
+    "description": "End-to-end water infrastructure monitoring with leak detection, pressure management, and predictive pipe failure analysis.",
+    "domains": ["water"],
+    "stage": "early",
+    "teamSize": 14,
+    "location": "Phoenix, AZ",
+    "founded": "2024",
+    "website": "https://hydrosafe.example.com"
+  },
+  {
+    "id": "startup-012",
+    "name": "SmartGrid Municipal",
+    "description": "Municipal energy grid optimization platform enabling renewable integration, demand response, and carbon tracking for city operations.",
+    "domains": ["energy", "digital"],
+    "stage": "growth",
+    "teamSize": 35,
+    "location": "New York, NY",
+    "founded": "2022",
+    "website": "https://smartgridmunicipal.example.com"
+  }
+]

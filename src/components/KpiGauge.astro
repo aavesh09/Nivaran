@@ -1,0 +1,79 @@
+---
+interface Props {
+  name: string;
+  baseline: number;
+  target: number;
+  current: number;
+  unit: string;
+}
+
+const { name, baseline, target, current, unit } = Astro.props;
+
+// Calculate progress percentage
+// Handle cases where lower is better (target < baseline) vs higher is better (target > baseline)
+const isLowerBetter = target < baseline;
+let progress: number;
+
+if (isLowerBetter) {
+  // E.g., reduce incidents from 120 to 20. Current at 35.
+  const totalRange = baseline - target;
+  const achieved = baseline - current;
+  progress = totalRange > 0 ? Math.round((achieved / totalRange) * 100) : 0;
+} else {
+  // E.g., increase coverage from 25% to 90%. Current at 72%.
+  const totalRange = target - baseline;
+  const achieved = current - baseline;
+  progress = totalRange > 0 ? Math.round((achieved / totalRange) * 100) : 0;
+}
+
+progress = Math.max(0, Math.min(progress, 100));
+
+const getBarColor = (pct: number) => {
+  if (pct >= 80) return 'from-emerald-400 to-emerald-500';
+  if (pct >= 50) return 'from-blue-400 to-blue-500';
+  if (pct >= 25) return 'from-amber-400 to-amber-500';
+  return 'from-red-400 to-red-500';
+};
+
+const getTextColor = (pct: number) => {
+  if (pct >= 80) return 'text-emerald-400';
+  if (pct >= 50) return 'text-blue-400';
+  if (pct >= 25) return 'text-amber-400';
+  return 'text-red-400';
+};
+---
+
+<div class="glass-sm p-5 space-y-4">
+  <div class="flex items-center justify-between">
+    <h4 class="font-medium text-text-primary text-sm">{name}</h4>
+    <span class={`font-display text-lg font-bold ${getTextColor(progress)}`}>
+      {progress}%
+    </span>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="relative">
+    <div class="w-full h-2.5 rounded-full bg-white/5 overflow-hidden">
+      <div
+        class={`h-full rounded-full bg-gradient-to-r ${getBarColor(progress)} transition-all duration-1000 ease-out`}
+        style={`width: ${progress}%; --progress: ${progress}%;`}
+      />
+    </div>
+  </div>
+
+  <!-- Metric values -->
+  <div class="flex items-center justify-between text-xs">
+    <div class="flex flex-col items-start">
+      <span class="text-text-muted uppercase tracking-wider text-[10px]">Baseline</span>
+      <span class="text-text-secondary font-medium">{baseline} {unit}</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <span class="text-text-muted uppercase tracking-wider text-[10px]">Current</span>
+      <span class={`font-bold ${getTextColor(progress)}`}>{current} {unit}</span>
+    </div>
+    <div class="flex flex-col items-end">
+      <span class="text-text-muted uppercase tracking-wider text-[10px]">Target</span>
+      <span class="text-text-secondary font-medium">{target} {unit}</span>
+    </div>
+  </div>
+</div>

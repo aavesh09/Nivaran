@@ -1,0 +1,49 @@
+---
+interface Props {
+  size?: number;
+  progress: number;
+  color?: string;
+  strokeWidth?: number;
+}
+
+const { size = 64, progress, color = '#2dd4bf', strokeWidth = 5 } = Astro.props;
+const radius = (size - strokeWidth) / 2;
+const circumference = 2 * Math.PI * radius;
+const offset = circumference - (Math.min(Math.max(progress, 0), 100) / 100) * circumference;
+---
+
+<svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} class="progress-ring transform -rotate-90">
+  <circle
+    cx={size / 2}
+    cy={size / 2}
+    r={radius}
+    fill="none"
+    stroke="rgba(255,255,255,0.06)"
+    stroke-width={strokeWidth}
+  />
+  <circle
+    cx={size / 2}
+    cy={size / 2}
+    r={radius}
+    fill="none"
+    stroke={color}
+    stroke-width={strokeWidth}
+    stroke-dasharray={circumference}
+    stroke-dashoffset={offset}
+    stroke-linecap="round"
+    class="progress-ring__circle"
+  />
+</svg>
+
+<style>
+  .progress-ring__circle {
+    transition: stroke-dashoffset 1s ease-out;
+    animation: ring-fill 1.2s ease-out forwards;
+  }
+
+  @keyframes ring-fill {
+    from {
+      stroke-dashoffset: var(--circumference, 999);
+    }
+  }
+</style>

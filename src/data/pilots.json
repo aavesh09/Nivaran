@@ -1,0 +1,181 @@
+[
+  {
+    "id": "pilot-001",
+    "problemId": "prob-003",
+    "startupId": "startup-003",
+    "title": "Water Quality Monitoring Pilot — AquaWatch Pro",
+    "startDate": "2026-08-01",
+    "endDate": "2026-11-01",
+    "status": "active",
+    "kpis": [
+      {
+        "name": "Detection Time",
+        "baseline": 48,
+        "target": 4,
+        "current": 6,
+        "unit": "hours"
+      },
+      {
+        "name": "Monitoring Coverage",
+        "baseline": 25,
+        "target": 90,
+        "current": 72,
+        "unit": "%"
+      },
+      {
+        "name": "False Alert Rate",
+        "baseline": 30,
+        "target": 5,
+        "current": 8,
+        "unit": "%"
+      },
+      {
+        "name": "Compliance Score",
+        "baseline": 65,
+        "target": 95,
+        "current": 88,
+        "unit": "pts"
+      }
+    ],
+    "outcome": null
+  },
+  {
+    "id": "pilot-002",
+    "problemId": "prob-002",
+    "startupId": "startup-002",
+    "title": "Smart Waste Collection Pilot — BinSense",
+    "startDate": "2026-07-15",
+    "endDate": "2026-10-15",
+    "status": "active",
+    "kpis": [
+      {
+        "name": "Route Efficiency",
+        "baseline": 55,
+        "target": 85,
+        "current": 74,
+        "unit": "%"
+      },
+      {
+        "name": "Overflow Incidents",
+        "baseline": 120,
+        "target": 20,
+        "current": 35,
+        "unit": "per month"
+      },
+      {
+        "name": "Fuel Consumption",
+        "baseline": 4500,
+        "target": 3000,
+        "current": 3200,
+        "unit": "gallons/mo"
+      }
+    ],
+    "outcome": null
+  },
+  {
+    "id": "pilot-003",
+    "problemId": "prob-008",
+    "startupId": "startup-009",
+    "title": "Air Quality Network Pilot — ClearSky Sensors",
+    "startDate": "2026-05-01",
+    "endDate": "2026-08-01",
+    "status": "completed",
+    "kpis": [
+      {
+        "name": "Sensor Coverage",
+        "baseline": 10,
+        "target": 80,
+        "current": 85,
+        "unit": "%"
+      },
+      {
+        "name": "Data Accuracy",
+        "baseline": 70,
+        "target": 95,
+        "current": 96,
+        "unit": "%"
+      },
+      {
+        "name": "Alert Response Time",
+        "baseline": 24,
+        "target": 2,
+        "current": 1.5,
+        "unit": "hours"
+      },
+      {
+        "name": "Citizen Engagement",
+        "baseline": 500,
+        "target": 5000,
+        "current": 6200,
+        "unit": "users"
+      }
+    ],
+    "outcome": "scale"
+  },
+  {
+    "id": "pilot-004",
+    "problemId": "prob-006",
+    "startupId": "startup-006",
+    "title": "Citizen Portal Modernization — CivicConnect",
+    "startDate": "2026-06-01",
+    "endDate": "2026-09-01",
+    "status": "completed",
+    "kpis": [
+      {
+        "name": "Abandonment Rate",
+        "baseline": 35,
+        "target": 10,
+        "current": 12,
+        "unit": "%"
+      },
+      {
+        "name": "Processing Time",
+        "baseline": 14,
+        "target": 3,
+        "current": 4,
+        "unit": "days"
+      },
+      {
+        "name": "User Satisfaction",
+        "baseline": 45,
+        "target": 85,
+        "current": 78,
+        "unit": "NPS"
+      }
+    ],
+    "outcome": "extend"
+  },
+  {
+    "id": "pilot-005",
+    "problemId": "prob-001",
+    "startupId": "startup-001",
+    "title": "Traffic Congestion Monitoring — FlowState Analytics",
+    "startDate": "2026-09-01",
+    "endDate": "2026-12-01",
+    "status": "active",
+    "kpis": [
+      {
+        "name": "Avg Commute Time",
+        "baseline": 42,
+        "target": 28,
+        "current": 36,
+        "unit": "minutes"
+      },
+      {
+        "name": "Intersection Throughput",
+        "baseline": 1200,
+        "target": 1800,
+        "current": 1450,
+        "unit": "vehicles/hr"
+      },
+      {
+        "name": "Signal Optimization",
+        "baseline": 30,
+        "target": 90,
+        "current": 55,
+        "unit": "%"
+      }
+    ],
+    "outcome": null
+  }
+]
