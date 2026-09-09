@@ -1,4 +1,4 @@
-# Astro Starter Kit: Basics
+# PilotSetu — Government Innovation Pilot Platform
 
 ```sh
 npm create astro@latest -- --template basics

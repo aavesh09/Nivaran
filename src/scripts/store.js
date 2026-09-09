@@ -1,12 +1,12 @@
 /**
- * GovPilot Client-Side Store
+ * PilotSetu Client-Side Store
  * localStorage-backed state management for problems, pilots, and KPI updates
  */
 
 const KEYS = {
-  problems: 'govpilot_problems',
-  pilots: 'govpilot_pilots',
-  initialized: 'govpilot_initialized',
+  problems: 'pilotsetu_problems',
+  pilots: 'pilotsetu_pilots',
+  initialized: 'pilotsetu_initialized',
 };
 
 /** Initialize store with seed data if not already done */

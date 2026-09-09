@@ -1,5 +1,5 @@
 /**
- * GovPilot Rule-Based Matching Engine
+ * PilotSetu Rule-Based Matching Engine
  * Scores startups against a government problem based on domain, stage, and team size.
  *
  * score = (domainOverlap × 0.5) + (stageFit × 0.3) + (teamSizeFit × 0.2)

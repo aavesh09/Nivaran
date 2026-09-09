@@ -43,22 +43,198 @@ const { title, breadcrumbs = [] } = Astro.props;
     </div>
 
     <div class="flex items-center gap-3">
-      <!-- Search (placeholder) -->
-      <div class="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-text-muted text-sm w-64 cursor-text">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-        </svg>
-        <span>Search...</span>
-        <span class="ml-auto text-xs bg-white/[0.06] px-1.5 py-0.5 rounded text-text-muted">⌘K</span>
+      <!-- Search -->
+      <div class="hidden md:flex items-center relative">
+        <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-text-muted text-sm w-64 cursor-text transition-all focus-within:border-teal-500/50 focus-within:ring-1 focus-within:ring-teal-500/25" id="search-container">
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input type="text" id="search-input" placeholder="Search..." class="bg-transparent border-none outline-none text-text-primary placeholder-text-muted text-sm w-full" autocomplete="off" />
+          <span class="ml-auto text-xs bg-white/[0.06] px-1.5 py-0.5 rounded text-text-muted shrink-0">⌘K</span>
+        </div>
+        <!-- Search Results Dropdown -->
+        <div id="search-results" class="absolute top-full left-0 right-0 mt-2 glass p-2 space-y-1 hidden z-50 max-h-80 overflow-y-auto">
+        </div>
       </div>
 
       <!-- Notification bell -->
-      <button class="relative p-2 rounded-xl hover:bg-white/[0.04] text-text-secondary transition-colors" aria-label="Notifications">
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-        </svg>
-        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-      </button>
+      <div class="relative" id="notification-wrapper">
+        <button class="relative p-2 rounded-xl hover:bg-white/[0.04] text-text-secondary transition-colors" aria-label="Notifications" id="notification-btn">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-400 animate-pulse" id="notification-dot" />
+        </button>
+        <!-- Notification dropdown -->
+        <div id="notification-dropdown" class="absolute right-0 top-full mt-2 w-80 glass p-0 hidden z-50">
+          <div class="px-4 py-3 border-b border-white/[0.06]">
+            <div class="flex items-center justify-between">
+              <h3 class="font-display font-bold text-sm text-text-primary">Notifications</h3>
+              <button id="mark-all-read" class="text-xs text-teal-400 hover:text-teal-300 transition-colors">Mark all read</button>
+            </div>
+          </div>
+          <div class="max-h-64 overflow-y-auto" id="notification-list">
+            <div class="px-4 py-3 border-b border-white/[0.04] hover:bg-white/[0.04] transition-colors cursor-pointer">
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">🚀</span>
+                <div>
+                  <p class="text-xs text-text-primary font-medium">Traffic pilot updated</p>
+                  <p class="text-xs text-text-muted mt-0.5">Signal Optimization KPI reached 55%</p>
+                  <p class="text-[10px] text-text-muted mt-1">2 hours ago</p>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 border-b border-white/[0.04] hover:bg-white/[0.04] transition-colors cursor-pointer">
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">💧</span>
+                <div>
+                  <p class="text-xs text-text-primary font-medium">Water Quality KPI hit 72%</p>
+                  <p class="text-xs text-text-muted mt-0.5">Monitoring coverage target on track</p>
+                  <p class="text-[10px] text-text-muted mt-1">5 hours ago</p>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 border-b border-white/[0.04] hover:bg-white/[0.04] transition-colors cursor-pointer">
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">✅</span>
+                <div>
+                  <p class="text-xs text-text-primary font-medium">Air Quality pilot scaled</p>
+                  <p class="text-xs text-text-muted mt-0.5">ClearSky Sensors approved for deployment</p>
+                  <p class="text-[10px] text-text-muted mt-1">1 day ago</p>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-white/[0.04] transition-colors cursor-pointer">
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">📋</span>
+                <div>
+                  <p class="text-xs text-text-primary font-medium">New problem submitted</p>
+                  <p class="text-xs text-text-muted mt-0.5">Stormwater Management System needs review</p>
+                  <p class="text-[10px] text-text-muted mt-1">2 days ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="px-4 py-2.5 border-t border-white/[0.06] text-center">
+            <a href="/reports" class="text-xs text-teal-400 hover:text-teal-300 transition-colors">View all activity →</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </header>
+
+<script>
+  // ─── Search Functionality ───
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchResults = document.getElementById('search-results');
+
+  // Navigation items for search
+  const searchableItems = [
+    { title: 'Dashboard', description: 'Overview and stats', href: '/', icon: '📊' },
+    { title: 'Problems', description: 'View all problems', href: '/problems', icon: '📋' },
+    { title: 'Submit Problem', description: 'Submit a new problem', href: '/problems/new', icon: '➕' },
+    { title: 'Startups', description: 'Startup directory', href: '/startups', icon: '🚀' },
+    { title: 'Startup Matching', description: 'Match startups to problems', href: '/startups/match', icon: '🔍' },
+    { title: 'Pilots', description: 'Active & completed pilots', href: '/pilots', icon: '📈' },
+    { title: 'Launch Pilot', description: 'Create a new pilot', href: '/pilots/new', icon: '🎯' },
+    { title: 'Reports', description: 'Pilot outcome reports', href: '/reports', icon: '📊' },
+    // Data items
+    { title: 'Urban Traffic Congestion Monitoring', description: 'Problem — Department of Transportation', href: '/problems/prob-001', icon: '🚦' },
+    { title: 'Smart Waste Collection Optimization', description: 'Problem — Department of Sanitation', href: '/problems/prob-002', icon: '♻️' },
+    { title: 'Water Quality Real-Time Monitoring', description: 'Problem — Water Authority', href: '/problems/prob-003', icon: '💧' },
+    { title: 'Public Safety Incident Response', description: 'Problem — Public Safety', href: '/problems/prob-004', icon: '🛡️' },
+    { title: 'Energy Efficiency in Municipal Buildings', description: 'Problem — Department of Energy', href: '/problems/prob-005', icon: '⚡' },
+    { title: 'Citizen Service Portal Modernization', description: 'Problem — Digital Services', href: '/problems/prob-006', icon: '💻' },
+    { title: 'Stormwater Management System', description: 'Problem — Public Works', href: '/problems/prob-007', icon: '💧' },
+    { title: 'Air Quality Monitoring Network', description: 'Problem — Environmental Protection', href: '/problems/prob-008', icon: '🌿' },
+    { title: 'Water Quality Monitoring Pilot', description: 'Pilot — AquaWatch Pro', href: '/pilots/pilot-001', icon: '💧' },
+    { title: 'Smart Waste Collection Pilot', description: 'Pilot — BinSense', href: '/pilots/pilot-002', icon: '♻️' },
+    { title: 'Air Quality Network Pilot', description: 'Pilot — ClearSky Sensors', href: '/pilots/pilot-003', icon: '🌿' },
+    { title: 'Citizen Portal Modernization', description: 'Pilot — CivicConnect', href: '/pilots/pilot-004', icon: '💻' },
+    { title: 'Traffic Congestion Monitoring Pilot', description: 'Pilot — FlowState Analytics', href: '/pilots/pilot-005', icon: '🚦' },
+  ];
+
+  if (searchInput && searchResults) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      if (!q) {
+        searchResults.classList.add('hidden');
+        return;
+      }
+
+      const filtered = searchableItems.filter(item =>
+        item.title.toLowerCase().includes(q) || item.description.toLowerCase().includes(q)
+      ).slice(0, 8);
+
+      if (filtered.length === 0) {
+        searchResults.innerHTML = '<div class="px-3 py-4 text-xs text-text-muted text-center">No results found</div>';
+      } else {
+        searchResults.innerHTML = filtered.map(item => `
+          <a href="${item.href}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group">
+            <span class="text-lg">${item.icon}</span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm text-text-primary font-medium group-hover:text-teal-400 transition-colors truncate">${item.title}</p>
+              <p class="text-xs text-text-muted truncate">${item.description}</p>
+            </div>
+            <svg class="w-4 h-4 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+        `).join('');
+      }
+      searchResults.classList.remove('hidden');
+    });
+
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => searchResults.classList.add('hidden'), 200);
+    });
+
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) {
+        searchInput.dispatchEvent(new Event('input'));
+      }
+    });
+
+    // Cmd+K / Ctrl+K shortcut
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      if (e.key === 'Escape') {
+        searchInput.blur();
+        searchResults.classList.add('hidden');
+      }
+    });
+  }
+
+  // ─── Notification Dropdown ───
+  const notifBtn = document.getElementById('notification-btn');
+  const notifDropdown = document.getElementById('notification-dropdown');
+  const notifDot = document.getElementById('notification-dot');
+  const markAllRead = document.getElementById('mark-all-read');
+
+  if (notifBtn && notifDropdown) {
+    notifBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notifDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!notifDropdown.contains(e.target as Node) && !notifBtn.contains(e.target as Node)) {
+        notifDropdown.classList.add('hidden');
+      }
+    });
+  }
+
+  if (markAllRead && notifDot) {
+    markAllRead.addEventListener('click', () => {
+      notifDot.classList.add('hidden');
+      const items = document.querySelectorAll('#notification-list > div');
+      items.forEach(item => {
+        (item as HTMLElement).style.opacity = '0.5';
+      });
+    });
+  }
+</script>

@@ -1,147 +1,127 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
 
 const breadcrumbs = [
   { label: 'Dashboard', href: '/' },
   { label: 'Problems', href: '/problems' },
-  { label: 'New Problem' },
+  { label: 'Submit Problem' },
+];
+
+const domains = [
+  { value: 'traffic', label: 'Traffic', icon: '🚦' },
+  { value: 'waste', label: 'Waste Management', icon: '♻️' },
+  { value: 'water', label: 'Water', icon: '💧' },
+  { value: 'safety', label: 'Public Safety', icon: '🛡️' },
+  { value: 'energy', label: 'Energy', icon: '⚡' },
+  { value: 'digital', label: 'Digital Services', icon: '💻' },
+  { value: 'environment', label: 'Environment', icon: '🌿' },
+];
+
+const urgencies = [
+  { value: 'critical', label: 'Critical', color: 'danger' },
+  { value: 'high', label: 'High', color: 'warning' },
+  { value: 'medium', label: 'Medium', color: 'info' },
+  { value: 'low', label: 'Low', color: 'neutral' },
 ];
 ---
 
 <Layout pageTitle="Submit Problem" breadcrumbs={breadcrumbs}>
-  <div class="max-w-2xl mx-auto">
+  <div class="max-w-3xl mx-auto">
     <div class="mb-8 animate-fade-in">
-      <h1 class="font-display text-3xl font-bold text-text-primary">Submit a Problem</h1>
-      <p class="text-text-secondary mt-2">Describe a government challenge that could benefit from innovative startup solutions.</p>
+      <h1 class="font-display text-3xl font-bold text-text-primary">Submit a <span class="gradient-text">Problem</span></h1>
+      <p class="text-text-secondary mt-2">Describe a government challenge that needs an innovative solution. We'll match it with suitable startups.</p>
     </div>
 
-    <form id="problem-form" class="space-y-6 animate-slide-up opacity-0" style="animation-fill-mode: forwards;">
-      <!-- Title -->
-      <div class="space-y-2">
-        <label for="title" class="block text-sm font-medium text-text-primary">Problem Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          required
-          placeholder="e.g., Urban Traffic Congestion Monitoring"
-          class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all"
-        />
-      </div>
+    <form id="problem-form" class="space-y-8 animate-slide-up opacity-0" style="animation-fill-mode: forwards;">
+      <!-- Step 1: Basic Info -->
+      <div class="glass p-6 space-y-4">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="w-8 h-8 rounded-lg bg-teal-500/15 flex items-center justify-center text-teal-400 font-bold text-sm">1</span>
+          <h2 class="font-display text-lg font-bold text-text-primary">Problem Details</h2>
+        </div>
 
-      <!-- Description -->
-      <div class="space-y-2">
-        <label for="description" class="block text-sm font-medium text-text-primary">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          required
-          rows={4}
-          placeholder="Describe the problem in detail, including current impact and desired outcomes..."
-          class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all resize-none"
-        />
-      </div>
+        <div class="space-y-2">
+          <label for="title" class="block text-sm font-medium text-text-primary">Problem Title</label>
+          <input type="text" id="title" name="title" required placeholder="e.g., Urban Traffic Congestion Monitoring"
+            class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all" />
+        </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Department -->
+        <div class="space-y-2">
+          <label for="description" class="block text-sm font-medium text-text-primary">Description</label>
+          <textarea id="description" name="description" required rows="4" placeholder="Describe the problem, its impact, and what kind of solution you're looking for..."
+            class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all resize-none"></textarea>
+        </div>
+
         <div class="space-y-2">
           <label for="department" class="block text-sm font-medium text-text-primary">Department</label>
-          <input
-            type="text"
-            id="department"
-            name="department"
-            required
-            placeholder="e.g., Dept. of Transportation"
-            class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all"
-          />
-        </div>
-
-        <!-- Domain -->
-        <div class="space-y-2">
-          <label for="domain" class="block text-sm font-medium text-text-primary">Domain</label>
-          <select
-            id="domain"
-            name="domain"
-            required
-            class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all appearance-none cursor-pointer"
-          >
-            <option value="" class="bg-navy-900">Select domain...</option>
-            <option value="traffic" class="bg-navy-900">🚦 Traffic</option>
-            <option value="waste" class="bg-navy-900">♻️ Waste Management</option>
-            <option value="water" class="bg-navy-900">💧 Water</option>
-            <option value="safety" class="bg-navy-900">🛡️ Public Safety</option>
-            <option value="energy" class="bg-navy-900">⚡ Energy</option>
-            <option value="digital" class="bg-navy-900">💻 Digital Services</option>
-            <option value="environment" class="bg-navy-900">🌿 Environment</option>
-          </select>
+          <input type="text" id="department" name="department" required placeholder="e.g., Department of Transportation"
+            class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all" />
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Urgency -->
-        <div class="space-y-2">
-          <label for="urgency" class="block text-sm font-medium text-text-primary">Urgency</label>
-          <div class="grid grid-cols-4 gap-2" id="urgency-group">
-            {(['low', 'medium', 'high', 'critical'] as const).map(level => (
-              <label class="cursor-pointer">
-                <input type="radio" name="urgency" value={level} class="hidden peer" required />
-                <div class={`px-3 py-2.5 rounded-xl text-center text-xs font-medium border transition-all peer-checked:border-teal-500/50 peer-checked:bg-teal-500/10 peer-checked:text-teal-400 ${
-                  level === 'critical' ? 'border-red-500/20 text-red-400 hover:bg-red-500/5' :
-                  level === 'high' ? 'border-amber-500/20 text-amber-400 hover:bg-amber-500/5' :
-                  level === 'medium' ? 'border-blue-500/20 text-blue-400 hover:bg-blue-500/5' :
-                  'border-white/[0.08] text-text-secondary hover:bg-white/[0.04]'
-                }`}>
-                  {level}
-                </div>
-              </label>
-            ))}
-          </div>
+      <!-- Step 2: Classification -->
+      <div class="glass p-6 space-y-4">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="w-8 h-8 rounded-lg bg-teal-500/15 flex items-center justify-center text-teal-400 font-bold text-sm">2</span>
+          <h2 class="font-display text-lg font-bold text-text-primary">Classification</h2>
         </div>
 
-        <!-- Budget -->
         <div class="space-y-2">
-          <label for="budget" class="block text-sm font-medium text-text-primary">Budget ($)</label>
-          <input
-            type="number"
-            id="budget"
-            name="budget"
-            required
-            min="10000"
-            step="5000"
-            placeholder="150000"
-            class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all"
-          />
+          <label class="block text-sm font-medium text-text-primary">Domain</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="domain-selector">
+            {domains.map(d => (
+              <button type="button" class="domain-btn px-3 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-text-secondary hover:bg-white/[0.06] hover:text-text-primary transition-all text-center space-y-1" data-domain={d.value}>
+                <div class="text-xl">{d.icon}</div>
+                <div class="text-xs font-medium">{d.label}</div>
+              </button>
+            ))}
+          </div>
+          <input type="hidden" id="domain" name="domain" required />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-text-primary">Urgency Level</label>
+            <div class="grid grid-cols-2 gap-2" id="urgency-selector">
+              {urgencies.map(u => (
+                <button type="button" class="urgency-btn px-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-text-secondary hover:bg-white/[0.06] hover:text-text-primary transition-all text-center" data-urgency={u.value}>
+                  {u.label}
+                </button>
+              ))}
+            </div>
+            <input type="hidden" id="urgency" name="urgency" required />
+          </div>
+
+          <div class="space-y-2">
+            <label for="budget" class="block text-sm font-medium text-text-primary">Budget ($)</label>
+            <input type="number" id="budget" name="budget" required min="10000" step="5000" placeholder="e.g., 150000"
+              class="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-text-primary placeholder-text-muted text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/25 transition-all" />
+            <p class="text-xs text-text-muted">Minimum $10,000</p>
+          </div>
         </div>
       </div>
 
       <!-- Submit -->
-      <div class="flex items-center gap-4 pt-4">
-        <button
-          type="submit"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-teal-500 to-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-teal-500/25 hover:-translate-y-0.5 active:translate-y-0"
-        >
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          Submit Problem
+      <div class="flex items-center gap-4">
+        <button type="submit" id="submit-btn" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-teal-500 to-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-teal-500/25 hover:-translate-y-0.5 active:translate-y-0">
+          📋 Submit Problem
         </button>
-        <a href="/problems" class="px-6 py-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-all">
-          Cancel
-        </a>
+        <a href="/problems" class="px-6 py-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-all">Cancel</a>
       </div>
     </form>
 
-    <!-- Success message (hidden by default) -->
+    <!-- Success Message -->
     <div id="success-msg" class="hidden mt-8 glass p-8 text-center space-y-4 animate-scale-in">
-      <div class="text-5xl">🎉</div>
+      <div class="text-5xl">✅</div>
       <h2 class="font-display text-xl font-bold text-text-primary">Problem Submitted!</h2>
-      <p class="text-sm text-text-secondary">Your problem has been recorded and is ready for startup matching.</p>
-      <div class="flex items-center justify-center gap-3 pt-2">
-        <a href="/startups/match" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-blue-500 text-white font-medium text-sm transition-all hover:shadow-lg hover:shadow-teal-500/25">
-          Find Matches
+      <p class="text-sm text-text-secondary">Your problem has been submitted and is now open for startup matching.</p>
+      <div class="flex items-center justify-center gap-3">
+        <a href="/problems" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-blue-500 text-white font-medium text-sm">
+          View Problems
         </a>
-        <a href="/problems" class="px-5 py-2.5 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-all">
-          View All Problems
+        <a href="/startups/match" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] text-text-secondary text-sm hover:bg-white/[0.06] hover:text-text-primary transition-all">
+          Find Matches
         </a>
       </div>
     </div>
@@ -155,25 +135,63 @@ const breadcrumbs = [
 
   initStore(problemsData, pilotsData);
 
+  // Domain selector
+  let selectedDomain = '';
+  document.querySelectorAll('.domain-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.domain-btn').forEach(b => {
+        b.classList.remove('border-teal-500/50', 'bg-teal-500/10', 'text-teal-400');
+        b.classList.add('border-white/[0.06]', 'text-text-secondary');
+      });
+      btn.classList.add('border-teal-500/50', 'bg-teal-500/10', 'text-teal-400');
+      btn.classList.remove('border-white/[0.06]', 'text-text-secondary');
+      selectedDomain = (btn as HTMLElement).dataset.domain || '';
+      (document.getElementById('domain') as HTMLInputElement).value = selectedDomain;
+    });
+  });
+
+  // Urgency selector
+  let selectedUrgency = '';
+  document.querySelectorAll('.urgency-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.urgency-btn').forEach(b => {
+        b.classList.remove('border-teal-500/50', 'bg-teal-500/10', 'text-teal-400');
+        b.classList.add('border-white/[0.06]', 'text-text-secondary');
+      });
+      btn.classList.add('border-teal-500/50', 'bg-teal-500/10', 'text-teal-400');
+      btn.classList.remove('border-white/[0.06]', 'text-text-secondary');
+      selectedUrgency = (btn as HTMLElement).dataset.urgency || '';
+      (document.getElementById('urgency') as HTMLInputElement).value = selectedUrgency;
+    });
+  });
+
+  // Form submission
   const form = document.getElementById('problem-form') as HTMLFormElement;
   const successMsg = document.getElementById('success-msg');
 
-  if (form && successMsg) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-      addProblem({
-        title: formData.get('title'),
-        description: formData.get('description'),
-        department: formData.get('department'),
-        domain: formData.get('domain'),
-        urgency: formData.get('urgency'),
-        budget: parseInt(formData.get('budget') as string) || 0,
-      });
+    if (!selectedDomain) {
+      alert('Please select a domain.');
+      return;
+    }
+    if (!selectedUrgency) {
+      alert('Please select an urgency level.');
+      return;
+    }
 
-      form.style.display = 'none';
-      successMsg.classList.remove('hidden');
+    const formData = new FormData(form);
+    addProblem({
+      title: formData.get('title'),
+      description: formData.get('description'),
+      department: formData.get('department'),
+      domain: selectedDomain,
+      urgency: selectedUrgency,
+      budget: parseInt(formData.get('budget') as string) || 0,
     });
-  }
+
+    form.style.display = 'none';
+    successMsg?.classList.remove('hidden');
+  });
 </script>
