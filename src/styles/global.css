@@ -2,71 +2,71 @@
 
 /* ===== Custom Theme ===== */
 @theme {
-  /* Government Navy Palette */
-  --color-navy-50: #f0f4f8;
-  --color-navy-100: #d9e2ec;
-  --color-navy-200: #bcccdc;
-  --color-navy-300: #9fb3c8;
-  --color-navy-400: #829ab1;
-  --color-navy-500: #627d98;
-  --color-navy-600: #486581;
-  --color-navy-700: #334e68;
-  --color-navy-800: #243b53;
-  --color-navy-900: #102a43;
-  --color-navy-950: #0a1929;
+  /* Navy Primary Palette */
+  --color-navy-50: #f5f8fc;
+  --color-navy-100: #e8eef8;
+  --color-navy-200: #d5e1f1;
+  --color-navy-300: #b7c9e5;
+  --color-navy-400: #8ba4cc;
+  --color-navy-500: #5f7db0;
+  --color-navy-600: #3c5a90;
+  --color-navy-700: #2b4478;
+  --color-navy-800: #1f3360;
+  --color-navy-900: #16243f;
+  --color-navy-950: #0d1729;
 
-  /* Sage Green Accent Palette */
-  --color-sage-50: #f4f7f5;
-  --color-sage-100: #e8f0eb;
-  --color-sage-200: #c9ddd0;
-  --color-sage-300: #a8c9b5;
-  --color-sage-400: #87b59a;
-  --color-sage-500: #5f9878;
-  --color-sage-600: #4a7a5f;
-  --color-sage-700: #3d6550;
-  --color-sage-800: #2f4d3d;
-  --color-sage-900: #1f362a;
+  /* Powder Blue Accent Palette #D0E6FD */
+  --color-sage-50: #fbfdff;
+  --color-sage-100: #f2f8ff;
+  --color-sage-200: #e6f1fd;
+  --color-sage-300: #d0e6fd;
+  --color-sage-400: #a8cef7;
+  --color-sage-500: #7fb2ea;
+  --color-sage-600: #5692d4;
+  --color-sage-700: #4076b3;
+  --color-sage-800: #335d8f;
+  --color-sage-900: #29496e;
 
-  /* Neutral Grays */
-  --color-gray-50: #fafbfc;
-  --color-gray-100: #f4f5f7;
-  --color-gray-200: #e8eaed;
-  --color-gray-300: #d3d6db;
-  --color-gray-400: #a8adb7;
-  --color-gray-500: #6c727f;
-  --color-gray-600: #4e5461;
-  --color-gray-700: #3a3f4b;
-  --color-gray-800: #2b2f38;
-  --color-gray-900: #1a1d23;
+  /* Neutral Grays — cool blue-tinted */
+  --color-gray-50: #fbfcfe;
+  --color-gray-100: #f2f5f9;
+  --color-gray-200: #e6ebf2;
+  --color-gray-300: #d8dee8;
+  --color-gray-400: #b9c2d0;
+  --color-gray-500: #8b95a6;
+  --color-gray-600: #6b7485;
+  --color-gray-700: #525a68;
+  --color-gray-800: #3d434e;
+  --color-gray-900: #2b3038;
 
   /* Primary & Accent aliases */
-  --color-blue-400: #829ab1;
-  --color-blue-500: #627d98;
-  --color-blue-600: #486581;
-  --color-blue-700: #334e68;
+  --color-blue-400: #8ba4cc;
+  --color-blue-500: #5f7db0;
+  --color-blue-600: #3c5a90;
+  --color-blue-700: #2b4478;
 
-  --color-accent-400: #87b59a;
-  --color-accent-500: #5f9878;
-  --color-accent-600: #4a7a5f;
-  --color-accent-700: #3d6550;
+  --color-accent-400: #a8cef7;
+  --color-accent-500: #7fb2ea;
+  --color-accent-600: #5692d4;
+  --color-accent-700: #4076b3;
 
-  /* Status colors — professional government tones */
-  --color-success-400: #6bb77b;
-  --color-success-500: #52a662;
-  --color-warning-400: #e6a855;
-  --color-warning-500: #d4941a;
-  --color-danger-400: #d97272;
-  --color-danger-500: #c85a54;
+  /* Status colors — navy & powder blue harmonized */
+  --color-success-400: #6fa3c9;
+  --color-success-500: #4d87b5;
+  --color-warning-400: #d4b46a;
+  --color-warning-500: #b8914a;
+  --color-danger-400: #c48080;
+  --color-danger-500: #a85f5f;
 
   /* Light mode surfaces */
   --color-surface-base: #ffffff;
-  --color-surface-secondary: #f4f5f7;
-  --color-surface-tertiary: #e8eaed;
+  --color-surface-secondary: #f2f6f9;
+  --color-surface-tertiary: #e8eef8;
 
   /* Text colors */
-  --color-text-primary: #102a43;
-  --color-text-secondary: #486581;
-  --color-text-muted: #627d98;
+  --color-text-primary: #16243f;
+  --color-text-secondary: #3c5a90;
+  --color-text-muted: #5f7db0;
 
   /* Fonts */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -103,8 +103,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(95, 152, 120, 0.15); }
-  50% { box-shadow: 0 0 30px rgba(95, 152, 120, 0.25); }
+  0%, 100% { box-shadow: 0 0 20px rgba(127, 178, 234, 0.25); }
+  50% { box-shadow: 0 0 30px rgba(127, 178, 234, 0.4); }
 }
 
 @keyframes float {
@@ -126,7 +126,7 @@
 @layer base {
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(95, 152, 120, 0.3) transparent;
+    scrollbar-color: rgba(127, 178, 234, 0.4) transparent;
   }
 
   html {
@@ -146,40 +146,47 @@
     font-family: var(--font-display);
     font-weight: 700;
     color: var(--color-navy-800);
+    letter-spacing: -0.01em;
   }
 
   ::selection {
-    background-color: rgba(95, 152, 120, 0.2);
+    background-color: rgba(127, 178, 234, 0.25);
     color: var(--color-navy-900);
   }
 }
 
 /* ===== Utility Classes ===== */
 @utility glass {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-gray-200);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid var(--color-gray-300);
+  border-radius: 6px;
+  box-shadow:
+    0 2px 4px 0 rgb(22 36 63 / 0.06),
+    0 1px 2px 0 rgb(22 36 63 / 0.04),
+    0 0 0 1px rgb(127 178 234 / 0.03);
 }
 
 @utility glass-sm {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-gray-200);
-  border-radius: 6px;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  border: 1px solid var(--color-gray-300);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 rgb(22 36 63 / 0.05);
 }
 
 @utility glass-hover {
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   &:hover {
     background: rgba(255, 255, 255, 1);
-    border-color: var(--color-sage-300);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-sage-400);
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 16px rgba(22, 36, 63, 0.12),
+      0 2px 4px rgba(22, 36, 63, 0.08),
+      0 0 0 2px rgba(127, 178, 234, 0.1);
   }
 }
 
@@ -188,6 +195,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 600;
 }
 
 @utility gradient-border {
@@ -197,7 +205,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    padding: 1px;
+    padding: 2px;
     background: linear-gradient(135deg, var(--color-sage-500), var(--color-navy-600));
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
