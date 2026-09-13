@@ -21,27 +21,27 @@ const breadcrumbs = [{ label: 'Dashboard' }];
 
 <Layout pageTitle="Dashboard" breadcrumbs={breadcrumbs}>
   <!-- Page heading -->
-  <div class="mb-8 animate-fade-in">
-    <h1 class="font-display text-3xl font-bold">
-      Welcome to <span class="gradient-text">PilotSetu</span>
+  <div class="mb-6 lg:mb-8 animate-fade-in">
+    <h1 class="font-display text-2xl lg:text-3xl font-bold text-gray-900 dark:text-text-primary">
+      Welcome to <span class="gradient-text">GovPilot</span>
     </h1>
-    <p class="text-text-secondary mt-2">Government innovation pilot management at a glance — powered by PilotSetu.</p>
+    <p class="text-gray-600 dark:text-text-secondary mt-2 text-sm lg:text-base">Government innovation management at a glance — powered by GovPilot.</p>
   </div>
 
   <!-- Stat cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 lg:gap-4 mb-6 lg:mb-8">
     <StatCard label="Total Problems" value={problems.length} icon="📋" trend="+2 this week" trendUp={true} delay={0} />
     <StatCard label="Active Pilots" value={activePilots.length} icon="🚀" trend="On track" trendUp={true} delay={100} />
     <StatCard label="Matched Startups" value={pilots.length} icon="🤝" delay={200} />
     <StatCard label="Success Rate" value={`${successRate}%`} icon="🎯" trend={`${scaledPilots.length} scaled`} trendUp={successRate > 50} delay={300} />
   </div>
 
-  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
     <!-- Active Pilots -->
-    <div class="xl:col-span-2 space-y-4">
+    <div class="xl:col-span-2 space-y-3 lg:space-y-4">
       <div class="flex items-center justify-between">
-        <h2 class="font-display text-xl font-bold text-text-primary">Active Pilots</h2>
-        <a href="/pilots" class="text-sm text-teal-400 hover:text-teal-300 transition-colors flex items-center gap-1">
+        <h2 class="font-display text-lg lg:text-xl font-bold text-gray-900 dark:text-text-primary">Active Pilots</h2>
+        <a href="/pilots" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center gap-1">
           View all
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -62,24 +62,24 @@ const breadcrumbs = [{ label: 'Dashboard' }];
     </div>
 
     <!-- Right sidebar: Recent Activity & Quick Actions -->
-    <div class="space-y-6">
+    <div class="space-y-4 lg:space-y-6">
       <!-- Quick Actions -->
-      <div class="glass p-5 space-y-3 animate-slide-up opacity-0" style="animation-delay: 200ms; animation-fill-mode: forwards;">
-        <h3 class="font-display font-bold text-text-primary">Quick Actions</h3>
+      <div class="glass p-4 lg:p-5 space-y-3 animate-slide-up opacity-0" style="animation-delay: 200ms; animation-fill-mode: forwards;">
+        <h3 class="font-display font-bold text-gray-900 dark:text-text-primary text-base lg:text-lg">Quick Actions</h3>
         <div class="space-y-2">
-          <a href="/problems/new" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-500/20 text-sm text-teal-400 hover:from-teal-500/20 hover:to-blue-500/20 transition-all group">
+          <a href="/problems/new" class="flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-blue-600/10 dark:from-blue-500/10 dark:to-blue-600/10 border border-blue-500/20 text-sm text-blue-700 dark:text-blue-400 hover:from-blue-500/20 hover:to-blue-600/20 dark:hover:from-blue-500/20 dark:hover:to-blue-600/20 transition-all group">
             <svg class="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
             Submit New Problem
           </a>
-          <a href="/startups/match" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-text-secondary hover:bg-white/[0.06] hover:text-text-primary transition-all">
+          <a href="/startups/match" class="flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06] text-sm text-gray-700 dark:text-text-secondary hover:bg-gray-200 dark:hover:bg-white/[0.06] hover:text-gray-900 dark:hover:text-text-primary transition-all">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
             Find Startup Match
           </a>
-          <a href="/pilots/new" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-text-secondary hover:bg-white/[0.06] hover:text-text-primary transition-all">
+          <a href="/pilots/new" class="flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06] text-sm text-gray-700 dark:text-text-secondary hover:bg-gray-200 dark:hover:bg-white/[0.06] hover:text-gray-900 dark:hover:text-text-primary transition-all">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75z" />
             </svg>
@@ -91,8 +91,8 @@ const breadcrumbs = [{ label: 'Dashboard' }];
       <!-- Recent Problems -->
       <div class="animate-slide-up opacity-0" style="animation-delay: 350ms; animation-fill-mode: forwards;">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="font-display font-bold text-text-primary">Recent Problems</h3>
-          <a href="/problems" class="text-xs text-teal-400 hover:text-teal-300 transition-colors">View all</a>
+          <h3 class="font-display font-bold text-gray-900 dark:text-text-primary text-base lg:text-lg">Recent Problems</h3>
+          <a href="/problems" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">View all</a>
         </div>
         <div class="space-y-3">
           {recentProblems.map(problem => (
@@ -102,13 +102,13 @@ const breadcrumbs = [{ label: 'Dashboard' }];
       </div>
 
       <!-- Completed Pilots Summary -->
-      <div class="glass p-5 space-y-3 animate-slide-up opacity-0" style="animation-delay: 450ms; animation-fill-mode: forwards;">
-        <h3 class="font-display font-bold text-text-primary">Completed Pilots</h3>
+      <div class="glass p-4 lg:p-5 space-y-3 animate-slide-up opacity-0" style="animation-delay: 450ms; animation-fill-mode: forwards;">
+        <h3 class="font-display font-bold text-gray-900 dark:text-text-primary text-base lg:text-lg">Completed Pilots</h3>
         <div class="space-y-3">
           {completedPilots.map(pilot => (
-            <a href={`/pilots/${pilot.id}`} class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/[0.04] transition-colors group">
+            <a href={`/pilots/${pilot.id}`} class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors group">
               <div class="min-w-0 flex-1">
-                <p class="text-sm text-text-primary truncate group-hover:text-teal-400 transition-colors">{pilot.title.split(' — ')[0]}</p>
+                <p class="text-sm text-gray-900 dark:text-text-primary truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{pilot.title.split(' — ')[0]}</p>
               </div>
               {pilot.outcome && (
                 <Badge variant={pilot.outcome === 'scale' ? 'success' : pilot.outcome === 'extend' ? 'info' : 'danger'}>
@@ -118,7 +118,7 @@ const breadcrumbs = [{ label: 'Dashboard' }];
             </a>
           ))}
         </div>
-        <a href="/reports" class="block text-center text-xs text-teal-400 hover:text-teal-300 transition-colors pt-2 border-t border-white/[0.06]">
+        <a href="/reports" class="block text-center text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors pt-2 border-t border-gray-200 dark:border-white/[0.06]">
           View Full Reports →
         </a>
       </div>

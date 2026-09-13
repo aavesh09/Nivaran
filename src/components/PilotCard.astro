@@ -59,18 +59,18 @@ const daysLeft = Math.max(0, Math.ceil((new Date(endDate).getTime() - Date.now()
 ---
 
 <a href={`/pilots/${id}`} class="block">
-  <div class="glass glass-hover p-5 space-y-4 group cursor-pointer">
+  <div class="glass glass-hover p-4 space-y-3 lg:space-y-4 group cursor-pointer">
     <div class="flex items-start justify-between gap-3">
       <div class="flex-1 min-w-0">
-        <h3 class="font-display font-bold text-text-primary group-hover:text-teal-400 transition-colors line-clamp-1">
+        <h3 class="font-display font-bold text-sm lg:text-base text-gray-900 dark:text-text-primary group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
           {title}
         </h3>
-        <p class="text-xs text-text-muted mt-1">
+        <p class="text-xs text-gray-600 dark:text-text-muted mt-1">
           {formatDate(startDate)} → {formatDate(endDate)}
-          {status === 'active' && <span class="text-teal-400 ml-2">· {daysLeft}d left</span>}
+          {status === 'active' && <span class="text-blue-600 dark:text-blue-400 ml-2">· {daysLeft}d left</span>}
         </p>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 shrink-0">
         <Badge variant={statusVariant[status as keyof typeof statusVariant] || 'neutral'}>
           {status}
         </Badge>
@@ -85,16 +85,16 @@ const daysLeft = Math.max(0, Math.ceil((new Date(endDate).getTime() - Date.now()
     <!-- Progress bar -->
     <div class="space-y-1.5">
       <div class="flex items-center justify-between text-xs">
-        <span class="text-text-muted">Overall Progress</span>
-        <span class="font-bold text-text-primary">{avgProgress}%</span>
+        <span class="text-gray-600 dark:text-text-muted">Overall Progress</span>
+        <span class="font-bold text-gray-900 dark:text-text-primary">{avgProgress}%</span>
       </div>
-      <div class="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+      <div class="w-full h-2 rounded-full bg-gray-200 dark:bg-white/5 overflow-hidden">
         <div
           class={`h-full rounded-full transition-all duration-1000 ease-out ${
-            avgProgress >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' :
-            avgProgress >= 50 ? 'bg-gradient-to-r from-blue-400 to-blue-500' :
-            avgProgress >= 25 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
-            'bg-gradient-to-r from-red-400 to-red-500'
+            avgProgress >= 80 ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500' :
+            avgProgress >= 50 ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500' :
+            avgProgress >= 25 ? 'bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500' :
+            'bg-gradient-to-r from-red-500 to-red-600 dark:from-red-400 dark:to-red-500'
           }`}
           style={`width: ${avgProgress}%;`}
         />
@@ -102,9 +102,9 @@ const daysLeft = Math.max(0, Math.ceil((new Date(endDate).getTime() - Date.now()
     </div>
 
     <!-- KPI summary -->
-    <div class="flex items-center gap-4 text-xs text-text-secondary">
+    <div class="flex items-center gap-4 text-xs text-gray-700 dark:text-text-secondary">
       <span class="flex items-center gap-1">
-        <svg class="w-3.5 h-3.5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg class="w-3.5 h-3.5 text-gray-500 dark:text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
         {kpis.length} KPIs

@@ -9,16 +9,29 @@
   --color-navy-700: #1c2748;
   --color-navy-600: #253259;
 
-  /* Accent — teal/emerald */
-  --color-accent-400: #2dd4bf;
-  --color-accent-500: #14b8a6;
-  --color-accent-600: #0d9488;
-  --color-accent-700: #0f766e;
+  /* Light mode grays */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
 
-  /* Secondary accent — vibrant blue */
+  /* Professional blue palette */
   --color-blue-400: #60a5fa;
   --color-blue-500: #3b82f6;
   --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+
+  /* Legacy teal support */
+  --color-accent-400: #60a5fa;
+  --color-accent-500: #3b82f6;
+  --color-accent-600: #2563eb;
+  --color-accent-700: #1d4ed8;
 
   /* Status colors */
   --color-success-400: #4ade80;
@@ -100,9 +113,12 @@
   }
 
   html {
+    font-family: var(--font-sans);
+  }
+
+  html.dark {
     background-color: var(--color-navy-950);
     color: var(--color-text-primary);
-    font-family: var(--font-sans);
   }
 
   body {
@@ -125,19 +141,33 @@
 
 /* ===== Utility Classes ===== */
 @utility glass {
-  background: var(--color-glass);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.dark .glass {
+  background: var(--color-glass);
   border: 1px solid var(--color-glass-border);
-  border-radius: 16px;
+  box-shadow: none;
 }
 
 @utility glass-sm {
-  background: var(--color-glass);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.dark .glass-sm {
+  background: var(--color-glass);
   border: 1px solid var(--color-glass-border);
-  border-radius: 12px;
+  box-shadow: none;
 }
 
 @utility glass-hover {
@@ -151,7 +181,14 @@
 }
 
 @utility gradient-text {
-  background: linear-gradient(135deg, var(--color-accent-400), var(--color-blue-400));
+  background: linear-gradient(135deg, var(--color-blue-600), var(--color-blue-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(135deg, var(--color-blue-400), var(--color-accent-400));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

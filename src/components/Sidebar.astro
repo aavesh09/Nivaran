@@ -19,34 +19,34 @@ const isActive = (href: string) => {
 };
 ---
 
-<aside class="fixed left-0 top-0 bottom-0 w-64 bg-navy-900/80 backdrop-blur-xl border-r border-white/[0.06] z-40 flex flex-col" id="sidebar">
+<aside class="fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-navy-900 border-r border-gray-200 dark:border-white/[0.06] z-40 flex flex-col transition-transform duration-300 lg:translate-x-0 -translate-x-full" id="sidebar">
   <!-- Logo / Brand -->
-  <div class="p-6 border-b border-white/[0.06]">
-    <a href="/" class="flex items-center gap-3 group">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:shadow-teal-500/40 transition-shadow">
+  <div class="p-4 border-b border-gray-200 dark:border-white/[0.06]">
+    <a href="/" class="flex items-center gap-2.5 group">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
         <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0v-6m3-3H9" />
         </svg>
       </div>
       <div>
-        <span class="font-display font-bold text-lg text-text-primary">Pilot<span class="text-teal-400">Setu</span></span>
-        <p class="text-[10px] text-text-muted tracking-wider uppercase">Innovation Platform</p>
+        <span class="font-display font-bold text-base text-gray-900 dark:text-text-primary">GovPilot</span>
+        <p class="text-[9px] text-gray-500 dark:text-text-muted tracking-wide uppercase">Platform</p>
       </div>
     </a>
   </div>
 
   <!-- Navigation -->
-  <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+  <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
     {navItems.map((item) => (
       <a
         href={item.href}
-        class={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group
+        class={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative
           ${isActive(item.href)
-            ? 'bg-gradient-to-r from-teal-500/15 to-blue-500/10 text-teal-400 border border-teal-500/20 shadow-sm shadow-teal-500/5'
-            : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]'
+            ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-semibold'
+            : 'text-gray-700 dark:text-text-secondary hover:text-gray-900 dark:hover:text-text-primary hover:bg-gray-100 dark:hover:bg-white/[0.04]'
           }`}
       >
-        <span class={`w-5 h-5 flex items-center justify-center ${isActive(item.href) ? 'text-teal-400' : 'text-text-muted group-hover:text-text-secondary'}`}>
+        <span class={`w-5 h-5 flex items-center justify-center ${isActive(item.href) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-text-muted group-hover:text-gray-700 dark:group-hover:text-text-secondary'}`}>
           {item.icon === 'dashboard' && (
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zm0 7a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1h-4a1 1 0 01-1-1v-5zM4 13a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1v-5z" />
@@ -73,27 +73,27 @@ const isActive = (href: string) => {
             </svg>
           )}
         </span>
-        {item.label}
+        <span class="truncate">{item.label}</span>
         {isActive(item.href) && (
-          <div class="ml-auto w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-600 dark:bg-blue-400 rounded-r-full" />
         )}
       </a>
     ))}
   </nav>
 
   <!-- Bottom section -->
-  <div class="p-4 border-t border-white/[0.06]">
-    <div class="glass-sm p-3 flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/30 to-purple-500/30 border border-white/10 flex items-center justify-center text-xs font-bold text-blue-400">
-        PS
+  <div class="p-3 border-t border-gray-200 dark:border-white/[0.06]">
+    <div class="p-2.5 rounded-lg bg-gray-50 dark:bg-white/[0.03] flex items-center gap-2.5 border border-gray-200 dark:border-white/[0.06]">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-xs font-bold text-white shadow-sm">
+        AD
       </div>
       <div class="flex-1 min-w-0">
-        <p class="text-xs font-medium text-text-primary truncate">PilotSetu Admin</p>
-        <p class="text-[10px] text-text-muted truncate">admin@pilotsetu.in</p>
+        <p class="text-xs font-medium text-gray-900 dark:text-text-primary truncate">Admin User</p>
+        <p class="text-[10px] text-gray-500 dark:text-text-muted truncate">admin@gov.in</p>
       </div>
     </div>
   </div>
 </aside>
 
 <!-- Mobile overlay -->
-<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" />
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 hidden lg:hidden" />

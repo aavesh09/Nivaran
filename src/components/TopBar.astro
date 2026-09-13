@@ -7,13 +7,13 @@ interface Props {
 const { title, breadcrumbs = [] } = Astro.props;
 ---
 
-<header class="sticky top-0 z-20 backdrop-blur-xl bg-navy-950/80 border-b border-white/[0.06]">
-  <div class="flex items-center justify-between h-16 px-6">
+<header class="sticky top-0 z-20 backdrop-blur-xl bg-white/90 dark:bg-navy-950/80 border-b border-gray-200 dark:border-white/[0.06]">
+  <div class="flex items-center justify-between h-14 px-4 lg:px-6">
     <div class="flex items-center gap-4">
       <!-- Mobile menu toggle -->
       <button
         id="mobile-menu-btn"
-        class="lg:hidden p-2 rounded-lg hover:bg-white/[0.04] text-text-secondary"
+        class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] text-gray-700 dark:text-text-secondary"
         aria-label="Toggle menu"
       >
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -26,97 +26,111 @@ const { title, breadcrumbs = [] } = Astro.props;
         {breadcrumbs.map((crumb, i) => (
           <>
             {i > 0 && (
-              <svg class="w-4 h-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <svg class="w-4 h-4 text-gray-400 dark:text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
             )}
             {crumb.href ? (
-              <a href={crumb.href} class="text-text-secondary hover:text-teal-400 transition-colors">
+              <a href={crumb.href} class="text-gray-600 dark:text-text-secondary hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {crumb.label}
               </a>
             ) : (
-              <span class="text-text-primary font-medium">{crumb.label}</span>
+              <span class="text-gray-900 dark:text-text-primary font-medium">{crumb.label}</span>
             )}
           </>
         ))}
       </nav>
     </div>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2">
+      <!-- Theme Toggle -->
+      <button
+        id="theme-toggle"
+        class="hidden sm:flex p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] text-gray-700 dark:text-text-secondary transition-colors"
+        aria-label="Toggle theme"
+      >
+        <svg id="theme-icon-light" class="w-5 h-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+        </svg>
+        <svg id="theme-icon-dark" class="w-5 h-5 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+        </svg>
+      </button>
+
       <!-- Search -->
       <div class="hidden md:flex items-center relative">
-        <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-text-muted text-sm w-64 cursor-text transition-all focus-within:border-teal-500/50 focus-within:ring-1 focus-within:ring-teal-500/25" id="search-container">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.06] text-gray-600 dark:text-text-muted text-sm w-64 cursor-text transition-all focus-within:border-blue-500 dark:focus-within:border-blue-500/50 focus-within:ring-2 focus-within:ring-blue-500/20" id="search-container">
           <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
           </svg>
-          <input type="text" id="search-input" placeholder="Search..." class="bg-transparent border-none outline-none text-text-primary placeholder-text-muted text-sm w-full" autocomplete="off" />
-          <span class="ml-auto text-xs bg-white/[0.06] px-1.5 py-0.5 rounded text-text-muted shrink-0">⌘K</span>
+          <input type="text" id="search-input" placeholder="Search..." class="bg-transparent border-none outline-none text-gray-900 dark:text-text-primary placeholder-gray-500 dark:placeholder-text-muted text-sm w-full" autocomplete="off" />
+          <span class="ml-auto text-xs bg-gray-200 dark:bg-white/[0.06] px-1.5 py-0.5 rounded text-gray-600 dark:text-text-muted shrink-0">⌘K</span>
         </div>
         <!-- Search Results Dropdown -->
-        <div id="search-results" class="absolute top-full left-0 right-0 mt-2 glass p-2 space-y-1 hidden z-50 max-h-80 overflow-y-auto">
+        <div id="search-results" class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-800 border border-gray-200 dark:border-white/[0.08] rounded-lg shadow-xl p-2 space-y-1 hidden z-50 max-h-80 overflow-y-auto">
         </div>
       </div>
 
       <!-- Notification bell -->
       <div class="relative" id="notification-wrapper">
-        <button class="relative p-2 rounded-xl hover:bg-white/[0.04] text-text-secondary transition-colors" aria-label="Notifications" id="notification-btn">
+        <button class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] text-gray-700 dark:text-text-secondary transition-colors" aria-label="Notifications" id="notification-btn">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
           </svg>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-400 animate-pulse" id="notification-dot" />
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse" id="notification-dot" />
         </button>
         <!-- Notification dropdown -->
-        <div id="notification-dropdown" class="absolute right-0 top-full mt-2 w-80 glass p-0 hidden z-50">
-          <div class="px-4 py-3 border-b border-white/[0.06]">
+        <div id="notification-dropdown" class="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-navy-800 border border-gray-200 dark:border-white/[0.08] rounded-lg shadow-xl p-0 hidden z-50">
+          <div class="px-4 py-3 border-b border-gray-200 dark:border-white/[0.06]">
             <div class="flex items-center justify-between">
-              <h3 class="font-display font-bold text-sm text-text-primary">Notifications</h3>
-              <button id="mark-all-read" class="text-xs text-teal-400 hover:text-teal-300 transition-colors">Mark all read</button>
+              <h3 class="font-display font-bold text-sm text-gray-900 dark:text-text-primary">Notifications</h3>
+              <button id="mark-all-read" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Mark all read</button>
             </div>
           </div>
           <div class="max-h-64 overflow-y-auto" id="notification-list">
-            <div class="px-4 py-3 border-b border-white/[0.04] hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="px-4 py-3 border-b border-gray-100 dark:border-white/[0.04] hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors cursor-pointer">
               <div class="flex items-start gap-3">
                 <span class="text-lg mt-0.5">🚀</span>
                 <div>
-                  <p class="text-xs text-text-primary font-medium">Traffic pilot updated</p>
-                  <p class="text-xs text-text-muted mt-0.5">Signal Optimization KPI reached 55%</p>
-                  <p class="text-[10px] text-text-muted mt-1">2 hours ago</p>
+                  <p class="text-xs text-gray-900 dark:text-text-primary font-medium">Traffic pilot updated</p>
+                  <p class="text-xs text-gray-600 dark:text-text-muted mt-0.5">Signal Optimization KPI reached 55%</p>
+                  <p class="text-[10px] text-gray-500 dark:text-text-muted mt-1">2 hours ago</p>
                 </div>
               </div>
             </div>
-            <div class="px-4 py-3 border-b border-white/[0.04] hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="px-4 py-3 border-b border-gray-100 dark:border-white/[0.04] hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors cursor-pointer">
               <div class="flex items-start gap-3">
                 <span class="text-lg mt-0.5">💧</span>
                 <div>
-                  <p class="text-xs text-text-primary font-medium">Water Quality KPI hit 72%</p>
-                  <p class="text-xs text-text-muted mt-0.5">Monitoring coverage target on track</p>
-                  <p class="text-[10px] text-text-muted mt-1">5 hours ago</p>
+                  <p class="text-xs text-gray-900 dark:text-text-primary font-medium">Water Quality KPI hit 72%</p>
+                  <p class="text-xs text-gray-600 dark:text-text-muted mt-0.5">Monitoring coverage target on track</p>
+                  <p class="text-[10px] text-gray-500 dark:text-text-muted mt-1">5 hours ago</p>
                 </div>
               </div>
             </div>
-            <div class="px-4 py-3 border-b border-white/[0.04] hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="px-4 py-3 border-b border-gray-100 dark:border-white/[0.04] hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors cursor-pointer">
               <div class="flex items-start gap-3">
                 <span class="text-lg mt-0.5">✅</span>
                 <div>
-                  <p class="text-xs text-text-primary font-medium">Air Quality pilot scaled</p>
-                  <p class="text-xs text-text-muted mt-0.5">ClearSky Sensors approved for deployment</p>
-                  <p class="text-[10px] text-text-muted mt-1">1 day ago</p>
+                  <p class="text-xs text-gray-900 dark:text-text-primary font-medium">Air Quality pilot scaled</p>
+                  <p class="text-xs text-gray-600 dark:text-text-muted mt-0.5">ClearSky Sensors approved for deployment</p>
+                  <p class="text-[10px] text-gray-500 dark:text-text-muted mt-1">1 day ago</p>
                 </div>
               </div>
             </div>
-            <div class="px-4 py-3 hover:bg-white/[0.04] transition-colors cursor-pointer">
+            <div class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors cursor-pointer">
               <div class="flex items-start gap-3">
                 <span class="text-lg mt-0.5">📋</span>
                 <div>
-                  <p class="text-xs text-text-primary font-medium">New problem submitted</p>
-                  <p class="text-xs text-text-muted mt-0.5">Stormwater Management System needs review</p>
-                  <p class="text-[10px] text-text-muted mt-1">2 days ago</p>
+                  <p class="text-xs text-gray-900 dark:text-text-primary font-medium">New problem submitted</p>
+                  <p class="text-xs text-gray-600 dark:text-text-muted mt-0.5">Stormwater Management System needs review</p>
+                  <p class="text-[10px] text-gray-500 dark:text-text-muted mt-1">2 days ago</p>
                 </div>
               </div>
             </div>
           </div>
-          <div class="px-4 py-2.5 border-t border-white/[0.06] text-center">
-            <a href="/reports" class="text-xs text-teal-400 hover:text-teal-300 transition-colors">View all activity →</a>
+          <div class="px-4 py-2.5 border-t border-gray-200 dark:border-white/[0.06] text-center">
+            <a href="/reports" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">View all activity →</a>
           </div>
         </div>
       </div>
@@ -125,6 +139,19 @@ const { title, breadcrumbs = [] } = Astro.props;
 </header>
 
 <script>
+  // ─── Theme Toggle ───
+  const themeToggle = document.getElementById('theme-toggle');
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('dark');
+
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+  }
+
   // ─── Search Functionality ───
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const searchResults = document.getElementById('search-results');
@@ -168,16 +195,16 @@ const { title, breadcrumbs = [] } = Astro.props;
       ).slice(0, 8);
 
       if (filtered.length === 0) {
-        searchResults.innerHTML = '<div class="px-3 py-4 text-xs text-text-muted text-center">No results found</div>';
+        searchResults.innerHTML = '<div class="px-3 py-4 text-xs text-gray-500 dark:text-text-muted text-center">No results found</div>';
       } else {
         searchResults.innerHTML = filtered.map(item => `
-          <a href="${item.href}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group">
+          <a href="${item.href}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.06] transition-colors group">
             <span class="text-lg">${item.icon}</span>
             <div class="flex-1 min-w-0">
-              <p class="text-sm text-text-primary font-medium group-hover:text-teal-400 transition-colors truncate">${item.title}</p>
-              <p class="text-xs text-text-muted truncate">${item.description}</p>
+              <p class="text-sm text-gray-900 dark:text-text-primary font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">${item.title}</p>
+              <p class="text-xs text-gray-600 dark:text-text-muted truncate">${item.description}</p>
             </div>
-            <svg class="w-4 h-4 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg class="w-4 h-4 text-gray-500 dark:text-text-muted opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </a>
