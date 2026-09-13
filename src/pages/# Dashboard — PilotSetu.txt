@@ -1,0 +1,74 @@
+# Dashboard — PilotSetu
+
+[PilotSetuInnovation Platform](http://localhost:4321/)
+Innovation Platform
+[Dashboard](http://localhost:4321/)
+[Problems](http://localhost:4321/problems)
+[Startups](http://localhost:4321/startups)
+[Pilots](http://localhost:4321/pilots)
+[Reports](http://localhost:4321/reports)
+PilotSetu Admin
+admin@pilotsetu.in
+
+### Notifications
+Traffic pilot updated
+Signal Optimization KPI reached 55%
+2 hours ago
+Water Quality KPI hit 72%
+Monitoring coverage target on track
+5 hours ago
+Air Quality pilot scaled
+ClearSky Sensors approved for deployment
+1 day ago
+New problem submitted
+Stormwater Management System needs review
+2 days ago
+[View all activity →](http://localhost:4321/reports)
+
+# Welcome to PilotSetu
+Government innovation pilot management at a glance — powered by PilotSetu.
+
+## Active Pilots
+[View all](http://localhost:4321/pilots)
+[Water Quality Monitoring Pilot — AquaWatch ProAug 1 → Nov 1· 53d leftactiveOverall Progress83%4 KPIs](http://localhost:4321/pilots/pilot-001)
+
+### Water Quality Monitoring Pilot — AquaWatch Pro
+Aug 1 → Nov 1· 53d left
+[Smart Waste Collection Pilot — BinSenseJul 15 → Oct 15· 36d leftactiveOverall Progress78%3 KPIs](http://localhost:4321/pilots/pilot-002)
+
+### Smart Waste Collection Pilot — BinSense
+Jul 15 → Oct 15· 36d left
+[Traffic Congestion Monitoring — FlowState AnalyticsSep 1 → Dec 1· 83d leftactiveOverall Progress42%3 KPIs](http://localhost:4321/pilots/pilot-005)
+
+### Traffic Congestion Monitoring — FlowState Analytics
+Sep 1 → Dec 1· 83d left
+
+### Quick Actions
+[Submit New Problem](http://localhost:4321/problems/new)
+[Find Startup Match](http://localhost:4321/startups/match)
+[Launch New Pilot](http://localhost:4321/pilots/new)
+
+### Recent Problems
+[View all](http://localhost:4321/problems)
+[🚦Urban Traffic Congestion MonitoringDepartment of TransportationThe city experiences severe traffic congestion during peak hours, costing an estimated $2.3M annually in lost productivity. We need real-time monitoring and predictive analytics to optimize signal timing and route management.highopen$150KAug 15, 2026](http://localhost:4321/problems/prob-001)
+
+### Urban Traffic Congestion Monitoring
+Department of Transportation
+The city experiences severe traffic congestion during peak hours, costing an estimated $2.3M annually in lost productivity. We need real-time monitoring and predictive analytics to optimize signal timing and route management.
+[♻️Smart Waste Collection OptimizationDepartment of SanitationCurrent waste collection routes are static and inefficient, leading to overflowing bins in some areas and unnecessary pickups in others. Looking for IoT-based monitoring and route optimization solutions.mediummatched$80KAug 20, 2026](http://localhost:4321/problems/prob-002)
+
+### Smart Waste Collection Optimization
+Department of Sanitation
+Current waste collection routes are static and inefficient, leading to overflowing bins in some areas and unnecessary pickups in others. Looking for IoT-based monitoring and route optimization solutions.
+[💧Water Quality Real-Time MonitoringWater AuthorityMultiple water quality incidents have occurred in the past year due to delayed detection. Need continuous monitoring sensors and an alert system across the municipal water supply network.criticalpilot active$200KJul 10, 2026](http://localhost:4321/problems/prob-003)
+
+### Water Quality Real-Time Monitoring
+Water Authority
+Multiple water quality incidents have occurred in the past year due to delayed detection. Need continuous monitoring sensors and an alert system across the municipal water supply network.
+
+### Completed Pilots
+[Air Quality Network Pilot🚀 Scale](http://localhost:4321/pilots/pilot-003)
+Air Quality Network Pilot
+[Citizen Portal Modernization🔄 Extend](http://localhost:4321/pilots/pilot-004)
+Citizen Portal Modernization
+[View Full Reports →](http://localhost:4321/reports)
