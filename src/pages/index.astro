@@ -1,217 +1,779 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import StatCard from '../components/StatCard.astro';
-import PilotCard from '../components/PilotCard.astro';
-import ProblemCard from '../components/ProblemCard.astro';
-import Badge from '../components/Badge.astro';
+import problems_seed from '../data/problems.json';
+import applications_seed from '../data/applications.json';
+import pilotRuns_seed from '../data/pilotRuns.json';
+import scaleDecisions_seed from '../data/scaleDecisions.json';
 
-import problems from '../data/problems.json';
-import startups from '../data/startups.json';
-import pilots from '../data/pilots.json';
+const categories = ['Sanitation', 'Water', 'Electrical', 'Roads', 'Health', 'Other civic issue'];
 
-const activePilots = pilots.filter(p => p.status === 'active');
-const completedPilots = pilots.filter(p => p.status === 'completed');
-const scaledPilots = completedPilots.filter(p => p.outcome === 'scale');
-const successRate = completedPilots.length > 0 ? Math.round((scaledPilots.length / completedPilots.length) * 100) : 0;
-const openProblems = problems.filter(p => p.status === 'open');
-const recentProblems = problems.slice(0, 3);
-
-const breadcrumbs = [{ label: 'Dashboard' }];
+// Counts for SSR-rendered funnel (JS will update live after hydration)
+const counts = {
+  posted: problems_seed.length,
+  matched: problems_seed.filter(p => ['matched','pilot_running','pilot_complete','approved_for_scale','not_approved'].includes(p.status)).length,
+  running: problems_seed.filter(p => p.status === 'pilot_running').length,
+  decided: problems_seed.filter(p => ['pilot_complete','approved_for_scale','not_approved'].includes(p.status)).length,
+};
 ---
 
-<Layout pageTitle="Dashboard" breadcrumbs={breadcrumbs}>
-  <!-- Page heading -->
-  <div class="mb-6 lg:mb-8 animate-fade-in">
-    <h1 class="font-display text-3xl lg:text-4xl font-bold text-navy-900">
-      Welcome to <span class="gradient-text">GovPilot</span>
-    </h1>
-    <p class="text-navy-600 mt-2 text-base lg:text-lg font-medium">Government innovation management at a glance — powered by GovPilot.</p>
-  </div>
-
-  <!-- Clickable Stat cards with navigation -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-5 mb-8 lg:mb-10">
-    <a href="/problems" class="block group">
-      <StatCard label="Total Problems" value={problems.length} icon="📋" trend="+2 this week" trendUp={true} delay={0} clickable={true} />
-    </a>
-    <a href="/pilots" class="block group">
-      <StatCard label="Active Pilots" value={activePilots.length} icon="🚀" trend="On track" trendUp={true} delay={100} clickable={true} />
-    </a>
-    <a href="/startups" class="block group">
-      <StatCard label="Matched Startups" value={pilots.length} icon="🤝" delay={200} clickable={true} />
-    </a>
-    <a href="/reports" class="block group">
-      <StatCard label="Success Rate" value={`${successRate}%`} icon="🎯" trend={`${scaledPilots.length} scaled`} trendUp={successRate > 50} delay={300} clickable={true} />
-    </a>
-  </div>
-
-  <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-6">
-    <!-- Active Pilots -->
-    <div class="xl:col-span-2 space-y-4 lg:space-y-5">
-      <div class="flex items-center justify-between">
-        <h2 class="font-display text-xl lg:text-2xl font-bold text-navy-900 flex items-center gap-2">
-          <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-sage-500 to-sage-600 flex items-center justify-center text-white text-sm">🚀</span>
-          Active Pilots
-        </h2>
-        <a href="/pilots" class="text-sm font-bold text-sage-700 hover:text-sage-800 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-sage-100">
-          View all
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+<Layout pageTitle="Dashboard">
+  <!-- ═══════════════════════════════════════════════════════ TOP NAV -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm">
+    <div class="max-w-screen-xl mx-auto px-4 flex items-center gap-4 h-16">
+      <!-- Brand -->
+      <a href="/" class="flex items-center gap-2.5 shrink-0 mr-2">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-navy-700 to-navy-900 flex items-center justify-center shadow-md">
+          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
           </svg>
-        </a>
-      </div>
-      <div class="space-y-4">
-        {activePilots.map((pilot, i) => {
-          const problem = problems.find(p => p.id === pilot.problemId);
-          const startup = startups.find(s => s.id === pilot.startupId);
-          return (
-            <div class="animate-slide-up opacity-0" style={`animation-delay: ${(i + 1) * 100}ms; animation-fill-mode: forwards;`}>
-              <PilotCard {...pilot} problemTitle={problem?.title} startupName={startup?.name} />
-            </div>
-          );
-        })}
+        </div>
+        <div class="leading-tight">
+          <div class="font-display font-800 text-navy-900 text-lg leading-none">PilotSetu</div>
+          <div class="text-xs text-gray-400 font-medium leading-none mt-0.5 hidden sm:block">Proof before scale</div>
+        </div>
+      </a>
+
+      <!-- Tab pills -->
+      <nav class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar" id="tab-nav">
+        {[
+          { id: 'overview',    label: 'Overview',             icon: '🏠' },
+          { id: 'gov',         label: 'Gov Console',          icon: '🏛️' },
+          { id: 'marketplace', label: 'Startup Marketplace',  icon: '🚀' },
+          { id: 'command',     label: 'Pilot Command',        icon: '📋' },
+          { id: 'ledger',      label: 'Proof Ledger',         icon: '📊' },
+        ].map((tab, i) => (
+          <button
+            class="tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-gray-500 hover:text-navy-800 hover:bg-gray-100"
+            data-tab={tab.id}
+            id={`tab-btn-${tab.id}`}
+          >
+            <span>{tab.icon}</span>
+            <span class="hidden sm:inline">{tab.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <!-- Role switcher -->
+      <div class="shrink-0 flex items-center gap-2">
+        <label class="text-xs text-gray-500 font-medium hidden md:block">Role:</label>
+        <select id="role-switcher" class="text-sm font-semibold bg-navy-50 border border-navy-200 text-navy-800 rounded-lg px-3 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-400">
+          <option value="gov">🏛️ Gov Official</option>
+          <option value="startup">🚀 Startup</option>
+          <option value="admin">🛡️ Admin</option>
+        </select>
       </div>
     </div>
+  </header>
 
-    <!-- Right sidebar: Recent Activity & Quick Actions -->
-    <div class="space-y-5 lg:space-y-6">
-      <!-- Enhanced Quick Actions -->
-      <div class="glass p-5 lg:p-6 space-y-4 animate-slide-up opacity-0 border-2 border-navy-200" style="animation-delay: 200ms; animation-fill-mode: forwards;">
-        <h3 class="font-display font-bold text-navy-900 text-lg lg:text-xl flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-navy-600 to-navy-700 flex items-center justify-center text-white text-xs">⚡</span>
-          Quick Actions
-        </h3>
-        <div class="space-y-3">
-          <a href="/problems/new" class="flex items-center gap-3 px-4 py-3.5 rounded-lg bg-gradient-to-r from-sage-500 to-sage-600 text-white font-bold text-sm hover:from-sage-600 hover:to-sage-700 transition-all shadow-md hover:shadow-lg hover:scale-[1.02] group">
-            <span class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center group-hover:rotate-90 transition-transform">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </span>
-            <span>Submit New Problem</span>
-            <svg class="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </a>
-          <a href="/startups/match" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-white border-2 border-navy-300 text-navy-800 font-bold text-sm hover:bg-sage-50 hover:border-sage-400 transition-all hover:shadow-md group">
-            <span class="w-7 h-7 rounded-lg bg-navy-100 text-navy-700 flex items-center justify-center group-hover:bg-sage-200 transition-colors">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-            </span>
-            Find Startup Match
-          </a>
-          <a href="/pilots/new" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-white border-2 border-navy-300 text-navy-800 font-bold text-sm hover:bg-sage-50 hover:border-sage-400 transition-all hover:shadow-md group">
-            <span class="w-7 h-7 rounded-lg bg-navy-100 text-navy-700 flex items-center justify-center group-hover:bg-sage-200 transition-colors">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41" />
-              </svg>
-            </span>
-            Launch New Pilot
-          </a>
+  <!-- ═══════════════════════════════════════════════════════ MAIN -->
+  <main class="flex-1 max-w-screen-xl mx-auto w-full px-4 py-6">
+
+    <!-- ─────────────────────────── TAB 1: OVERVIEW ─────────────────────────── -->
+    <div class="tab-panel active" id="panel-overview">
+
+      <!-- Explainer banner -->
+      <div class="mb-6 glass p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 border-l-4 border-orange-500">
+        <div class="w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-2xl shadow-md">⚡</div>
+        <div>
+          <h1 class="font-display text-xl font-bold text-navy-900">PilotSetu — <span class="gradient-text">Proof before scale</span></h1>
+          <p class="text-sm text-gray-600 mt-0.5">A marketplace between government departments and startups. Departments post real problems. Startups pitch solutions. One startup runs a small, time-boxed pilot. Data decides who scales.</p>
         </div>
       </div>
 
-      <!-- Recent Problems -->
-      <div class="animate-slide-up opacity-0" style="animation-delay: 350ms; animation-fill-mode: forwards;">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-display font-bold text-navy-900 text-lg lg:text-xl flex items-center gap-2">
-            <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-navy-600 to-navy-700 flex items-center justify-center text-white text-xs">📋</span>
-            Recent Problems
-          </h3>
-          <a href="/problems" class="text-sm font-bold text-sage-700 hover:text-sage-800 transition-colors">View all →</a>
-        </div>
-        <div class="space-y-3">
-          {recentProblems.map(problem => (
-            <ProblemCard {...problem} />
-          ))}
-        </div>
-      </div>
-
-      <!-- Completed Pilots Summary -->
-      <div class="glass p-5 lg:p-6 space-y-4 animate-slide-up opacity-0 border-2 border-navy-200" style="animation-delay: 450ms; animation-fill-mode: forwards;">
-        <h3 class="font-display font-bold text-navy-900 text-lg lg:text-xl flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-navy-600 to-navy-700 flex items-center justify-center text-white text-xs">✅</span>
-          Completed Pilots
-        </h3>
-        <div class="space-y-2">
-          {completedPilots.map(pilot => (
-            <a href={`/pilots/${pilot.id}`} class="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-sage-50 transition-colors group border-2 border-transparent hover:border-sage-300">
-              <div class="min-w-0 flex-1">
-                <p class="text-sm font-bold text-navy-900 truncate group-hover:text-sage-700 transition-colors">{pilot.title.split(' — ')[0]}</p>
+      <!-- 4-stage funnel strip -->
+      <div class="mb-6 glass p-4">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Problem lifecycle</p>
+        <div class="flex gap-2 items-stretch" id="funnel-strip">
+          {[
+            { key: 'posted',  label: 'Problem posted',    color: 'from-gray-400 to-gray-500',     count: counts.posted  },
+            { key: 'matched', label: 'Startup matched',   color: 'from-blue-500 to-blue-600',     count: counts.matched },
+            { key: 'running', label: 'Pilot running',     color: 'from-orange-400 to-orange-500', count: counts.running },
+            { key: 'decided', label: 'Scale decision',    color: 'from-green-500 to-green-600',   count: counts.decided },
+          ].map((step, i) => (
+            <button
+              class="funnel-step flex-1 rounded-lg py-3 px-2 text-center bg-gradient-to-br text-white transition-all hover:scale-[1.03] hover:shadow-lg"
+              style={`background-image: linear-gradient(135deg, var(--tw-gradient-stops));`}
+              data-funnel={step.key}
+            >
+              <div class={`inline-flex flex-col items-center w-full bg-gradient-to-br ${step.color} rounded-lg py-3 px-2`}>
+                <span class="text-2xl font-display font-800 leading-none" data-funnel-count={step.key}>{step.count}</span>
+                <span class="text-xs font-semibold mt-1 opacity-90">{step.label}</span>
               </div>
-              {pilot.outcome && (
-                <Badge variant={pilot.outcome === 'scale' ? 'success' : pilot.outcome === 'extend' ? 'info' : 'danger'}>
-                  {pilot.outcome === 'scale' ? '🚀 Scale' : pilot.outcome === 'extend' ? '🔄 Extend' : '⏹️ Stop'}
-                </Badge>
-              )}
-            </a>
+            </button>
           ))}
         </div>
-        <a href="/reports" class="block text-center text-sm font-bold text-sage-700 hover:text-sage-800 transition-colors pt-3 border-t-2 border-navy-200">
-          View Full Reports →
-        </a>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="stat-cards">
+        <div class="glass p-4 animate-slide-up stagger-1">
+          <div class="text-3xl font-display font-800 text-navy-900" id="stat-total-problems">{problems_seed.length}</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">Total problems</div>
+          <div class="text-xs text-gray-400 mt-0.5">on platform</div>
+        </div>
+        <div class="glass p-4 animate-slide-up stagger-2">
+          <div class="text-3xl font-display font-800 text-blue-600" id="stat-applications">{applications_seed.length}</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">Applications</div>
+          <div class="text-xs text-gray-400 mt-0.5">from startups</div>
+        </div>
+        <div class="glass p-4 animate-slide-up stagger-3">
+          <div class="text-3xl font-display font-800 text-orange-500" id="stat-pilots-running">{problems_seed.filter(p=>p.status==='pilot_running').length}</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">Pilots running</div>
+          <div class="text-xs text-gray-400 mt-0.5">right now</div>
+        </div>
+        <div class="glass p-4 animate-slide-up stagger-4">
+          <div class="text-3xl font-display font-800 text-green-600" id="stat-avg-improvement">—</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">Avg. improvement</div>
+          <div class="text-xs text-gray-400 mt-0.5">across completed pilots</div>
+        </div>
+      </div>
+
+      <!-- All problems list -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-display text-lg font-bold text-navy-900">All problems on the platform</h2>
+          <span class="text-xs text-gray-400" id="overview-filter-label"></span>
+        </div>
+        <div class="space-y-3" id="overview-problem-list">
+          <!-- rendered by JS -->
+          <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Floating Action Button (FAB) -->
-  <div class="fixed bottom-6 right-6 z-30" id="fab-container">
-    <!-- FAB Menu (hidden by default) -->
-    <div id="fab-menu" class="absolute bottom-16 right-0 space-y-3 mb-2 hidden">
-      <a href="/problems/new" class="flex items-center gap-3 bg-white border-2 border-navy-300 text-navy-800 px-4 py-3 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all group">
-        <span class="font-bold text-sm whitespace-nowrap">New Problem</span>
-        <span class="w-8 h-8 rounded-lg bg-navy-100 flex items-center justify-center">📋</span>
-      </a>
-      <a href="/pilots/new" class="flex items-center gap-3 bg-white border-2 border-navy-300 text-navy-800 px-4 py-3 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all group">
-        <span class="font-bold text-sm whitespace-nowrap">New Pilot</span>
-        <span class="w-8 h-8 rounded-lg bg-navy-100 flex items-center justify-center">🚀</span>
-      </a>
-      <a href="/startups/match" class="flex items-center gap-3 bg-white border-2 border-navy-300 text-navy-800 px-4 py-3 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all group">
-        <span class="font-bold text-sm whitespace-nowrap">Match Startup</span>
-        <span class="w-8 h-8 rounded-lg bg-navy-100 flex items-center justify-center">🔍</span>
-      </a>
+    <!-- ─────────────────────────── TAB 2: GOV CONSOLE ─────────────────────────── -->
+    <div class="tab-panel" id="panel-gov">
+      <h1 class="font-display text-2xl font-bold text-navy-900 mb-6">🏛️ Government Console</h1>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Post a problem form -->
+        <div class="glass p-6">
+          <h2 class="font-display text-lg font-bold text-navy-800 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-base">+</span>
+            Post a new problem
+          </h2>
+          <form id="post-problem-form" class="space-y-4" novalidate>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Problem title *</label>
+              <input id="f-title" type="text" required placeholder="e.g. Missed garbage pickups" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Department *</label>
+                <input id="f-department" type="text" required placeholder="e.g. Solid Waste Dept." class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">City / ULB *</label>
+                <input id="f-city" type="text" required placeholder="e.g. Nagpur MC" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Category *</label>
+              <select id="f-category" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
+                {categories.map(c => <option value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Description *</label>
+              <textarea id="f-description" required rows="3" placeholder="Describe the civic problem in detail…" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"></textarea>
+            </div>
+            <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+              <p class="text-xs font-semibold text-blue-700 mb-2 uppercase tracking-wide">Baseline metric</p>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="col-span-3 sm:col-span-1">
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Metric name *</label>
+                  <input id="f-metric-name" type="text" required placeholder="e.g. Missed pickups" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Unit *</label>
+                  <input id="f-metric-unit" type="text" required placeholder="%, hrs, days" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Baseline value *</label>
+                  <input id="f-baseline" type="number" required placeholder="e.g. 40" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                </div>
+              </div>
+              <div class="mt-2">
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Direction</label>
+                <select id="f-direction" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
+                  <option value="lower_is_better">⬇️ Lower is better</option>
+                  <option value="higher_is_better">⬆️ Higher is better</option>
+                </select>
+              </div>
+            </div>
+            <div id="form-error" class="hidden text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2"></div>
+            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              Post problem to marketplace
+            </button>
+          </form>
+          <div id="form-success" class="hidden mt-3 text-sm text-green-700 bg-green-50 rounded-lg px-3 py-2 flex items-center gap-2">
+            ✅ Problem posted successfully!
+          </div>
+        </div>
+
+        <!-- Dept problems list -->
+        <div>
+          <h2 class="font-display text-lg font-bold text-navy-800 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-navy-100 text-navy-700 flex items-center justify-center text-sm">📋</span>
+            Posted by your department
+          </h2>
+          <div class="space-y-3" id="dept-problem-list">
+            <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- FAB Button -->
-    <button id="fab-button" class="w-14 h-14 rounded-full bg-gradient-to-br from-sage-500 to-sage-600 text-white shadow-xl hover:shadow-2xl hover:scale-110 transition-all flex items-center justify-center group">
-      <svg id="fab-icon" class="w-7 h-7 transition-transform group-hover:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-      </svg>
-    </button>
-  </div>
+
+    <!-- ─────────────────────────── TAB 3: STARTUP MARKETPLACE ─────────────────────────── -->
+    <div class="tab-panel" id="panel-marketplace">
+      <div class="mb-6">
+        <h1 class="font-display text-2xl font-bold text-navy-900">🚀 Startup Marketplace</h1>
+        <p class="text-gray-500 text-sm mt-1">Open problems, looking for a pilot partner. Apply with a short pitch. The department shortlists one startup for a small pilot — not a full contract.</p>
+      </div>
+      <div class="space-y-4" id="marketplace-list">
+        <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────── TAB 4: PILOT COMMAND ─────────────────────────── -->
+    <div class="tab-panel" id="panel-command">
+      <div class="mb-6">
+        <h1 class="font-display text-2xl font-bold text-navy-900">📋 Pilot Command</h1>
+        <p class="text-gray-500 text-sm mt-1">Pilots in progress — record results when the pilot period ends.</p>
+      </div>
+      <div class="space-y-4" id="command-list">
+        <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────── TAB 5: PROOF LEDGER ─────────────────────────── -->
+    <div class="tab-panel" id="panel-ledger">
+      <div class="mb-6">
+        <h1 class="font-display text-2xl font-bold text-navy-900">📊 Proof Ledger</h1>
+        <p class="text-gray-500 text-sm mt-1">Completed pilots — decision pending or made. The numbers speak.</p>
+      </div>
+      <div class="space-y-4" id="ledger-list">
+        <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="max-w-screen-xl mx-auto w-full px-4 py-4 border-t border-gray-200 text-center text-xs text-gray-400">
+    PilotSetu © 2026 — Proof before scale · Government × Startup Innovation Marketplace
+  </footer>
 </Layout>
 
 <script>
-  import { initStore } from '../scripts/store.js';
-  import problemsData from '../data/problems.json';
-  import pilotsData from '../data/pilots.json';
+// ─── Imports ─────────────────────────────────────────────────────────────────
+import {
+  initStore, getStore, resetStore,
+  addProblem, deleteProblem,
+  addApplication, shortlistApplication,
+  startPilot, recordPilotResult,
+  makeScaleDecision,
+  avgImprovement,
+} from '../scripts/store.js';
 
-  initStore(problemsData, pilotsData);
+import problemsSeed       from '../data/problems.json';
+import applicationsSeed   from '../data/applications.json';
+import pilotRunsSeed      from '../data/pilotRuns.json';
+import scaleDecisionsSeed from '../data/scaleDecisions.json';
 
-  // FAB functionality
-  const fabButton = document.getElementById('fab-button');
-  const fabMenu = document.getElementById('fab-menu');
-  const fabIcon = document.getElementById('fab-icon');
+// ─── Init store ───────────────────────────────────────────────────────────────
+initStore(problemsSeed, applicationsSeed, pilotRunsSeed, scaleDecisionsSeed);
 
-  if (fabButton && fabMenu && fabIcon) {
-    fabButton.addEventListener('click', () => {
-      const isOpen = !fabMenu.classList.contains('hidden');
+// ─── Role ─────────────────────────────────────────────────────────────────────
+let currentRole = 'gov'; // gov | startup | admin
+const roleSelect = document.getElementById('role-switcher') as HTMLSelectElement;
+roleSelect?.addEventListener('change', () => {
+  currentRole = roleSelect.value;
+  renderAll();
+});
 
-      if (isOpen) {
-        fabMenu.classList.add('hidden');
-        fabIcon.style.transform = 'rotate(0deg)';
-      } else {
-        fabMenu.classList.remove('hidden');
-        fabIcon.style.transform = 'rotate(45deg)';
-      }
-    });
+// ─── Tab switching ────────────────────────────────────────────────────────────
+const tabBtns  = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+const tabPanels = document.querySelectorAll<HTMLElement>('.tab-panel');
 
-    // Close FAB menu when clicking outside
-    document.addEventListener('click', (e) => {
-      const fabContainer = document.getElementById('fab-container');
-      if (fabContainer && !fabContainer.contains(e.target as Node)) {
-        fabMenu.classList.add('hidden');
-        fabIcon.style.transform = 'rotate(0deg)';
-      }
-    });
+let activeTab = 'overview';
+
+function activateTab(id: string) {
+  activeTab = id;
+  tabBtns.forEach(btn => {
+    const isActive = btn.dataset.tab === id;
+    btn.classList.toggle('bg-orange-500', isActive);
+    btn.classList.toggle('text-white', isActive);
+    btn.classList.toggle('shadow-md', isActive);
+    btn.classList.toggle('text-gray-500', !isActive);
+    btn.classList.toggle('hover:bg-gray-100', !isActive);
+  });
+  tabPanels.forEach(panel => {
+    panel.classList.toggle('active', panel.id === `panel-${id}`);
+  });
+  renderAll();
+}
+
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => activateTab(btn.dataset.tab!));
+});
+
+// ─── Status badge HTML ────────────────────────────────────────────────────────
+function statusBadge(status: string) {
+  const map: Record<string, [string, string]> = {
+    open:              ['⬜ Open — awaiting startups', 'bg-gray-100 text-gray-600 border border-gray-300'],
+    matched:           ['🔵 Startup matched',          'bg-blue-100 text-blue-800 border border-blue-200'],
+    pilot_running:     ['🟠 Pilot running',             'bg-orange-100 text-orange-800 border border-orange-200'],
+    pilot_complete:    ['🟡 Pilot complete',            'bg-yellow-100 text-yellow-800 border border-yellow-200'],
+    approved_for_scale:['🟢 Approved for scale',       'bg-green-100 text-green-800 border border-green-200'],
+    not_approved:      ['🔴 Not approved',              'bg-red-100 text-red-800 border border-red-200'],
+  };
+  const [label, cls] = map[status] ?? ['Unknown', 'bg-gray-100 text-gray-500'];
+  return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${cls}">${label}</span>`;
+}
+
+// ─── Category icon ────────────────────────────────────────────────────────────
+function catIcon(cat: string) {
+  const m: Record<string,string> = { Sanitation:'🗑️', Water:'💧', Electrical:'⚡', Roads:'🛣️', Health:'🏥', 'Other civic issue':'🏙️' };
+  return m[cat] ?? '📋';
+}
+
+// ─── Problem card HTML ────────────────────────────────────────────────────────
+function problemCardHtml(p: any, opts: { showDelete?: boolean, showApply?: boolean, showShortlist?: boolean } = {}) {
+  const canDelete = opts.showDelete && (currentRole === 'admin' || currentRole === 'gov');
+  const deleteBtn = canDelete
+    ? `<button class="delete-problem-btn text-red-400 hover:text-red-600 transition-colors ml-2 shrink-0" data-id="${p.id}" title="Delete problem">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.021-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+       </button>`
+    : '';
+
+  return `
+  <div class="glass glass-hover p-4 rounded-xl" data-problem-id="${p.id}">
+    <div class="flex items-start gap-3">
+      <div class="w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br from-navy-100 to-navy-200 flex items-center justify-center text-lg">${catIcon(p.category)}</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-start justify-between gap-2 flex-wrap">
+          <h3 class="font-display font-bold text-navy-900 text-base leading-tight">${p.title}</h3>
+          <div class="flex items-center gap-1 shrink-0">
+            ${statusBadge(p.status)}
+            ${deleteBtn}
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-0.5 font-medium">${p.department} · ${p.city_ulb}</p>
+        <p class="text-sm text-gray-600 mt-1.5 line-clamp-2">${p.description}</p>
+        <div class="mt-2 inline-flex items-center gap-1.5 bg-navy-50 border border-navy-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-navy-700">
+          <span>📏</span>
+          <span>${p.metric_name}: <strong>${p.baseline_value}${p.metric_unit}</strong> baseline</span>
+          <span class="text-gray-400">(${p.metric_direction === 'lower_is_better' ? '⬇️ lower is better' : '⬆️ higher is better'})</span>
+        </div>
+        ${opts.showApply && p.status === 'open' && currentRole === 'startup' ? applyFormHtml(p) : ''}
+        ${opts.showShortlist && p.status === 'matched' && currentRole === 'gov' ? shortlistSectionHtml(p) : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function applyFormHtml(p: any) {
+  return `
+  <div class="mt-3 border-t border-gray-100 pt-3">
+    <div id="apply-form-${p.id}" class="space-y-2">
+      <input type="text" placeholder="Your startup name" id="apply-name-${p.id}"
+        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"/>
+      <textarea placeholder="Your pitch (3–5 sentences — what you'll do and why it'll work)" id="apply-pitch-${p.id}"
+        rows="2" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"></textarea>
+      <button class="apply-submit-btn w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-2 rounded-lg text-sm hover:from-orange-600 hover:to-orange-700 transition-all" data-pid="${p.id}">
+        🚀 Apply with a solution
+      </button>
+      <div id="apply-msg-${p.id}" class="hidden text-sm text-green-700 bg-green-50 rounded px-2 py-1">Application submitted!</div>
+    </div>
+  </div>`;
+}
+
+function shortlistSectionHtml(p: any) {
+  const store = getStore();
+  const apps = store.applications.filter((a: any) => a.problem_id === p.id);
+  if (!apps.length) return '';
+  return `
+  <div class="mt-3 border-t border-gray-100 pt-3">
+    <p class="text-xs font-bold text-gray-600 mb-2 uppercase tracking-wide">Applications (${apps.length})</p>
+    <div class="space-y-2">
+      ${apps.map((a: any) => `
+        <div class="bg-gray-50 rounded-lg p-2.5 border border-gray-200">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span class="font-semibold text-sm text-navy-800">${a.startup_name}</span>
+            ${a.status === 'shortlisted'
+              ? `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-semibold">⭐ Shortlisted</span>`
+              : `<button class="shortlist-btn text-xs bg-navy-700 text-white px-3 py-1 rounded-lg font-semibold hover:bg-navy-900 transition-colors" data-aid="${a.id}" data-pid="${p.id}">Shortlist → Start pilot</button>`
+            }
+          </div>
+          <p class="text-xs text-gray-600 mt-1">${a.pitch}</p>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+// ─── SVG Bar chart ────────────────────────────────────────────────────────────
+function barChart(p: any, pilot: any) {
+  const baseline = p.baseline_value;
+  const after = pilot.after_value;
+  const unit = p.metric_unit;
+  const maxVal = Math.max(baseline, after) * 1.2;
+  const W = 180, H = 100, barW = 50, gap = 30, padLeft = 20, padBottom = 28;
+  const toY = (v: number) => H - padBottom - ((v / maxVal) * (H - padBottom - 8));
+  const bH = H - padBottom - toY(baseline);
+  const aH = H - padBottom - toY(after);
+  const bX = padLeft;
+  const aX = padLeft + barW + gap;
+
+  let impText = '';
+  if (p.metric_direction === 'lower_is_better') {
+    const imp = Math.round(((baseline - after) / baseline) * 100);
+    impText = `<text x="${W/2}" y="12" text-anchor="middle" font-size="11" font-weight="700" fill="${imp > 0 ? '#16a34a' : '#dc2626'}">${imp > 0 ? '▲' : '▼'} ${Math.abs(imp)}% improvement</text>`;
+  } else {
+    const imp = Math.round(((after - baseline) / baseline) * 100);
+    impText = `<text x="${W/2}" y="12" text-anchor="middle" font-size="11" font-weight="700" fill="${imp > 0 ? '#16a34a' : '#dc2626'}">${imp > 0 ? '▲' : '▼'} ${Math.abs(imp)}% improvement</text>`;
   }
+
+  return `
+  <svg viewBox="0 0 ${W} ${H+16}" width="${W}" height="${H+16}" xmlns="http://www.w3.org/2000/svg" class="mt-1" role="img" aria-label="Before/after chart">
+    ${impText}
+    <!-- Baseline bar -->
+    <rect x="${bX}" y="${toY(baseline)+16}" width="${barW}" height="${bH}" rx="4" fill="#94a3b8"/>
+    <text x="${bX + barW/2}" y="${toY(baseline)+14}" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">${baseline}${unit}</text>
+    <text x="${bX + barW/2}" y="${H+12}" text-anchor="middle" font-size="10" fill="#64748b">Before</text>
+    <!-- After bar -->
+    <rect x="${aX}" y="${toY(after)+16}" width="${barW}" height="${aH}" rx="4" fill="#f97316"/>
+    <text x="${aX + barW/2}" y="${toY(after)+14}" text-anchor="middle" font-size="11" font-weight="600" fill="#ea580c">${after}${unit}</text>
+    <text x="${aX + barW/2}" y="${H+12}" text-anchor="middle" font-size="10" fill="#64748b">After</text>
+  </svg>`;
+}
+
+// ─── RENDER FUNCTIONS ─────────────────────────────────────────────────────────
+
+function renderOverview(funnelFilter?: string) {
+  const store = getStore();
+  const problems = store.problems as any[];
+
+  // Update funnel counts
+  const funnelMap: Record<string, string[]> = {
+    posted:  ['open','matched','pilot_running','pilot_complete','approved_for_scale','not_approved'],
+    matched: ['matched','pilot_running','pilot_complete','approved_for_scale','not_approved'],
+    running: ['pilot_running'],
+    decided: ['pilot_complete','approved_for_scale','not_approved'],
+  };
+  ['posted','matched','running','decided'].forEach(k => {
+    const el = document.querySelector(`[data-funnel-count="${k}"]`);
+    if (el) el.textContent = String(problems.filter(p => funnelMap[k].includes(p.status)).length);
+  });
+
+  // Stat cards
+  document.getElementById('stat-total-problems')!.textContent = String(problems.length);
+  document.getElementById('stat-applications')!.textContent = String(store.applications.length);
+  document.getElementById('stat-pilots-running')!.textContent = String(problems.filter((p:any) => p.status === 'pilot_running').length);
+  const avg = avgImprovement(store);
+  document.getElementById('stat-avg-improvement')!.textContent = avg !== null ? `${avg}%` : '—';
+
+  // Filter label
+  const filterLabel = document.getElementById('overview-filter-label');
+  if (filterLabel) filterLabel.textContent = funnelFilter ? `Filtered: ${funnelFilter}` : '';
+
+  // Problem list
+  let filtered = problems;
+  if (funnelFilter && funnelMap[funnelFilter]) {
+    filtered = problems.filter(p => funnelMap[funnelFilter].includes(p.status));
+  }
+
+  const container = document.getElementById('overview-problem-list')!;
+  if (!filtered.length) {
+    container.innerHTML = `<div class="glass p-8 text-center text-gray-400">No problems found.</div>`;
+    return;
+  }
+  container.innerHTML = filtered.map(p => problemCardHtml(p, { showDelete: true })).join('');
+  attachDeleteListeners(container);
+}
+
+function renderGovConsole() {
+  const store = getStore();
+  const problems = (store.problems as any[]);
+  const container = document.getElementById('dept-problem-list')!;
+  // For MVP, "department" filter = all problems posted (no real auth)
+  if (!problems.length) {
+    container.innerHTML = `<div class="glass p-8 text-center text-gray-400">No problems posted yet.</div>`;
+    return;
+  }
+  container.innerHTML = problems.map(p => problemCardHtml(p, { showDelete: true, showShortlist: true })).join('');
+  attachDeleteListeners(container);
+  attachShortlistListeners(container);
+}
+
+function renderMarketplace() {
+  const store = getStore();
+  const problems = (store.problems as any[]).filter(p => p.status === 'open' || p.status === 'matched');
+  const container = document.getElementById('marketplace-list')!;
+  if (!problems.length) {
+    container.innerHTML = `<div class="glass p-8 text-center text-gray-400">No open problems right now. Check back later!</div>`;
+    return;
+  }
+  container.innerHTML = problems.map(p => problemCardHtml(p, { showApply: true })).join('');
+  attachApplyListeners(container);
+}
+
+function renderPilotCommand() {
+  const store = getStore();
+  const problems = (store.problems as any[]).filter(p => p.status === 'pilot_running');
+  const container = document.getElementById('command-list')!;
+  if (!problems.length) {
+    container.innerHTML = `<div class="glass p-8 text-center text-gray-400 rounded-xl">No pilots currently running.</div>`;
+    return;
+  }
+  container.innerHTML = problems.map(p => {
+    const pilot = store.pilotRuns.find((r: any) => r.problem_id === p.id && r.status === 'running');
+    const app = pilot ? store.applications.find((a: any) => a.id === pilot.application_id) : null;
+    const canRecord = currentRole === 'gov' || currentRole === 'admin';
+    return `
+    <div class="glass p-5 rounded-xl" data-problem-id="${p.id}">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 shrink-0 rounded-xl bg-orange-100 flex items-center justify-center text-lg">${catIcon(p.category)}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-2 flex-wrap">
+            <h3 class="font-display font-bold text-navy-900 text-base">${p.title}</h3>
+            ${statusBadge(p.status)}
+          </div>
+          <p class="text-xs text-gray-500 font-medium mt-0.5">${p.department} · ${p.city_ulb}</p>
+          <p class="text-sm text-gray-600 mt-1.5">${p.description}</p>
+          ${pilot ? `
+          <div class="mt-3 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm">
+            <span class="font-semibold text-orange-800">🏃 Pilot running:</span>
+            <span class="text-orange-700"> ${pilot.scope_notes} · ${pilot.duration_days} days</span>
+            ${app ? `<span class="text-orange-600"> · Partner: <strong>${app.startup_name}</strong></span>` : ''}
+          </div>` : ''}
+          <div class="mt-2 inline-flex items-center gap-1.5 bg-navy-50 border border-navy-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-navy-700">
+            📏 ${p.metric_name}: <strong>${p.baseline_value}${p.metric_unit}</strong> baseline
+          </div>
+          ${canRecord ? `
+          <div class="mt-4 border-t border-gray-100 pt-4 space-y-3">
+            <p class="text-xs font-bold text-gray-600 uppercase tracking-wide">Record pilot result</p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">After-pilot value *</label>
+                <input type="number" id="after-val-${p.id}" placeholder="Baseline was ${p.baseline_value}${p.metric_unit}"
+                  class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"/>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Field notes</label>
+                <input type="text" id="field-notes-${p.id}" placeholder="Anything worth flagging?"
+                  class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"/>
+              </div>
+            </div>
+            <button class="record-result-btn w-full bg-gradient-to-r from-navy-700 to-navy-800 text-white font-bold py-2.5 rounded-lg text-sm hover:from-navy-800 hover:to-navy-900 transition-all shadow-md"
+              data-pid="${p.id}">📋 Record pilot result</button>
+            <div id="record-msg-${p.id}" class="hidden text-sm text-green-700 bg-green-50 rounded px-2 py-1">Result recorded! Problem moved to Proof Ledger.</div>
+          </div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Attach record result listeners
+  container.querySelectorAll<HTMLButtonElement>('.record-result-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.pid!;
+      const afterInput = document.getElementById(`after-val-${pid}`) as HTMLInputElement;
+      const notesInput = document.getElementById(`field-notes-${pid}`) as HTMLInputElement;
+      const afterVal = afterInput?.value.trim();
+      if (!afterVal) { afterInput?.focus(); return; }
+      recordPilotResult(pid, Number(afterVal), notesInput?.value ?? '');
+      const msg = document.getElementById(`record-msg-${pid}`);
+      if (msg) { msg.classList.remove('hidden'); }
+      setTimeout(() => renderAll(), 800);
+    });
+  });
+}
+
+function renderProofLedger() {
+  const store = getStore();
+  const problems = (store.problems as any[]).filter(p =>
+    ['pilot_complete','approved_for_scale','not_approved'].includes(p.status)
+  );
+  const container = document.getElementById('ledger-list')!;
+  if (!problems.length) {
+    container.innerHTML = `<div class="glass p-8 text-center text-gray-400 rounded-xl">No completed pilots yet. Results will appear here.</div>`;
+    return;
+  }
+  const canDecide = currentRole === 'gov' || currentRole === 'admin';
+  container.innerHTML = problems.map(p => {
+    const pilot = store.pilotRuns.find((r: any) => r.problem_id === p.id && r.status === 'complete');
+    const decision = store.scaleDecisions.find((d: any) => d.problem_id === p.id);
+    const chart = pilot && pilot.after_value !== null ? barChart(p, pilot) : '';
+    const decisionBtns = canDecide && p.status === 'pilot_complete' ? `
+      <div class="flex gap-2 mt-3 flex-wrap">
+        <button class="scale-decision-btn flex-1 min-w-fit bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg text-sm transition-all shadow-md" data-pid="${p.id}" data-decision="approved_for_scale">✅ Approved for scale-up</button>
+        <button class="scale-decision-btn flex-1 min-w-fit bg-red-100 hover:bg-red-200 text-red-800 font-bold py-2.5 px-4 rounded-lg text-sm transition-all border border-red-200" data-pid="${p.id}" data-decision="not_approved">❌ Not approved</button>
+      </div>` : '';
+    const decisionBlock = decision ? `
+      <div class="mt-3 p-3 rounded-lg ${decision.decision === 'approved_for_scale' ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}">
+        <p class="text-sm font-bold ${decision.decision === 'approved_for_scale' ? 'text-green-800' : 'text-red-800'}">
+          ${decision.decision === 'approved_for_scale' ? '✅ Approved for scale-up' : '❌ Not approved'}
+        </p>
+        ${decision.notes ? `<p class="text-xs text-gray-600 mt-1">${decision.notes}</p>` : ''}
+      </div>` : '';
+    return `
+    <div class="glass p-5 rounded-xl" data-problem-id="${p.id}">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 shrink-0 rounded-xl bg-gray-100 flex items-center justify-center text-lg">${catIcon(p.category)}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-2 flex-wrap">
+            <h3 class="font-display font-bold text-navy-900 text-base">${p.title}</h3>
+            ${statusBadge(p.status)}
+          </div>
+          <p class="text-xs text-gray-500 font-medium mt-0.5">${p.department} · ${p.city_ulb}</p>
+          <p class="text-sm text-gray-600 mt-1.5">${p.description}</p>
+          <div class="mt-2 inline-flex items-center gap-1.5 bg-navy-50 border border-navy-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-navy-700">
+            📏 ${p.metric_name}: <strong>${p.baseline_value}${p.metric_unit}</strong> baseline
+          </div>
+          ${chart ? `<div class="mt-3">${chart}</div>` : ''}
+          ${pilot?.field_notes ? `<p class="mt-2 text-xs text-gray-500 italic">"${pilot.field_notes}"</p>` : ''}
+          ${decisionBlock}
+          ${decisionBtns}
+          <div id="ledger-msg-${p.id}" class="hidden text-sm text-green-700 bg-green-50 rounded px-2 py-1 mt-2">Decision recorded!</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  container.querySelectorAll<HTMLButtonElement>('.scale-decision-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.pid!;
+      const dec = btn.dataset.decision!;
+      makeScaleDecision(pid, dec, '');
+      const msg = document.getElementById(`ledger-msg-${pid}`);
+      if (msg) { msg.classList.remove('hidden'); }
+      setTimeout(() => renderAll(), 600);
+    });
+  });
+}
+
+// ─── Attach listeners ─────────────────────────────────────────────────────────
+
+function attachDeleteListeners(container: HTMLElement) {
+  container.querySelectorAll<HTMLButtonElement>('.delete-problem-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id!;
+      if (confirm('Delete this problem and all related data?')) {
+        deleteProblem(id);
+        renderAll();
+      }
+    });
+  });
+}
+
+function attachApplyListeners(container: HTMLElement) {
+  container.querySelectorAll<HTMLButtonElement>('.apply-submit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.pid!;
+      const nameEl = document.getElementById(`apply-name-${pid}`) as HTMLInputElement;
+      const pitchEl = document.getElementById(`apply-pitch-${pid}`) as HTMLTextAreaElement;
+      if (!nameEl?.value.trim() || !pitchEl?.value.trim()) {
+        alert('Please fill in your startup name and pitch.');
+        return;
+      }
+      addApplication(pid, nameEl.value.trim(), pitchEl.value.trim());
+      const msg = document.getElementById(`apply-msg-${pid}`);
+      if (msg) { msg.classList.remove('hidden'); }
+      btn.disabled = true;
+      btn.textContent = '✅ Applied!';
+      setTimeout(() => renderAll(), 800);
+    });
+  });
+}
+
+function attachShortlistListeners(container: HTMLElement) {
+  container.querySelectorAll<HTMLButtonElement>('.shortlist-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const aid = btn.dataset.aid!;
+      const pid = btn.dataset.pid!;
+      // Also start pilot automatically (basic MVP flow)
+      shortlistApplication(aid);
+      const app = getStore().applications.find((a: any) => a.id === aid);
+      if (app) {
+        const scope = prompt('Pilot scope notes (e.g. "6 tankers, 2 wards"):') ?? 'To be defined';
+        const days = parseInt(prompt('Pilot duration in days:') ?? '21', 10) || 21;
+        startPilot(pid, aid, scope, days);
+      }
+      renderAll();
+    });
+  });
+}
+
+// ─── Post problem form ────────────────────────────────────────────────────────
+document.getElementById('post-problem-form')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const get = (id: string) => (document.getElementById(id) as HTMLInputElement)?.value?.trim();
+  const title = get('f-title');
+  const dept  = get('f-department');
+  const city  = get('f-city');
+  const desc  = get('f-description');
+  const metric = get('f-metric-name');
+  const unit  = get('f-metric-unit');
+  const baseline = parseFloat(get('f-baseline') || '');
+
+  const errEl = document.getElementById('form-error')!;
+  if (!title || !dept || !city || !desc || !metric || !unit || isNaN(baseline)) {
+    errEl.textContent = 'Please fill in all required fields.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+  errEl.classList.add('hidden');
+
+  addProblem({
+    title, department: dept, city_ulb: city,
+    category: (document.getElementById('f-category') as HTMLSelectElement)?.value ?? 'Other civic issue',
+    description: desc,
+    metric_name: metric,
+    metric_unit: unit,
+    metric_direction: (document.getElementById('f-direction') as HTMLSelectElement)?.value ?? 'lower_is_better',
+    baseline_value: baseline,
+    posted_by: 'current-user',
+  });
+
+  (document.getElementById('post-problem-form') as HTMLFormElement).reset();
+  document.getElementById('form-success')!.classList.remove('hidden');
+  setTimeout(() => document.getElementById('form-success')!.classList.add('hidden'), 3000);
+  renderAll();
+});
+
+// ─── Funnel click filter ──────────────────────────────────────────────────────
+let funnelFilter: string | undefined;
+document.querySelectorAll<HTMLButtonElement>('[data-funnel]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.funnel!;
+    if (funnelFilter === key) {
+      funnelFilter = undefined;
+      btn.style.opacity = '';
+    } else {
+      funnelFilter = key;
+    }
+    if (activeTab !== 'overview') activateTab('overview');
+    else renderOverview(funnelFilter);
+  });
+});
+
+// ─── Master render ────────────────────────────────────────────────────────────
+function renderAll() {
+  renderOverview(funnelFilter);
+  renderGovConsole();
+  renderMarketplace();
+  renderPilotCommand();
+  renderProofLedger();
+  // Reattach role-gated visibility
+  const govOnlyEls = document.querySelectorAll<HTMLElement>('[data-role-gov]');
+  const startupOnlyEls = document.querySelectorAll<HTMLElement>('[data-role-startup]');
+  govOnlyEls.forEach(el => el.style.display = currentRole === 'gov' || currentRole === 'admin' ? '' : 'none');
+  startupOnlyEls.forEach(el => el.style.display = currentRole === 'startup' ? '' : 'none');
+}
+
+// ─── Initial render ───────────────────────────────────────────────────────────
+activateTab('overview');
 </script>
