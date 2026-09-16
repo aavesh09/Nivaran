@@ -1,0 +1,9 @@
+[
+  {
+    "id": "scale-001",
+    "problem_id": "prob-006",
+    "decision": "approved_for_scale",
+    "decided_at": "2026-09-01T10:00:00Z",
+    "notes": "Coverage improved from 12% to 58%. Approving city-wide rollout of 200 nodes across all 12 districts. Budget cleared by Finance dept."
+  }
+]

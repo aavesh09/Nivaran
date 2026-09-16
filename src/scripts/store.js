@@ -1,139 +1,198 @@
 /**
- * PilotSetu Client-Side Store
- * localStorage-backed state management for problems, pilots, and KPI updates
+ * PilotSetu — Client-Side Store
+ * All data persisted in localStorage. Seed data loaded from JSON files on first run.
+ * 
+ * Status state machine:
+ * open → matched → pilot_running → pilot_complete → approved_for_scale | not_approved
  */
 
-const KEYS = {
-  problems: 'pilotsetu_problems',
-  pilots: 'pilotsetu_pilots',
-  initialized: 'pilotsetu_initialized',
-};
+const STORE_KEY = 'pilotsetu_store';
 
-/** Initialize store with seed data if not already done */
-export function initStore(seedProblems, seedPilots) {
-  if (typeof window === 'undefined') return;
-  if (localStorage.getItem(KEYS.initialized)) return;
-
-  localStorage.setItem(KEYS.problems, JSON.stringify(seedProblems));
-  localStorage.setItem(KEYS.pilots, JSON.stringify(seedPilots));
-  localStorage.setItem(KEYS.initialized, 'true');
+/** @returns {import('./store').Store} */
+export function getStore() {
+  const raw = localStorage.getItem(STORE_KEY);
+  if (raw) {
+    try { return JSON.parse(raw); } catch {}
+  }
+  return null;
 }
 
-/** Reset store to seed data */
-export function resetStore(seedProblems, seedPilots) {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(KEYS.problems, JSON.stringify(seedProblems));
-  localStorage.setItem(KEYS.pilots, JSON.stringify(seedPilots));
-  localStorage.setItem(KEYS.initialized, 'true');
+/** @param {import('./store').Store} store */
+function saveStore(store) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(store));
 }
 
-// ─── Problems ───
-
-export function getProblems() {
-  if (typeof window === 'undefined') return [];
-  const data = localStorage.getItem(KEYS.problems);
-  return data ? JSON.parse(data) : [];
+/**
+ * Initialize store with seed data on first page load.
+ * If store already exists in localStorage, leave it untouched.
+ */
+export function initStore(seedProblems, seedApplications, seedPilotRuns, seedScaleDecisions) {
+  if (getStore()) return; // already initialized
+  const store = {
+    problems: seedProblems,
+    applications: seedApplications,
+    pilotRuns: seedPilotRuns,
+    scaleDecisions: seedScaleDecisions,
+  };
+  saveStore(store);
 }
 
-export function getProblem(id) {
-  return getProblems().find(p => p.id === id) || null;
+/** Force-reset store to seed data (useful for dev/demo) */
+export function resetStore(seedProblems, seedApplications, seedPilotRuns, seedScaleDecisions) {
+  const store = {
+    problems: seedProblems,
+    applications: seedApplications,
+    pilotRuns: seedPilotRuns,
+    scaleDecisions: seedScaleDecisions,
+  };
+  saveStore(store);
+  return store;
 }
 
-export function addProblem(problem) {
-  const problems = getProblems();
-  const newProblem = {
-    ...problem,
-    id: `prob-${String(problems.length + 1).padStart(3, '0')}`,
+// ─── Problem CRUD ────────────────────────────────────────────────────────────
+
+export function addProblem(fields) {
+  const store = getStore();
+  const problem = {
+    id: 'prob-' + Date.now(),
+    ...fields,
     status: 'open',
-    submittedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
   };
-  problems.push(newProblem);
-  localStorage.setItem(KEYS.problems, JSON.stringify(problems));
-  return newProblem;
+  store.problems.unshift(problem);
+  saveStore(store);
+  return problem;
 }
 
-export function updateProblemStatus(id, status) {
-  const problems = getProblems();
-  const idx = problems.findIndex(p => p.id === id);
-  if (idx !== -1) {
-    problems[idx].status = status;
-    localStorage.setItem(KEYS.problems, JSON.stringify(problems));
-  }
-  return problems[idx] || null;
+export function deleteProblem(problemId) {
+  const store = getStore();
+  store.problems = store.problems.filter(p => p.id !== problemId);
+  // Cascade: remove related applications, pilots, scale decisions
+  store.applications = store.applications.filter(a => a.problem_id !== problemId);
+  store.pilotRuns = store.pilotRuns.filter(p => p.problem_id !== problemId);
+  store.scaleDecisions = store.scaleDecisions.filter(s => s.problem_id !== problemId);
+  saveStore(store);
 }
 
-// ─── Pilots ───
-
-export function getPilots() {
-  if (typeof window === 'undefined') return [];
-  const data = localStorage.getItem(KEYS.pilots);
-  return data ? JSON.parse(data) : [];
+export function updateProblemStatus(problemId, status) {
+  const store = getStore();
+  const prob = store.problems.find(p => p.id === problemId);
+  if (prob) prob.status = status;
+  saveStore(store);
 }
 
-export function getPilot(id) {
-  return getPilots().find(p => p.id === id) || null;
-}
+// ─── Application CRUD ────────────────────────────────────────────────────────
 
-export function addPilot(pilot) {
-  const pilots = getPilots();
-  const newPilot = {
-    ...pilot,
-    id: `pilot-${String(pilots.length + 1).padStart(3, '0')}`,
-    status: 'active',
-    outcome: null,
+export function addApplication(problemId, startupName, pitch) {
+  const store = getStore();
+  const app = {
+    id: 'app-' + Date.now(),
+    problem_id: problemId,
+    startup_name: startupName,
+    pitch,
+    status: 'submitted',
+    created_at: new Date().toISOString(),
   };
-  pilots.push(newPilot);
-  localStorage.setItem(KEYS.pilots, JSON.stringify(pilots));
-
-  // Update problem status
-  updateProblemStatus(pilot.problemId, 'pilot-active');
-
-  return newPilot;
+  store.applications.unshift(app);
+  saveStore(store);
+  return app;
 }
 
-export function updateKpi(pilotId, kpiIndex, newCurrent) {
-  const pilots = getPilots();
-  const pilot = pilots.find(p => p.id === pilotId);
-  if (pilot && pilot.kpis[kpiIndex]) {
-    pilot.kpis[kpiIndex].current = parseFloat(newCurrent);
-    localStorage.setItem(KEYS.pilots, JSON.stringify(pilots));
-  }
+export function shortlistApplication(applicationId) {
+  const store = getStore();
+  const app = store.applications.find(a => a.id === applicationId);
+  if (!app) return;
+  app.status = 'shortlisted';
+  // Move problem to matched
+  const prob = store.problems.find(p => p.id === app.problem_id);
+  if (prob && prob.status === 'open') prob.status = 'matched';
+  saveStore(store);
+}
+
+export function rejectApplication(applicationId) {
+  const store = getStore();
+  const app = store.applications.find(a => a.id === applicationId);
+  if (app) app.status = 'rejected';
+  saveStore(store);
+}
+
+// ─── Pilot CRUD ───────────────────────────────────────────────────────────────
+
+export function startPilot(problemId, applicationId, scopeNotes, durationDays) {
+  const store = getStore();
+  const pilot = {
+    id: 'pilot-' + Date.now(),
+    problem_id: problemId,
+    application_id: applicationId,
+    scope_notes: scopeNotes,
+    duration_days: Number(durationDays),
+    start_date: new Date().toISOString().split('T')[0],
+    after_value: null,
+    field_notes: null,
+    status: 'running',
+  };
+  store.pilotRuns.unshift(pilot);
+  // Move problem to pilot_running
+  const prob = store.problems.find(p => p.id === problemId);
+  if (prob) prob.status = 'pilot_running';
+  saveStore(store);
   return pilot;
 }
 
-export function setOutcome(pilotId, outcome) {
-  const pilots = getPilots();
-  const pilot = pilots.find(p => p.id === pilotId);
+export function recordPilotResult(problemId, afterValue, fieldNotes) {
+  const store = getStore();
+  const pilot = store.pilotRuns.find(p => p.problem_id === problemId && p.status === 'running');
   if (pilot) {
-    pilot.outcome = outcome;
-    pilot.status = 'completed';
-    localStorage.setItem(KEYS.pilots, JSON.stringify(pilots));
-
-    // Update problem status
-    const status = outcome === 'scale' ? 'pilot-completed' : outcome === 'extend' ? 'pilot-active' : 'pilot-completed';
-    updateProblemStatus(pilot.problemId, status);
+    pilot.after_value = Number(afterValue);
+    pilot.field_notes = fieldNotes;
+    pilot.status = 'complete';
   }
-  return pilot;
+  // Move problem to pilot_complete
+  const prob = store.problems.find(p => p.id === problemId);
+  if (prob) prob.status = 'pilot_complete';
+  saveStore(store);
 }
 
-// ─── Stats ───
+// ─── Scale Decision ───────────────────────────────────────────────────────────
 
-export function getStats() {
-  const problems = getProblems();
-  const pilots = getPilots();
-
-  const activePilots = pilots.filter(p => p.status === 'active');
-  const completedPilots = pilots.filter(p => p.status === 'completed');
-  const scaledPilots = completedPilots.filter(p => p.outcome === 'scale');
-
-  return {
-    totalProblems: problems.length,
-    openProblems: problems.filter(p => p.status === 'open').length,
-    activePilots: activePilots.length,
-    completedPilots: completedPilots.length,
-    matchedStartups: problems.filter(p => p.status === 'matched' || p.status === 'pilot-active' || p.status === 'pilot-completed').length,
-    successRate: completedPilots.length > 0
-      ? Math.round((scaledPilots.length / completedPilots.length) * 100)
-      : 0,
+export function makeScaleDecision(problemId, decision, notes) {
+  const store = getStore();
+  const sd = {
+    id: 'scale-' + Date.now(),
+    problem_id: problemId,
+    decision, // 'approved_for_scale' | 'not_approved'
+    decided_at: new Date().toISOString(),
+    notes,
   };
+  store.scaleDecisions.unshift(sd);
+  // Move problem to terminal status
+  const prob = store.problems.find(p => p.id === problemId);
+  if (prob) prob.status = decision;
+  saveStore(store);
+  return sd;
+}
+
+// ─── Computed helpers ─────────────────────────────────────────────────────────
+
+/** Average % improvement across completed pilots (before→after relative change) */
+export function avgImprovement(store) {
+  const completedPilots = store.pilotRuns.filter(p => p.status === 'complete' && p.after_value !== null);
+  if (completedPilots.length === 0) return null;
+  let total = 0;
+  let count = 0;
+  for (const pilot of completedPilots) {
+    const prob = store.problems.find(p => p.id === pilot.problem_id);
+    if (!prob || prob.baseline_value === 0) continue;
+    const baseline = prob.baseline_value;
+    const after = pilot.after_value;
+    let improvement;
+    if (prob.metric_direction === 'lower_is_better') {
+      improvement = ((baseline - after) / baseline) * 100;
+    } else {
+      improvement = ((after - baseline) / baseline) * 100;
+    }
+    total += improvement;
+    count++;
+  }
+  return count > 0 ? Math.round(total / count) : null;
 }

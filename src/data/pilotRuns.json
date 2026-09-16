@@ -1,0 +1,35 @@
+[
+  {
+    "id": "pilot-001",
+    "problem_id": "prob-001",
+    "application_id": "app-003",
+    "scope_notes": "2 wards, 6 collection vehicles, IoT sensors on 120 bins",
+    "duration_days": 21,
+    "start_date": "2026-08-25",
+    "after_value": null,
+    "field_notes": null,
+    "status": "running"
+  },
+  {
+    "id": "pilot-002",
+    "problem_id": "prob-005",
+    "application_id": "app-004",
+    "scope_notes": "3 mobile clinics, 5 wards, WhatsApp notification to 4,200 registered households",
+    "duration_days": 42,
+    "start_date": "2026-07-28",
+    "after_value": 71,
+    "field_notes": "Strong uptake in Wards 4 & 5. Ward 2 needed extra community outreach — added 2 health workers mid-pilot.",
+    "status": "complete"
+  },
+  {
+    "id": "pilot-003",
+    "problem_id": "prob-006",
+    "application_id": "app-005",
+    "scope_notes": "40 AQI nodes across 2 districts, public dashboard + SMS alerts",
+    "duration_days": 60,
+    "start_date": "2026-06-22",
+    "after_value": 58,
+    "field_notes": "Coverage jumped from 12% to 58% of wards. Node maintenance requires monthly calibration — factored into scale-up cost.",
+    "status": "complete"
+  }
+]
