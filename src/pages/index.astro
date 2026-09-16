@@ -17,32 +17,33 @@ const counts = {
 
 <Layout pageTitle="Dashboard">
 
-  <!-- ══════════════════════ GOV HEADER ══════════════════════ -->
+  <!-- ══════════════════════ GOV HEADER (NAVY & POWDER BLUE) ══════════════════════ -->
   <div class="ashoka-stripe"></div>
 
-  <header class="bg-navy-900 text-white shadow-lg">
-    <div class="max-w-screen-xl mx-auto px-4 lg:px-6">
+  <header class="bg-[#0c1b3a] text-white shadow-xl border-b border-[#163561] sticky top-0 z-40">
+    <div class="max-w-screen-xl mx-auto px-3 sm:px-6 lg:px-8">
       <!-- Top identity bar -->
-      <div class="flex items-center justify-between py-3 border-b border-navy-700">
-        <!-- Brand — text only, no icon -->
-        <a href="/" class="flex flex-col leading-tight">
-          <span class="font-display font-900 text-2xl tracking-tight text-white">Nivaran</span>
-          <span class="text-xs text-navy-300 font-medium tracking-wide uppercase">Government Pilot Marketplace</span>
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 sm:py-4 border-b border-[#163561] gap-3 sm:gap-4">
+        <!-- Brand -->
+        <a href="/" class="flex flex-col leading-none group cursor-pointer">
+          <span class="font-display font-900 text-2xl sm:text-4xl tracking-tight text-white group-hover:text-[#d0e6fd] transition-colors">Nivaran</span>
+          <span class="text-[10px] sm:text-xs text-[#d0e6fd] font-extrabold tracking-widest uppercase mt-1">National Government Pilot Marketplace</span>
         </a>
+
         <!-- Role switcher -->
-        <div class="flex items-center gap-3">
-          <span class="text-xs text-navy-300 font-semibold hidden md:block">Viewing as:</span>
+        <div class="flex items-center gap-2 sm:gap-3 bg-[#112650] px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-[#2e5d91] w-full sm:w-auto justify-between sm:justify-start">
+          <span class="text-xs text-[#d0e6fd] font-extrabold uppercase tracking-wider shrink-0">Role:</span>
           <select id="role-switcher"
-            class="text-sm font-semibold bg-navy-800 border border-navy-600 text-white rounded px-3 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-saffron-400">
-            <option value="gov">🏛️ Government Official</option>
-            <option value="startup">🚀 Startup</option>
-            <option value="admin">🛡️ Admin</option>
+            class="text-xs sm:text-sm font-extrabold bg-[#0c1b3a] border border-[#5680af] text-white rounded px-2.5 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#d0e6fd] hover:border-[#d0e6fd] transition-all flex-1 sm:flex-initial">
+            <option value="gov">Government Official</option>
+            <option value="startup">Startup Innovator</option>
+            <option value="admin">Administrator</option>
           </select>
         </div>
       </div>
 
-      <!-- Tab navigation -->
-      <nav class="flex items-center gap-1 overflow-x-auto py-1" id="tab-nav" aria-label="Main navigation">
+      <!-- Tab navigation line — Touch Scrollable -->
+      <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2 flex-nowrap" id="tab-nav" aria-label="Main navigation">
         {[
           { id: 'overview',    label: 'Overview'            },
           { id: 'gov',         label: 'Government Console'  },
@@ -51,7 +52,7 @@ const counts = {
           { id: 'ledger',      label: 'Proof Ledger'        },
         ].map((tab) => (
           <button
-            class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 border-transparent text-navy-300 hover:text-white hover:border-saffron-400 transition-all"
+            class="tab-btn px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-base font-extrabold whitespace-nowrap border-b-4 border-transparent text-[#b8cde3] hover:text-white hover:border-[#d0e6fd] cursor-pointer transition-all active:scale-[0.98] shrink-0"
             data-tab={tab.id}
             id={`tab-btn-${tab.id}`}
           >
@@ -63,166 +64,173 @@ const counts = {
   </header>
 
   <!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
-  <main class="flex-1 max-w-screen-xl mx-auto w-full px-4 lg:px-6 py-6">
+  <main class="flex-1 max-w-screen-xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
 
     <!-- ─── TAB 1: OVERVIEW ─── -->
     <div class="tab-panel active" id="panel-overview">
 
       <!-- Mission banner -->
-      <div class="mb-6 bg-navy-900 text-white rounded-md p-5 flex flex-col sm:flex-row items-start gap-4">
+      <div class="mb-6 sm:mb-8 bg-[#0c1b3a] text-white rounded-lg p-4 sm:p-6 shadow-md border-l-4 sm:border-l-8 border-[#d0e6fd] flex flex-col sm:flex-row items-start justify-between gap-4 sm:gap-6">
         <div class="flex-1">
-          <h1 class="font-display text-xl font-800 text-white">Nivaran — <span style="color:#f77f17;">Proof before scale</span></h1>
-          <p class="text-navy-200 text-sm mt-1.5 leading-relaxed max-w-2xl">
-            A structured marketplace between government departments and startups.
-            Departments post real civic problems with a measurable baseline.
-            Startups pitch solutions. One startup runs a small, time-boxed pilot.
-            Hard data decides who scales — not promises.
+          <h1 class="font-display text-xl sm:text-3xl font-900 text-white tracking-tight">Nivaran <span class="text-[#d0e6fd] block sm:inline">— PROOF BEFORE SCALE</span></h1>
+          <p class="text-[#dce6f0] text-sm sm:text-base mt-2 leading-relaxed font-medium">
+            Official government platform matching public sector civic problems with verified startup solutions.
+            Departments establish an empirical baseline. Startups execute time-boxed field pilots.
+            Hard data determines full contract scaling.
           </p>
         </div>
-        <div class="shrink-0 text-center hidden sm:block border-l border-navy-700 pl-5">
-          <div class="text-3xl font-display font-900 text-saffron-400">{counts.posted}</div>
-          <div class="text-xs text-navy-300 font-semibold uppercase tracking-wide mt-0.5">Active problems</div>
+        <div class="shrink-0 text-left sm:text-center border-t sm:border-t-0 sm:border-l border-[#1e4478] pt-3 sm:pt-0 sm:pl-6 w-full sm:w-auto cursor-pointer hover:opacity-90 flex sm:flex-col items-center justify-between sm:justify-center" id="banner-stat-btn">
+          <div class="text-3xl sm:text-4xl font-display font-900 text-[#d0e6fd] leading-none">{counts.posted}</div>
+          <div class="text-[11px] sm:text-xs text-[#b8cde3] font-extrabold uppercase tracking-wider mt-1">Active Problems</div>
         </div>
       </div>
 
       <!-- 4-stage funnel -->
-      <div class="mb-6 bg-white border border-gray-200 rounded-md p-4">
-        <p class="text-xs font-700 text-gray-500 uppercase tracking-widest mb-3">Problem Lifecycle</p>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="funnel-strip">
+      <div class="mb-6 sm:mb-8 bg-white border-2 border-[#b8cde3] rounded-lg p-4 sm:p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <p class="text-[11px] sm:text-xs font-900 text-[#0c1b3a] uppercase tracking-widest">Problem Lifecycle Pipeline (Tap stage to filter)</p>
+          <button id="reset-funnel-btn" class="text-xs font-bold text-[#1e4478] hover:text-[#0c1b3a] underline cursor-pointer hidden">Clear Filter</button>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4" id="funnel-strip">
           {[
-            { key: 'posted',  label: 'Problem posted',  count: counts.posted,  color: '#6c757d', bg: '#f8f9fa' },
-            { key: 'matched', label: 'Startup matched',  count: counts.matched, color: '#2563eb', bg: '#dbeafe' },
-            { key: 'running', label: 'Pilot running',    count: counts.running, color: '#c2410c', bg: '#ffedd5' },
-            { key: 'decided', label: 'Scale decision',   count: counts.decided, color: '#16a34a', bg: '#dcfce7' },
+            { key: 'posted',  label: 'Problems Posted',  count: counts.posted,  color: '#0c1b3a', bg: '#e8f3fe' },
+            { key: 'matched', label: 'Startups Matched', count: counts.matched, color: '#163561', bg: '#d0e6fd' },
+            { key: 'running', label: 'Pilots Running',   count: counts.running, color: '#9a3412', bg: '#ffedd5' },
+            { key: 'decided', label: 'Scale Decisions',  count: counts.decided, color: '#14532d', bg: '#dcfce7' },
           ].map((step) => (
             <button
-              class="funnel-step text-left rounded p-3 border-2 transition-all hover:shadow-md"
-              style={`border-color:${step.color}20; background:${step.bg};`}
+              class="funnel-step text-left rounded-lg p-3 sm:p-4 border-2 transition-all cursor-pointer hover:shadow-md active:scale-[0.98]"
+              style={`border-color:${step.color}; background:${step.bg};`}
               data-funnel={step.key}
             >
-              <div class="text-3xl font-display font-900 leading-none" style={`color:${step.color};`} data-funnel-count={step.key}>{step.count}</div>
-              <div class="text-xs font-600 mt-1" style={`color:${step.color};`}>{step.label}</div>
+              <div class="text-2xl sm:text-4xl font-display font-900 leading-none" style={`color:${step.color};`} data-funnel-count={step.key}>{step.count}</div>
+              <div class="text-[10px] sm:text-xs font-800 uppercase tracking-wide mt-1.5 sm:mt-2" style={`color:${step.color};`}>{step.label}</div>
             </button>
           ))}
         </div>
       </div>
 
-      <!-- Stat cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <!-- Stat cards — Navy & Powder Blue (#D0E6FD) -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-6 sm:mb-8">
         {[
-          { label: 'Total Problems',      id: 'stat-total-problems',   value: problems_seed.length,                                                     sub: 'on platform' },
-          { label: 'Applications Filed',  id: 'stat-applications',     value: applications_seed.length,                                                  sub: 'from startups' },
-          { label: 'Pilots Running',      id: 'stat-pilots-running',   value: problems_seed.filter(p=>p.status==='pilot_running').length,                sub: 'active pilots' },
-          { label: 'Avg. Improvement',    id: 'stat-avg-improvement',  value: '—',                                                                       sub: 'completed pilots' },
+          { label: 'Total Problems',      id: 'stat-total-problems',   value: problems_seed.length,                                                     sub: 'Tap to view all', targetTab: 'overview' },
+          { label: 'Applications Filed',  id: 'stat-applications',     value: applications_seed.length,                                                  sub: 'Tap for Marketplace', targetTab: 'marketplace' },
+          { label: 'Pilots Running',      id: 'stat-pilots-running',   value: problems_seed.filter(p=>p.status==='pilot_running').length,                sub: 'Tap for Pilot Command', targetTab: 'command' },
+          { label: 'Avg. Improvement',    id: 'stat-avg-improvement',  value: '—',                                                                       sub: 'Tap for Proof Ledger', targetTab: 'ledger' },
         ].map((s, i) => (
-          <div class={`bg-white border border-gray-200 rounded-md p-4 animate-slide-up stagger-${i+1}`}>
-            <div class="text-2xl font-display font-800 text-navy-900" id={s.id}>{s.value}</div>
-            <div class="text-sm font-600 text-gray-700 mt-1">{s.label}</div>
-            <div class="text-xs text-gray-400 mt-0.5">{s.sub}</div>
-          </div>
+          <button
+            class="stat-click-card bg-white border-2 border-[#b8cde3] rounded-lg p-3.5 sm:p-5 text-left cursor-pointer transition-all hover:border-[#0c1b3a] hover:bg-[#f4f9ff] hover:shadow-lg active:scale-[0.98]"
+            data-target-tab={s.targetTab}
+          >
+            <div class="text-2xl sm:text-3xl font-display font-900 text-[#0c1b3a]" id={s.id}>{s.value}</div>
+            <div class="text-xs sm:text-sm font-800 text-[#163561] mt-1 uppercase tracking-wider">{s.label}</div>
+            <div class="text-[11px] sm:text-xs text-[#5680af] font-bold mt-1 underline">{s.sub}</div>
+          </button>
         ))}
       </div>
 
-      <!-- All problems -->
+      <!-- All problems listing -->
       <div>
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="font-display text-base font-700 text-navy-900 uppercase tracking-wide">All Problems on Platform</h2>
-          <span class="text-xs text-gray-400 font-medium" id="overview-filter-label"></span>
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="font-display text-lg sm:text-xl font-900 text-[#0c1b3a] uppercase tracking-wide">Civic Problems Directory</h2>
+          <span class="text-xs font-bold bg-[#0c1b3a] text-[#d0e6fd] px-3 py-1.5 rounded" id="overview-filter-label">ALL PROBLEMS</span>
         </div>
-        <div class="space-y-3" id="overview-problem-list">
-          <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
+        <div class="space-y-4" id="overview-problem-list">
+          <div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-8 text-center text-[#163561] font-bold text-base">Loading datasets…</div>
         </div>
       </div>
     </div>
 
     <!-- ─── TAB 2: GOV CONSOLE ─── -->
     <div class="tab-panel" id="panel-gov">
-      <h1 class="font-display text-xl font-800 text-navy-900 mb-1">Government Console</h1>
-      <p class="text-gray-500 text-sm mb-6">Post civic problems for the marketplace. Shortlist startups for pilots.</p>
+      <div class="mb-6">
+        <h1 class="font-display text-xl sm:text-3xl font-900 text-[#0c1b3a]">Government Console</h1>
+        <p class="text-[#163561] font-bold text-sm sm:text-base mt-1">Post new civic problems with baseline metrics and shortlist startups for time-boxed pilots.</p>
+      </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         <!-- Form -->
-        <div class="bg-white border border-gray-200 rounded-md p-6">
-          <h2 class="font-display text-base font-700 text-navy-900 mb-4 pb-3 border-b border-gray-100">
-            Post a New Problem
+        <div class="bg-white border-2 border-[#b8cde3] rounded-lg p-4 sm:p-6 shadow-sm">
+          <h2 class="font-display text-base sm:text-lg font-900 text-[#0c1b3a] mb-4 pb-3 border-b-2 border-[#dce6f0] uppercase tracking-wider">
+            Post Problem Specification
           </h2>
           <form id="post-problem-form" class="space-y-4" novalidate>
             <div>
-              <label class="block text-sm font-600 text-gray-700 mb-1.5">Problem Title <span class="text-red-500">*</span></label>
-              <input id="f-title" type="text" required placeholder="e.g. Missed garbage pickups"
-                class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
+              <label class="block text-sm font-800 text-[#0c1b3a] mb-1">Problem Title <span class="text-red-600">*</span></label>
+              <input id="f-title" type="text" required placeholder="e.g. Traffic Light Signal Synchronization"
+                class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] focus:outline-none focus:border-[#0c1b3a] focus:ring-2 focus:ring-[#d0e6fd]" />
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-sm font-600 text-gray-700 mb-1.5">Department <span class="text-red-500">*</span></label>
-                <input id="f-department" type="text" required placeholder="e.g. Solid Waste Dept."
-                  class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
+                <label class="block text-sm font-800 text-[#0c1b3a] mb-1">Department <span class="text-red-600">*</span></label>
+                <input id="f-department" type="text" required placeholder="e.g. Traffic Management Dept."
+                  class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] focus:outline-none focus:border-[#0c1b3a]" />
               </div>
               <div>
-                <label class="block text-sm font-600 text-gray-700 mb-1.5">City / ULB <span class="text-red-500">*</span></label>
-                <input id="f-city" type="text" required placeholder="e.g. Nagpur MC"
-                  class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
+                <label class="block text-sm font-800 text-[#0c1b3a] mb-1">City / ULB <span class="text-red-600">*</span></label>
+                <input id="f-city" type="text" required placeholder="e.g. Bangalore City Corp"
+                  class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] focus:outline-none focus:border-[#0c1b3a]" />
               </div>
             </div>
             <div>
-              <label class="block text-sm font-600 text-gray-700 mb-1.5">Category <span class="text-red-500">*</span></label>
+              <label class="block text-sm font-800 text-[#0c1b3a] mb-1">Category <span class="text-red-600">*</span></label>
               <select id="f-category"
-                class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200">
+                class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] focus:outline-none focus:border-[#0c1b3a] cursor-pointer">
                 {categories.map(c => <option value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label class="block text-sm font-600 text-gray-700 mb-1.5">Problem Description <span class="text-red-500">*</span></label>
+              <label class="block text-sm font-800 text-[#0c1b3a] mb-1">Problem Description <span class="text-red-600">*</span></label>
               <textarea id="f-description" required rows="3"
-                placeholder="Describe the civic problem in detail. Include current situation, impact, and what success looks like."
-                class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 resize-none placeholder:text-gray-400"></textarea>
+                placeholder="Detailed explanation of the civic challenge, scope, and impact."
+                class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] focus:outline-none focus:border-[#0c1b3a] resize-none"></textarea>
             </div>
 
-            <fieldset class="border border-navy-200 rounded p-3 bg-navy-50">
-              <legend class="text-xs font-700 text-navy-800 uppercase tracking-wide px-1">Baseline Metric</legend>
-              <div class="grid grid-cols-3 gap-2 mt-2">
-                <div class="col-span-3 sm:col-span-1">
-                  <label class="block text-xs font-600 text-gray-600 mb-1">Metric Name <span class="text-red-500">*</span></label>
-                  <input id="f-metric-name" type="text" required placeholder="e.g. Missed pickups"
-                    class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
+            <fieldset class="border-2 border-[#88a9cc] rounded-lg p-3 sm:p-4 bg-[#f4f9ff]">
+              <legend class="text-xs font-900 text-[#0c1b3a] uppercase tracking-widest px-2 bg-[#d0e6fd] rounded">Baseline Metric Setup</legend>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+                <div>
+                  <label class="block text-xs font-800 text-[#0c1b3a] mb-1">Metric Name <span class="text-red-600">*</span></label>
+                  <input id="f-metric-name" type="text" required placeholder="e.g. Uncollected Waste"
+                    class="w-full border border-[#5680af] rounded px-2.5 py-2 text-sm font-bold text-[#0c1b3a]" />
                 </div>
                 <div>
-                  <label class="block text-xs font-600 text-gray-600 mb-1">Unit <span class="text-red-500">*</span></label>
-                  <input id="f-metric-unit" type="text" required placeholder="%, hrs, days"
-                    class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
+                  <label class="block text-xs font-800 text-[#0c1b3a] mb-1">Unit <span class="text-red-600">*</span></label>
+                  <input id="f-metric-unit" type="text" required placeholder="MT/day, %, mins"
+                    class="w-full border border-[#5680af] rounded px-2.5 py-2 text-sm font-bold text-[#0c1b3a]" />
                 </div>
                 <div>
-                  <label class="block text-xs font-600 text-gray-600 mb-1">Baseline Value <span class="text-red-500">*</span></label>
-                  <input id="f-baseline" type="number" required placeholder="e.g. 40"
-                    class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
+                  <label class="block text-xs font-800 text-[#0c1b3a] mb-1">Baseline Value <span class="text-red-600">*</span></label>
+                  <input id="f-baseline" type="number" required placeholder="30"
+                    class="w-full border border-[#5680af] rounded px-2.5 py-2 text-sm font-bold text-[#0c1b3a]" />
                 </div>
               </div>
-              <div class="mt-2">
-                <label class="block text-xs font-600 text-gray-600 mb-1">Improvement Direction</label>
+              <div class="mt-3">
+                <label class="block text-xs font-800 text-[#0c1b3a] mb-1">Target Direction</label>
                 <select id="f-direction"
-                  class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200">
-                  <option value="lower_is_better">Lower is better (e.g. fewer incidents, less time)</option>
-                  <option value="higher_is_better">Higher is better (e.g. coverage %, satisfaction)</option>
+                  class="w-full border border-[#5680af] rounded px-2.5 py-2 text-sm font-bold text-[#0c1b3a] cursor-pointer">
+                  <option value="lower_is_better">Lower is better (e.g. reduced wait time, less waste gap)</option>
+                  <option value="higher_is_better">Higher is better (e.g. increased recycling MT, coverage %)</option>
                 </select>
               </div>
             </fieldset>
 
-            <div id="form-error" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded px-3 py-2"></div>
+            <div id="form-error" class="hidden text-sm font-bold text-red-900 bg-red-100 border-2 border-red-300 rounded px-3 py-2"></div>
             <button type="submit"
-              class="w-full bg-navy-800 hover:bg-navy-900 text-white font-700 py-2.5 rounded text-sm transition-colors flex items-center justify-center gap-2">
-              + Post Problem to Marketplace
+              class="w-full bg-[#0c1b3a] hover:bg-[#163561] text-white font-900 py-3 rounded-lg text-sm sm:text-base cursor-pointer transition-all hover:shadow-lg active:scale-[0.99] uppercase tracking-wider">
+              Publish Problem to Marketplace
             </button>
           </form>
-          <div id="form-success" class="hidden mt-3 text-sm text-green-800 bg-green-50 border border-green-200 rounded px-3 py-2">
-            ✅ Problem posted successfully and is now live on the marketplace.
+          <div id="form-success" class="hidden mt-3 text-sm font-bold text-green-950 bg-green-100 border-2 border-green-400 rounded px-3 py-2">
+            Problem published successfully and is live on the marketplace.
           </div>
         </div>
 
         <!-- Dept list -->
         <div>
-          <h2 class="font-display text-base font-700 text-navy-900 mb-4">Posted by Your Department</h2>
-          <div class="space-y-3" id="dept-problem-list">
-            <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
+          <h2 class="font-display text-base sm:text-lg font-900 text-[#0c1b3a] mb-4 uppercase tracking-wider">Manage Posted Problems & Shortlists</h2>
+          <div class="space-y-4" id="dept-problem-list">
+            <div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-8 text-center text-[#163561] font-bold text-base">Loading department records…</div>
           </div>
         </div>
       </div>
@@ -231,45 +239,45 @@ const counts = {
     <!-- ─── TAB 3: STARTUP MARKETPLACE ─── -->
     <div class="tab-panel" id="panel-marketplace">
       <div class="mb-6">
-        <h1 class="font-display text-xl font-800 text-navy-900">Startup Marketplace</h1>
-        <p class="text-gray-600 text-sm mt-1 leading-relaxed max-w-2xl">
-          Open problems seeking a pilot partner. Apply with a short pitch — the department shortlists
-          one startup for a small, time-boxed pilot. Not a full contract. Proof first.
+        <h1 class="font-display text-xl sm:text-3xl font-900 text-[#0c1b3a]">Startup Marketplace</h1>
+        <p class="text-[#163561] font-bold text-sm sm:text-base mt-1 max-w-3xl">
+          Browse open government challenges seeking startup pilot partners. Submit a concise 3-sentence technical pitch to compete for a time-boxed pilot.
         </p>
       </div>
       <div class="space-y-4" id="marketplace-list">
-        <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
+        <div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-8 text-center text-[#163561] font-bold text-base">Loading marketplace challenges…</div>
       </div>
     </div>
 
     <!-- ─── TAB 4: PILOT COMMAND ─── -->
     <div class="tab-panel" id="panel-command">
       <div class="mb-6">
-        <h1 class="font-display text-xl font-800 text-navy-900">Pilot Command</h1>
-        <p class="text-gray-600 text-sm mt-1">Active pilots — monitor progress and record results when the pilot period ends.</p>
+        <h1 class="font-display text-xl sm:text-3xl font-900 text-[#0c1b3a]">Pilot Command</h1>
+        <p class="text-[#163561] font-bold text-sm sm:text-base mt-1">Live monitoring for active field pilots. Record verified after-pilot evaluation numbers when complete.</p>
       </div>
       <div class="space-y-4" id="command-list">
-        <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
+        <div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-8 text-center text-[#163561] font-bold text-base">Loading active pilots…</div>
       </div>
     </div>
 
     <!-- ─── TAB 5: PROOF LEDGER ─── -->
     <div class="tab-panel" id="panel-ledger">
       <div class="mb-6">
-        <h1 class="font-display text-xl font-800 text-navy-900">Proof Ledger</h1>
-        <p class="text-gray-600 text-sm mt-1">Completed pilots — all decisions and results recorded here for accountability.</p>
+        <h1 class="font-display text-xl sm:text-3xl font-900 text-[#0c1b3a]">Proof Ledger</h1>
+        <p class="text-[#163561] font-bold text-sm sm:text-base mt-1">Public accountability record for completed pilots. View before/after comparison metrics and final scaling decisions.</p>
       </div>
       <div class="space-y-4" id="ledger-list">
-        <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
+        <div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-8 text-center text-[#163561] font-bold text-base">Loading audit ledger…</div>
       </div>
     </div>
 
   </main>
 
-  <footer class="bg-navy-900 text-navy-300 text-xs py-4 mt-6">
-    <div class="max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+  <!-- ══════════════════════ FOOTER ══════════════════════ -->
+  <footer class="bg-[#0c1b3a] text-white text-xs sm:text-sm font-bold py-6 mt-8 sm:mt-12 border-t-2 border-[#163561]">
+    <div class="max-w-screen-xl mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
       <span>Nivaran © 2026 — Government Pilot Marketplace · Ministry of Urban Development</span>
-      <span class="text-navy-400">Built for accountability · Proof before scale</span>
+      <span class="text-[#d0e6fd] font-extrabold uppercase tracking-wider">Proof Before Scale</span>
     </div>
   </footer>
 
@@ -306,41 +314,54 @@ function activateTab(id: string) {
   tabBtns.forEach(btn => {
     const on = btn.dataset.tab === id;
     btn.classList.toggle('text-white',          on);
-    btn.classList.toggle('border-saffron-400',  on);
-    btn.style.borderBottomColor = on ? '#f77f17' : '';
-    btn.classList.toggle('text-navy-300',       !on);
-    btn.classList.toggle('border-transparent',  !on);
+    btn.classList.toggle('border-[#d0e6fd]',    on);
+    btn.style.borderBottomColor = on ? '#d0e6fd' : 'transparent';
+    btn.classList.toggle('text-[#b8cde3]',      !on);
   });
   tabPanels.forEach(p => p.classList.toggle('active', p.id === `panel-${id}`));
   renderAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 tabBtns.forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab!)));
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 const STATUS_MAP: Record<string,[string,string]> = {
-  open:              ['Open — Awaiting startups', 'background:#f1f3f5;color:#495057;border:1px solid #ced4da;'],
-  matched:           ['Startup Matched',          'background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;'],
-  pilot_running:     ['Pilot Running',            'background:#ffedd5;color:#c2410c;border:1px solid #fed7aa;'],
-  pilot_complete:    ['Pilot Complete',           'background:#fef9c3;color:#a16207;border:1px solid #fde68a;'],
-  approved_for_scale:['Approved for Scale',       'background:#dcfce7;color:#166534;border:1px solid #bbf7d0;'],
-  not_approved:      ['Not Approved',             'background:#fee2e2;color:#991b1b;border:1px solid #fecaca;'],
+  open:              ['OPEN — AWAITING PITCHES',  'background:#f4f9ff;color:#0c1b3a;border:2px solid #5680af;'],
+  matched:           ['STARTUP MATCHED',          'background:#d0e6fd;color:#0c1b3a;border:2px solid #163561;'],
+  pilot_running:     ['PILOT IN PROGRESS',        'background:#ffedd5;color:#9a3412;border:2px solid #ea580c;'],
+  pilot_complete:    ['PILOT COMPLETE',           'background:#fef9c3;color:#854d0e;border:2px solid #ca8a04;'],
+  approved_for_scale:['APPROVED FOR SCALE-UP',   'background:#dcfce7;color:#14532d;border:2px solid #16a34a;'],
+  not_approved:      ['NOT APPROVED FOR SCALE',   'background:#fee2e2;color:#7f1d1d;border:2px solid #dc2626;'],
 };
 function badge(status: string) {
-  const [label, style] = STATUS_MAP[status] ?? ['Unknown',''];
-  return `<span style="${style}padding:2px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap;">${label}</span>`;
+  const [label, style] = STATUS_MAP[status] ?? ['UNKNOWN',''];
+  return `<span class="status-badge cursor-pointer hover:opacity-80 transition-opacity" data-status="${status}" style="${style}padding:3px 10px;border-radius:4px;font-size:10px;font-weight:900;letter-spacing:0.05em;white-space:nowrap;">${label}</span>`;
 }
 
-// ── Category icon ─────────────────────────────────────────────────────────────
-const CAT_ICON: Record<string,string> = {
-  Sanitation:'🗑️', Water:'💧', Electrical:'⚡', Roads:'🛣️', Health:'🏥', 'Other civic issue':'🏙️'
-};
+// ── Clean SVG Category Icon Map (NO EMOJIS) ────────────────────────────────────
+function getCategoryIconSvg(category: string): string {
+  switch (category) {
+    case 'Sanitation':
+      return `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0c1b3a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>`;
+    case 'Water':
+      return `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0c1b3a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" /></svg>`;
+    case 'Electrical':
+      return `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0c1b3a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>`;
+    case 'Roads':
+      return `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0c1b3a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 19L8 5m8 0l4 14M12 5v2m0 4v2m0 4v2" /></svg>`;
+    case 'Health':
+      return `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0c1b3a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>`;
+    default:
+      return `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0c1b3a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h5m-5 0V11m0 0h-2m2 0h2" /></svg>`;
+  }
+}
 
-// ── Problem card ──────────────────────────────────────────────────────────────
+// ── Problem Card Renderer — Navy & Powder Blue ─────────────────────────────────
 function problemCard(p: any, opts: {del?:boolean,apply?:boolean,shortlist?:boolean} = {}) {
   const canDel = opts.del && (currentRole==='admin'||currentRole==='gov');
   const delBtn = canDel
-    ? `<button class="delete-problem-btn text-gray-400 hover:text-red-600 transition-colors" data-id="${p.id}" title="Delete problem" style="padding:4px;">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.021-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+    ? `<button class="delete-problem-btn text-slate-400 hover:text-red-700 transition-colors p-1 rounded hover:bg-red-50 cursor-pointer" data-id="${p.id}" title="Delete Problem">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.021-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
        </button>` : '';
 
   const store = getStore();
@@ -350,20 +371,26 @@ function problemCard(p: any, opts: {del?:boolean,apply?:boolean,shortlist?:boole
     ? applyBlock(p) : '';
 
   return `
-  <div class="bg-white border border-gray-200 rounded-md p-4 transition-all hover:border-navy-400 hover:shadow-sm" data-problem-id="${p.id}">
-    <div class="flex items-start gap-3">
-      <div style="font-size:22px;width:36px;text-align:center;padding-top:2px;">${CAT_ICON[p.category]??'📋'}</div>
-      <div class="flex-1 min-w-0">
+  <div class="problem-card-item bg-white border-2 border-[#b8cde3] rounded-lg p-4 sm:p-6 transition-all hover:border-[#0c1b3a] hover:bg-[#f4f9ff] hover:shadow-lg cursor-pointer" data-problem-id="${p.id}">
+    <div class="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+      <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#d0e6fd] border-2 border-[#163561] flex items-center justify-center">
+        ${getCategoryIconSvg(p.category)}
+      </div>
+      <div class="flex-1 min-w-0 w-full">
         <div class="flex items-start justify-between gap-2 flex-wrap mb-1.5">
-          <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#0c1b3a;margin:0;">${p.title}</h3>
+          <h3 class="font-display font-900 text-base sm:text-lg text-[#0c1b3a] hover:text-[#163561] transition-colors">${p.title}</h3>
           <div class="flex items-center gap-2 shrink-0">${badge(p.status)}${delBtn}</div>
         </div>
-        <p style="font-size:12px;color:#6c757d;font-weight:600;margin:0 0 6px 0;">${p.department} &nbsp;·&nbsp; ${p.city_ulb} &nbsp;·&nbsp; ${p.category}</p>
-        <p style="font-size:14px;color:#343a40;margin:0 0 10px 0;line-height:1.6;">${p.description}</p>
-        <div style="display:inline-flex;align-items:center;gap:6px;background:#f0f4f8;border:1px solid #b8cde3;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:600;color:#163561;">
-          Baseline metric: <strong>${p.metric_name}</strong> = ${p.baseline_value}${p.metric_unit}
-          &nbsp;<span style="color:#6c757d;">(${p.metric_direction==='lower_is_better'?'lower is better':'higher is better'})</span>
+        <p class="text-[11px] sm:text-xs font-800 text-[#163561] uppercase tracking-wider mb-2">${p.department} &nbsp;·&nbsp; ${p.city_ulb} &nbsp;·&nbsp; ${p.category}</p>
+        <p class="text-sm sm:text-base font-bold text-[#0c1b3a] mb-3 sm:mb-4 leading-relaxed">${p.description}</p>
+
+        <!-- Metric Highlight Box (Powder Blue #D0E6FD) -->
+        <div class="metric-highlight">
+          <span>BASELINE METRIC:</span>
+          <span class="text-[#0c1b3a] font-extrabold">${p.metric_name}</span> = <span class="text-[#0c1b3a] font-extrabold text-sm sm:text-base">${p.baseline_value} ${p.metric_unit}</span>
+          <span class="text-[#163561] font-bold">(${p.metric_direction==='lower_is_better'?'Lower is better':'Higher is better'})</span>
         </div>
+
         ${applySection}${shortlistSection}
       </div>
     </div>
@@ -372,65 +399,65 @@ function problemCard(p: any, opts: {del?:boolean,apply?:boolean,shortlist?:boole
 
 function applyBlock(p: any) {
   return `
-  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #dee2e6;">
-    <p style="font-size:12px;font-weight:700;color:#343a40;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.05em;">Apply with a Solution</p>
-    <input type="text" id="apply-name-${p.id}" placeholder="Your startup / organisation name"
-      style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:8px 10px;font-size:13px;color:#212529;margin-bottom:8px;box-sizing:border-box;" />
-    <textarea id="apply-pitch-${p.id}" placeholder="Describe your approach in 3–5 sentences. What will you do and why will it work?" rows="2"
-      style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:8px 10px;font-size:13px;color:#212529;resize:none;box-sizing:border-box;"></textarea>
-    <button class="apply-submit-btn" data-pid="${p.id}"
-      style="margin-top:8px;width:100%;background:#f77f17;color:#fff;font-weight:700;font-size:13px;padding:9px;border:none;border-radius:4px;cursor:pointer;">
-      Submit Application →
+  <div class="mt-4 pt-4 border-t-2 border-[#dce6f0]">
+    <p class="text-xs font-900 text-[#0c1b3a] uppercase tracking-wider mb-2">Submit Startup Pilot Pitch</p>
+    <input type="text" id="apply-name-${p.id}" placeholder="Your Startup / Organisation Name *"
+      class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] mb-2 focus:outline-none focus:border-[#0c1b3a]" />
+    <textarea id="apply-pitch-${p.id}" placeholder="Describe your technical solution in 3–5 sentences. Why will it improve the baseline metric? *" rows="2"
+      class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] resize-none focus:outline-none focus:border-[#0c1b3a]"></textarea>
+    <button class="apply-submit-btn w-full mt-2 bg-[#0c1b3a] hover:bg-[#163561] text-white font-900 text-sm py-3 rounded cursor-pointer transition-all uppercase tracking-wider" data-pid="${p.id}">
+      Submit Application Pitch →
     </button>
-    <div id="apply-msg-${p.id}" style="display:none;margin-top:6px;font-size:13px;color:#166534;background:#dcfce7;border:1px solid #bbf7d0;border-radius:4px;padding:6px 10px;">Application submitted successfully.</div>
+    <div id="apply-msg-${p.id}" class="hidden mt-2 text-sm font-bold text-green-950 bg-green-100 border-2 border-green-400 rounded px-3 py-2">Application submitted successfully.</div>
   </div>`;
 }
 
 function shortlistBlock(p: any, store: any) {
   const apps = store.applications.filter((a: any) => a.problem_id === p.id);
-  if (!apps.length) return `<div style="margin-top:10px;font-size:12px;color:#6c757d;">No applications yet.</div>`;
+  if (!apps.length) return `<div class="mt-3 text-xs font-bold text-[#5680af]">No applications received yet.</div>`;
   return `
-  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #dee2e6;">
-    <p style="font-size:12px;font-weight:700;color:#343a40;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.05em;">Applications (${apps.length})</p>
+  <div class="mt-4 pt-4 border-t-2 border-[#dce6f0]">
+    <p class="text-xs font-900 text-[#0c1b3a] uppercase tracking-wider mb-2">Startup Applications (${apps.length})</p>
     ${apps.map((a: any) => `
-      <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;padding:10px;margin-bottom:8px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-          <span style="font-weight:700;font-size:13px;color:#0c1b3a;">${a.startup_name}</span>
+      <div class="bg-[#f4f9ff] border-2 border-[#b8cde3] rounded-lg p-3 mb-2">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <span class="font-extrabold text-sm text-[#0c1b3a]">${a.startup_name}</span>
           ${a.status==='shortlisted'
-            ? `<span style="font-size:11px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;border-radius:3px;padding:2px 8px;font-weight:600;">Shortlisted</span>`
-            : `<button class="shortlist-btn" data-aid="${a.id}" data-pid="${p.id}"
-                style="font-size:12px;background:#1e4478;color:#fff;border:none;border-radius:4px;padding:4px 12px;cursor:pointer;font-weight:600;">
+            ? `<span class="text-xs font-900 bg-[#d0e6fd] text-[#0c1b3a] border border-[#163561] px-3 py-1 rounded">SHORTLISTED</span>`
+            : `<button class="shortlist-btn text-xs bg-[#0c1b3a] hover:bg-[#163561] text-white font-900 px-4 py-2 rounded cursor-pointer transition-all" data-aid="${a.id}" data-pid="${p.id}">
                 Shortlist &amp; Start Pilot →
                </button>`}
         </div>
-        <p style="font-size:13px;color:#495057;margin:6px 0 0 0;line-height:1.5;">${a.pitch}</p>
+        <p class="text-xs font-bold text-[#163561] mt-2 leading-relaxed">${a.pitch}</p>
       </div>`).join('')}
   </div>`;
 }
 
-// ── SVG bar chart ─────────────────────────────────────────────────────────────
+// ── SVG Bar Chart for Proof Ledger ─────────────────────────────────────────────
 function barChart(p: any, pilot: any) {
   const b = p.baseline_value, a = pilot.after_value, u = p.metric_unit;
   const maxV = Math.max(b, a) * 1.25;
-  const H = 90, bW = 48, gap = 36, pL = 10, pB = 24;
-  const toY = (v: number) => H - pB - ((v/maxV)*(H-pB-10));
+  const H = 100, bW = 54, gap = 40, pL = 20, pB = 26;
+  const toY = (v: number) => H - pB - ((v/maxV)*(H-pB-12));
   const bH = H-pB-toY(b), aH = H-pB-toY(a);
   const aX = pL+bW+gap;
   let impPct: number, better: boolean;
   if (p.metric_direction==='lower_is_better') { impPct=Math.round(((b-a)/b)*100); better=impPct>0; }
   else { impPct=Math.round(((a-b)/b)*100); better=impPct>0; }
-  const impColor = better ? '#16a34a' : '#dc2626';
+  const impColor = better ? '#15803d' : '#b91c1c';
   const W = pL+bW+gap+bW+pL;
   return `
-  <svg viewBox="0 0 ${W} ${H+20}" width="${W}" height="${H+20}" xmlns="http://www.w3.org/2000/svg">
-    <text x="${W/2}" y="11" text-anchor="middle" font-size="11" font-weight="700" fill="${impColor}">${better?'▲':'▼'} ${Math.abs(impPct)}% ${better?'improvement':'regression'}</text>
-    <rect x="${pL}" y="${toY(b)+14}" width="${bW}" height="${bH}" rx="3" fill="#94a3b8"/>
-    <text x="${pL+bW/2}" y="${toY(b)+12}" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">${b}${u}</text>
-    <text x="${pL+bW/2}" y="${H+16}" text-anchor="middle" font-size="10" fill="#6c757d">Before</text>
-    <rect x="${aX}" y="${toY(a)+14}" width="${bW}" height="${aH}" rx="3" fill="${better?'#16a34a':'#dc2626'}"/>
-    <text x="${aX+bW/2}" y="${toY(a)+12}" text-anchor="middle" font-size="11" font-weight="600" fill="${better?'#14532d':'#7f1d1d'}">${a}${u}</text>
-    <text x="${aX+bW/2}" y="${H+16}" text-anchor="middle" font-size="10" fill="#6c757d">After</text>
-  </svg>`;
+  <div class="bg-[#f4f9ff] border-2 border-[#b8cde3] rounded-lg p-3 sm:p-4 my-3 overflow-x-auto max-w-full no-scrollbar inline-block">
+    <svg viewBox="0 0 ${W} ${H+20}" width="${W}" height="${H+20}" class="max-w-[280px] sm:max-w-[340px] h-auto" xmlns="http://www.w3.org/2000/svg">
+      <text x="${W/2}" y="12" text-anchor="middle" font-size="12" font-weight="900" fill="${impColor}">${Math.abs(impPct)}% ${better?'IMPROVEMENT':'REGRESSION'}</text>
+      <rect x="${pL}" y="${toY(b)+14}" width="${bW}" height="${bH}" rx="4" fill="#5680af"/>
+      <text x="${pL+bW/2}" y="${toY(b)+10}" text-anchor="middle" font-size="12" font-weight="900" fill="#0c1b3a">${b}${u}</text>
+      <text x="${pL+bW/2}" y="${H+16}" text-anchor="middle" font-size="11" font-weight="800" fill="#163561">BEFORE</text>
+      <rect x="${aX}" y="${toY(a)+14}" width="${bW}" height="${aH}" rx="4" fill="${better?'#16a34a':'#dc2626'}"/>
+      <text x="${aX+bW/2}" y="${toY(a)+10}" text-anchor="middle" font-size="12" font-weight="900" fill="${better?'#14532d':'#7f1d1d'}">${a}${u}</text>
+      <text x="${aX+bW/2}" y="${H+16}" text-anchor="middle" font-size="11" font-weight="800" fill="#163561">AFTER</text>
+    </svg>
+  </div>`;
 }
 
 // ── RENDERERS ─────────────────────────────────────────────────────────────────
@@ -455,14 +482,18 @@ function renderOverview() {
   s('stat-pilots-running', probs.filter((p:any)=>p.status==='pilot_running').length);
   const avg = avgImprovement(store);
   s('stat-avg-improvement', avg!==null ? `${avg}%` : '—');
+
   const lbl = document.getElementById('overview-filter-label');
-  if(lbl) lbl.textContent = funnelFilter ? `Showing: ${funnelFilter.replace('_',' ')}` : '';
+  const clearBtn = document.getElementById('reset-funnel-btn');
+  if(lbl) lbl.textContent = funnelFilter ? `FILTERED: ${funnelFilter.toUpperCase()}` : 'ALL PROBLEMS';
+  if(clearBtn) clearBtn.classList.toggle('hidden', !funnelFilter);
+
   let filtered = funnelFilter ? probs.filter(p=>fMap[funnelFilter!].includes(p.status)) : probs;
   const c = document.getElementById('overview-problem-list')!;
   c.innerHTML = filtered.length
     ? filtered.map(p=>problemCard(p,{del:true})).join('')
-    : `<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No problems match this filter.</div>`;
-  attachDelete(c); attachShortlist(c);
+    : `<div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-10 text-center text-[#163561] font-bold text-base">No problems match this filter criteria.</div>`;
+  attachDelete(c); attachShortlist(c); attachCardClicks(c);
 }
 
 function renderGov() {
@@ -471,8 +502,8 @@ function renderGov() {
   const c = document.getElementById('dept-problem-list')!;
   c.innerHTML = probs.length
     ? probs.map(p=>problemCard(p,{del:true,shortlist:true})).join('')
-    : `<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No problems posted yet. Use the form to post your first problem.</div>`;
-  attachDelete(c); attachShortlist(c);
+    : `<div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-10 text-center text-[#163561] font-bold text-base">No problems posted yet. Use the specification form to publish your first challenge.</div>`;
+  attachDelete(c); attachShortlist(c); attachCardClicks(c);
 }
 
 function renderMarketplace() {
@@ -481,8 +512,8 @@ function renderMarketplace() {
   const c = document.getElementById('marketplace-list')!;
   c.innerHTML = probs.length
     ? probs.map(p=>problemCard(p,{apply:true})).join('')
-    : `<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No open problems at this time.</div>`;
-  attachApply(c);
+    : `<div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-10 text-center text-[#163561] font-bold text-base">No open marketplace challenges at this time.</div>`;
+  attachApply(c); attachCardClicks(c);
 }
 
 function renderCommand() {
@@ -491,51 +522,51 @@ function renderCommand() {
   const canRec = currentRole==='gov'||currentRole==='admin';
   const c = document.getElementById('command-list')!;
   if(!probs.length){
-    c.innerHTML=`<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No pilots currently running.</div>`;
+    c.innerHTML=`<div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-10 text-center text-[#163561] font-bold text-base">No pilots currently running.</div>`;
     return;
   }
   c.innerHTML = probs.map(p=>{
     const pilot = store.pilotRuns.find((r:any)=>r.problem_id===p.id&&r.status==='running');
     const app   = pilot ? store.applications.find((a:any)=>a.id===pilot.application_id) : null;
     return `
-    <div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:20px;" data-problem-id="${p.id}">
-      <div style="display:flex;align-items:start;gap:12px;">
-        <div style="font-size:22px;width:36px;text-align:center;padding-top:2px;">${CAT_ICON[p.category]??'📋'}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-            <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#0c1b3a;margin:0;">${p.title}</h3>
+    <div class="problem-card-item bg-white border-2 border-[#b8cde3] rounded-lg p-4 sm:p-6 transition-all hover:border-[#0c1b3a] hover:bg-[#f4f9ff] cursor-pointer" data-problem-id="${p.id}">
+      <div class="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+        <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#d0e6fd] border-2 border-[#163561] flex items-center justify-center">
+          ${getCategoryIconSvg(p.category)}
+        </div>
+        <div class="flex-1 min-w-0 w-full">
+          <div class="flex items-start justify-between gap-2 flex-wrap mb-1.5">
+            <h3 class="font-display font-900 text-base sm:text-lg text-[#0c1b3a]">${p.title}</h3>
             ${badge(p.status)}
           </div>
-          <p style="font-size:12px;color:#6c757d;font-weight:600;margin:0 0 8px 0;">${p.department} · ${p.city_ulb}</p>
-          <p style="font-size:14px;color:#343a40;margin:0 0 10px 0;line-height:1.6;">${p.description}</p>
-          ${pilot?`<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:4px;padding:8px 12px;font-size:13px;margin-bottom:10px;">
-            <strong style="color:#c2410c;">Pilot in progress:</strong>
-            <span style="color:#9a3412;"> ${pilot.scope_notes} &nbsp;·&nbsp; ${pilot.duration_days} days</span>
-            ${app?`&nbsp;·&nbsp;<strong style="color:#9a3412;">Partner: ${app.startup_name}</strong>`:''}
+          <p class="text-[11px] sm:text-xs font-800 text-[#163561] uppercase tracking-wider mb-2">${p.department} · ${p.city_ulb}</p>
+          <p class="text-sm sm:text-base font-bold text-[#0c1b3a] mb-3 sm:mb-4 leading-relaxed">${p.description}</p>
+          ${pilot?`<div class="bg-[#d0e6fd] border-2 border-[#163561] rounded-lg p-3 text-xs sm:text-sm font-bold text-[#0c1b3a] mb-4">
+            <strong class="text-[#0c1b3a] font-900 uppercase">Pilot in Progress:</strong> ${pilot.scope_notes} &nbsp;·&nbsp; ${pilot.duration_days} Days
+            ${app?` &nbsp;·&nbsp; <strong class="text-[#0c1b3a] font-900">Partner: ${app.startup_name}</strong>`:''}
           </div>`:''}
-          <div style="display:inline-flex;align-items:center;gap:6px;background:#f0f4f8;border:1px solid #b8cde3;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:600;color:#163561;margin-bottom:${canRec?'16px':'0'};">
-            Baseline: <strong>${p.metric_name}</strong> = ${p.baseline_value}${p.metric_unit}
+          <div class="metric-highlight mb-4">
+            <span>BASELINE METRIC:</span> <strong>${p.metric_name}</strong> = ${p.baseline_value} ${p.metric_unit}
           </div>
           ${canRec?`
-          <div style="border-top:1px solid #dee2e6;padding-top:14px;">
-            <p style="font-size:12px;font-weight:700;color:#343a40;margin:0 0 10px 0;text-transform:uppercase;letter-spacing:0.05em;">Record Pilot Result</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+          <div class="border-t-2 border-[#dce6f0] pt-4 mt-2">
+            <p class="text-xs font-900 text-[#0c1b3a] uppercase tracking-wider mb-3">Record Verified Pilot Result</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <div>
-                <label style="display:block;font-size:12px;font-weight:600;color:#495057;margin-bottom:4px;">After-pilot value *</label>
-                <input type="number" id="after-val-${p.id}" placeholder="Was ${p.baseline_value}${p.metric_unit}"
-                  style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:7px 10px;font-size:13px;box-sizing:border-box;" />
+                <label class="block text-xs font-800 text-[#0c1b3a] mb-1">After-Pilot Metric Value *</label>
+                <input type="number" id="after-val-${p.id}" placeholder="Baseline was ${p.baseline_value}${p.metric_unit}"
+                  class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] focus:outline-none focus:border-[#0c1b3a]" />
               </div>
               <div>
-                <label style="display:block;font-size:12px;font-weight:600;color:#495057;margin-bottom:4px;">Field notes</label>
-                <input type="text" id="field-notes-${p.id}" placeholder="Observations from the field"
-                  style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:7px 10px;font-size:13px;box-sizing:border-box;" />
+                <label class="block text-xs font-800 text-[#0c1b3a] mb-1">Field Audit Notes</label>
+                <input type="text" id="field-notes-${p.id}" placeholder="Observations from field monitoring"
+                  class="w-full border-2 border-[#b8cde3] rounded px-3 py-2.5 text-sm font-bold text-[#0c1b3a] focus:outline-none focus:border-[#0c1b3a]" />
               </div>
             </div>
-            <button class="record-result-btn" data-pid="${p.id}"
-              style="width:100%;background:#1e4478;color:#fff;font-weight:700;font-size:13px;padding:10px;border:none;border-radius:4px;cursor:pointer;">
+            <button class="record-result-btn w-full bg-[#0c1b3a] hover:bg-[#163561] text-white font-900 text-sm py-3 rounded cursor-pointer transition-all uppercase tracking-wider" data-pid="${p.id}">
               Record Pilot Result →
             </button>
-            <div id="record-msg-${p.id}" style="display:none;margin-top:8px;font-size:13px;color:#166534;background:#dcfce7;border:1px solid #bbf7d0;border-radius:4px;padding:7px 10px;">
+            <div id="record-msg-${p.id}" class="hidden mt-2 text-sm font-bold text-green-950 bg-green-100 border-2 border-green-400 rounded px-3 py-2">
               Result recorded. Problem moved to Proof Ledger.
             </div>
           </div>`:''}
@@ -545,7 +576,8 @@ function renderCommand() {
   }).join('');
 
   c.querySelectorAll<HTMLButtonElement>('.record-result-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
       const pid=btn.dataset.pid!;
       const av=(document.getElementById(`after-val-${pid}`) as HTMLInputElement)?.value.trim();
       if(!av){ alert('Please enter the after-pilot value.'); return; }
@@ -556,6 +588,7 @@ function renderCommand() {
       setTimeout(()=>renderAll(), 700);
     });
   });
+  attachCardClicks(c);
 }
 
 function renderLedger() {
@@ -564,7 +597,7 @@ function renderLedger() {
   const canDec = currentRole==='gov'||currentRole==='admin';
   const c = document.getElementById('ledger-list')!;
   if(!probs.length){
-    c.innerHTML=`<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No completed pilots yet. Results will appear here once pilots are concluded.</div>`;
+    c.innerHTML=`<div class="bg-white border-2 border-[#b8cde3] rounded-lg p-6 sm:p-10 text-center text-[#163561] font-bold text-base">No completed pilots in the ledger yet. Results appear here once pilots conclude.</div>`;
     return;
   }
   c.innerHTML = probs.map(p=>{
@@ -572,39 +605,39 @@ function renderLedger() {
     const dec=store.scaleDecisions.find((d:any)=>d.problem_id===p.id);
     const chart=pilot&&pilot.after_value!==null ? barChart(p,pilot) : '';
     const decBlock=dec?`
-      <div style="margin-top:12px;padding:10px 14px;border-radius:4px;${dec.decision==='approved_for_scale'?'background:#dcfce7;border:1px solid #bbf7d0;':'background:#fee2e2;border:1px solid #fecaca;'}">
-        <p style="font-size:13px;font-weight:700;margin:0;color:${dec.decision==='approved_for_scale'?'#166534':'#991b1b'};">${dec.decision==='approved_for_scale'?'✅ Approved for Scale-Up':'❌ Not Approved for Scale'}</p>
-        ${dec.notes?`<p style="font-size:12px;color:#495057;margin:4px 0 0 0;">${dec.notes}</p>`:''}
+      <div class="mt-4 p-4 rounded-lg font-bold border-2 ${dec.decision==='approved_for_scale'?'bg-green-100 border-green-500 text-green-950':'bg-red-100 border-red-500 text-red-950'}">
+        <p class="text-sm font-900 uppercase tracking-wider">${dec.decision==='approved_for_scale'?'Approved for Scale-Up':'Not Approved for Scale'}</p>
+        ${dec.notes?`<p class="text-xs font-bold mt-1 text-[#163561]">${dec.notes}</p>`:''}
       </div>`:
       (canDec&&p.status==='pilot_complete'?`
-      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="scale-decision-btn" data-pid="${p.id}" data-decision="approved_for_scale"
-          style="flex:1;min-width:160px;background:#138808;color:#fff;font-weight:700;font-size:13px;padding:9px 16px;border:none;border-radius:4px;cursor:pointer;">
-          ✅ Approve for Scale-Up
+      <div class="mt-4 flex flex-col sm:flex-row gap-3">
+        <button class="scale-decision-btn flex-1 bg-green-700 hover:bg-green-800 text-white font-900 text-sm py-3 rounded cursor-pointer transition-all uppercase tracking-wider" data-pid="${p.id}" data-decision="approved_for_scale">
+          Approve for Scale-Up
         </button>
-        <button class="scale-decision-btn" data-pid="${p.id}" data-decision="not_approved"
-          style="flex:1;min-width:120px;background:#fff;color:#991b1b;font-weight:700;font-size:13px;padding:9px 16px;border:1.5px solid #fca5a5;border-radius:4px;cursor:pointer;">
-          ❌ Not Approved
+        <button class="scale-decision-btn flex-1 bg-white border-2 border-red-500 text-red-700 hover:bg-red-50 font-900 text-sm py-3 rounded cursor-pointer transition-all uppercase tracking-wider" data-pid="${p.id}" data-decision="not_approved">
+          Not Approved
         </button>
       </div>
-      <div id="ledger-msg-${p.id}" style="display:none;margin-top:8px;font-size:13px;color:#166534;background:#dcfce7;border:1px solid #bbf7d0;border-radius:4px;padding:7px 10px;">Decision recorded.</div>
+      <div id="ledger-msg-${p.id}" class="hidden mt-2 text-sm font-bold text-green-950 bg-green-100 border-2 border-green-400 rounded px-3 py-2">Decision recorded.</div>
       `:'');
     return `
-    <div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:20px;" data-problem-id="${p.id}">
-      <div style="display:flex;align-items:start;gap:12px;">
-        <div style="font-size:22px;width:36px;text-align:center;padding-top:2px;">${CAT_ICON[p.category]??'📋'}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-            <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#0c1b3a;margin:0;">${p.title}</h3>
+    <div class="problem-card-item bg-white border-2 border-[#b8cde3] rounded-lg p-4 sm:p-6 transition-all hover:border-[#0c1b3a] hover:bg-[#f4f9ff] cursor-pointer" data-problem-id="${p.id}">
+      <div class="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+        <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#d0e6fd] border-2 border-[#163561] flex items-center justify-center">
+          ${getCategoryIconSvg(p.category)}
+        </div>
+        <div class="flex-1 min-w-0 w-full">
+          <div class="flex items-start justify-between gap-2 flex-wrap mb-1.5">
+            <h3 class="font-display font-900 text-base sm:text-lg text-[#0c1b3a]">${p.title}</h3>
             ${badge(p.status)}
           </div>
-          <p style="font-size:12px;color:#6c757d;font-weight:600;margin:0 0 8px 0;">${p.department} · ${p.city_ulb}</p>
-          <p style="font-size:14px;color:#343a40;margin:0 0 10px 0;line-height:1.6;">${p.description}</p>
-          <div style="display:inline-flex;align-items:center;gap:6px;background:#f0f4f8;border:1px solid #b8cde3;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:600;color:#163561;">
-            Baseline: <strong>${p.metric_name}</strong> = ${p.baseline_value}${p.metric_unit}
+          <p class="text-[11px] sm:text-xs font-800 text-[#163561] uppercase tracking-wider mb-2">${p.department} · ${p.city_ulb}</p>
+          <p class="text-sm sm:text-base font-bold text-[#0c1b3a] mb-3 sm:mb-4 leading-relaxed">${p.description}</p>
+          <div class="metric-highlight">
+            <span>BASELINE:</span> <strong>${p.metric_name}</strong> = ${p.baseline_value} ${p.metric_unit}
           </div>
-          ${chart?`<div style="margin-top:12px;">${chart}</div>`:''}
-          ${pilot?.field_notes?`<p style="margin-top:8px;font-size:13px;color:#495057;font-style:italic;">Field note: "${pilot.field_notes}"</p>`:''}
+          ${chart?`<div>${chart}</div>`:''}
+          ${pilot?.field_notes?`<p class="mt-2 text-xs sm:text-sm font-bold text-[#163561] italic">Field Note: "${pilot.field_notes}"</p>`:''}
           ${decBlock}
         </div>
       </div>
@@ -612,7 +645,8 @@ function renderLedger() {
   }).join('');
 
   c.querySelectorAll<HTMLButtonElement>('.scale-decision-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
       const pid=btn.dataset.pid!, dec=btn.dataset.decision!;
       makeScaleDecision(pid,dec,'');
       const msg=document.getElementById(`ledger-msg-${pid}`);
@@ -620,6 +654,7 @@ function renderLedger() {
       setTimeout(()=>renderAll(),600);
     });
   });
+  attachCardClicks(c);
 }
 
 // ── Listener helpers ──────────────────────────────────────────────────────────
@@ -631,13 +666,15 @@ function attachDelete(c: HTMLElement) {
     });
   });
 }
+
 function attachApply(c: HTMLElement) {
   c.querySelectorAll<HTMLButtonElement>('.apply-submit-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
       const pid=btn.dataset.pid!;
       const n=(document.getElementById(`apply-name-${pid}`) as HTMLInputElement)?.value.trim();
       const pitch=(document.getElementById(`apply-pitch-${pid}`) as HTMLTextAreaElement)?.value.trim();
-      if(!n||!pitch){ alert('Please fill in both your name and pitch.'); return; }
+      if(!n||!pitch){ alert('Please fill in both your startup name and pitch.'); return; }
       addApplication(pid,n,pitch);
       const msg=document.getElementById(`apply-msg-${pid}`);
       if(msg) msg.style.display='block';
@@ -646,26 +683,57 @@ function attachApply(c: HTMLElement) {
     });
   });
 }
+
 function attachShortlist(c: HTMLElement) {
   c.querySelectorAll<HTMLButtonElement>('.shortlist-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
       const aid=btn.dataset.aid!, pid=btn.dataset.pid!;
       shortlistApplication(aid);
-      const scope=prompt('Enter pilot scope notes (e.g. "6 tankers, 2 wards"):')?? 'To be defined';
-      const days=parseInt(prompt('Pilot duration in days (e.g. 21):')?? '21',10)||21;
+      const scope=prompt('Enter pilot scope notes (e.g. "25 signals on Outer Ring Road corridor"):')?? 'To be defined';
+      const days=parseInt(prompt('Pilot duration in days (e.g. 30):')?? '30',10)||30;
       startPilot(pid,aid,scope,days);
       renderAll();
     });
   });
 }
 
-// ── Funnel filter ─────────────────────────────────────────────────────────────
+function attachCardClicks(c: HTMLElement) {
+  c.querySelectorAll<HTMLElement>('.problem-card-item').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Don't trigger card click if user clicked an interactive input or button inside
+      const target = e.target as HTMLElement;
+      if (target.closest('button, input, textarea, select, a, .delete-problem-btn')) return;
+      card.classList.toggle('ring-4');
+      card.classList.toggle('ring-[#0c1b3a]');
+    });
+  });
+}
+
+// ── Funnel filter & Stat card clicks ──────────────────────────────────────────
 document.querySelectorAll<HTMLButtonElement>('[data-funnel]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const k=btn.dataset.funnel!;
     funnelFilter = funnelFilter===k ? undefined : k;
     if(activeTab!=='overview') activateTab('overview');
     else renderOverview();
+  });
+});
+
+document.getElementById('reset-funnel-btn')?.addEventListener('click', () => {
+  funnelFilter = undefined;
+  renderOverview();
+});
+
+document.getElementById('banner-stat-btn')?.addEventListener('click', () => {
+  funnelFilter = undefined;
+  activateTab('overview');
+});
+
+document.querySelectorAll<HTMLButtonElement>('.stat-click-card').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetTab = btn.dataset.targetTab;
+    if (targetTab) activateTab(targetTab);
   });
 });
 
