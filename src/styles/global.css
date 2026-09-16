@@ -2,120 +2,87 @@
 
 /* ===== Custom Theme ===== */
 @theme {
-  /* Navy Primary Palette */
-  --color-navy-50: #f5f8fc;
-  --color-navy-100: #e8eef8;
-  --color-navy-200: #d5e1f1;
-  --color-navy-300: #b7c9e5;
-  --color-navy-400: #8ba4cc;
-  --color-navy-500: #5f7db0;
-  --color-navy-600: #3c5a90;
-  --color-navy-700: #2b4478;
-  --color-navy-800: #1f3360;
-  --color-navy-900: #16243f;
-  --color-navy-950: #0d1729;
+  /* Primary Navy — Government Blue */
+  --color-navy-50:  #f0f4f8;
+  --color-navy-100: #dce6f0;
+  --color-navy-200: #b8cde3;
+  --color-navy-300: #88a9cc;
+  --color-navy-400: #5680af;
+  --color-navy-500: #2e5d91;
+  --color-navy-600: #1e4478;
+  --color-navy-700: #163561;
+  --color-navy-800: #112650;
+  --color-navy-900: #0c1b3a;
+  --color-navy-950: #070f21;
 
-  /* Orange accent — for CTAs and highlights */
-  --color-orange-400: #fb923c;
-  --color-orange-500: #f97316;
-  --color-orange-600: #ea6c0a;
+  /* Saffron / Amber — Indian government accent */
+  --color-saffron-100: #fff7ed;
+  --color-saffron-200: #fed7aa;
+  --color-saffron-300: #fdba74;
+  --color-saffron-400: #fb923c;
+  --color-saffron-500: #f77f17;
+  --color-saffron-600: #ea6c00;
+  --color-saffron-700: #c45400;
 
-  /* Sage / Powder Blue */
-  --color-sage-50: #fbfdff;
-  --color-sage-100: #f2f8ff;
-  --color-sage-200: #e6f1fd;
-  --color-sage-300: #d0e6fd;
-  --color-sage-400: #a8cef7;
-  --color-sage-500: #7fb2ea;
-  --color-sage-600: #5692d4;
-  --color-sage-700: #4076b3;
-  --color-sage-800: #335d8f;
-  --color-sage-900: #29496e;
+  /* Green — success / Tiranga */
+  --color-gov-green-500: #138808;
+  --color-gov-green-600: #0e6406;
+  --color-gov-green-100: #dcfce7;
+  --color-gov-green-800: #166534;
 
-  /* Neutral Grays */
-  --color-gray-50: #f8fafc;
-  --color-gray-100: #f1f5f9;
-  --color-gray-200: #e2e8f0;
-  --color-gray-300: #cbd5e1;
-  --color-gray-400: #94a3b8;
-  --color-gray-500: #64748b;
-  --color-gray-600: #475569;
-  --color-gray-700: #334155;
-  --color-gray-800: #1e293b;
-  --color-gray-900: #0f172a;
+  /* Neutrals */
+  --color-gray-50:  #f8f9fa;
+  --color-gray-100: #f1f3f5;
+  --color-gray-150: #eaecef;
+  --color-gray-200: #dee2e6;
+  --color-gray-300: #ced4da;
+  --color-gray-400: #adb5bd;
+  --color-gray-500: #6c757d;
+  --color-gray-600: #495057;
+  --color-gray-700: #343a40;
+  --color-gray-800: #212529;
+  --color-gray-900: #111318;
 
-  /* Status colours */
-  --color-green-400: #4ade80;
-  --color-green-500: #22c55e;
-  --color-green-600: #16a34a;
+  /* Status */
   --color-green-100: #dcfce7;
+  --color-green-600: #16a34a;
   --color-green-800: #166534;
-
-  --color-blue-100: #dbeafe;
-  --color-blue-500: #3b82f6;
-  --color-blue-800: #1e40af;
-
+  --color-blue-100:  #dbeafe;
+  --color-blue-600:  #2563eb;
+  --color-blue-800:  #1e40af;
   --color-yellow-100: #fef9c3;
-  --color-yellow-500: #eab308;
-  --color-yellow-800: #854d0e;
-
-  --color-red-100: #fee2e2;
-  --color-red-500: #ef4444;
-  --color-red-600: #dc2626;
-  --color-red-800: #991b1b;
-
-  --color-purple-100: #f3e8ff;
-  --color-purple-500: #a855f7;
-  --color-purple-800: #6b21a8;
+  --color-yellow-700: #a16207;
+  --color-orange-100: #ffedd5;
+  --color-orange-700: #c2410c;
+  --color-red-100:   #fee2e2;
+  --color-red-600:   #dc2626;
+  --color-red-800:   #991b1b;
 
   /* Fonts */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
 
   /* Animations */
-  --animate-fade-in: fade-in 0.4s ease-out;
-  --animate-slide-up: slide-up 0.45s ease-out;
-  --animate-scale-in: scale-in 0.3s ease-out;
-  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-fade-in:  fade-in 0.35s ease-out;
+  --animate-slide-up: slide-up 0.4s ease-out;
 }
 
 /* ===== Keyframes ===== */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes scale-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 18px rgba(249, 115, 22, 0.25); }
-  50%       { box-shadow: 0 0 32px rgba(249, 115, 22, 0.45); }
-}
-@keyframes bar-grow {
-  from { height: 0; }
-  to   { height: var(--bar-h); }
-}
-@keyframes count-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ===== Base Styles ===== */
+/* ===== Base ===== */
 @layer base {
   * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(127, 178, 234, 0.4) transparent;
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #88a9cc transparent;
   }
   html {
     font-family: var(--font-sans);
-    background-color: #f1f5f9;
-    color: #16243f;
+    background-color: #f1f3f5;
+    color: #212529;
+    font-size: 15px;
   }
   body {
     margin: 0;
@@ -125,95 +92,120 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     font-weight: 700;
+    color: #0c1b3a;
     letter-spacing: -0.01em;
+    line-height: 1.25;
   }
-  ::selection {
-    background-color: rgba(249, 115, 22, 0.18);
-  }
+  p { line-height: 1.65; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: rgba(30,68,120,0.15); }
 }
 
-/* ===== Utility classes ===== */
-@utility glass {
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1.5px solid #e2e8f0;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(22,36,63,0.07), 0 1px 3px rgba(22,36,63,0.05);
+/* ===== Utilities ===== */
+
+/* Government card — crisp white, strong border, no blur effects */
+@utility gov-card {
+  background: #ffffff;
+  border: 1.5px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(12,27,58,0.06), 0 0 0 0.5px rgba(12,27,58,0.04);
 }
 
-@utility glass-hover {
-  transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+@utility gov-card-hover {
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(22,36,63,0.12), 0 2px 6px rgba(22,36,63,0.08);
-    border-color: #a8cef7;
+    border-color: #5680af;
+    box-shadow: 0 4px 14px rgba(12,27,58,0.10);
+    transform: translateY(-1px);
   }
 }
 
+/* High-contrast readable text */
+@utility text-readable {
+  color: #212529;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+/* Saffron accent gradient text */
 @utility gradient-text {
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(90deg, #f77f17, #ea6c00);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ─── Background blobs ─── */
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(72px);
-  opacity: 0.55;
-  pointer-events: none;
+/* Solid government button */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #1e4478;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: #163561; }
 }
-.blob-1 {
-  width: 520px; height: 520px;
-  top: -120px; right: -120px;
-  background: radial-gradient(circle, #d0e6fd 0%, #b7c9e5 100%);
+
+@utility btn-saffron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f77f17;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: #ea6c00; }
 }
-.blob-2 {
-  width: 400px; height: 400px;
-  top: 50%; left: -100px;
-  background: radial-gradient(circle, #fed7aa 0%, #fdba74 100%);
-}
-.blob-3 {
-  width: 360px; height: 360px;
-  bottom: -80px; right: 30%;
-  background: radial-gradient(circle, #e6f1fd 0%, #d0e6fd 100%);
+
+/* Form fields */
+@utility gov-input {
+  width: 100%;
+  border: 1.5px solid #ced4da;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: #212529;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  &:focus {
+    outline: none;
+    border-color: #1e4478;
+    box-shadow: 0 0 0 3px rgba(30,68,120,0.12);
+  }
 }
 
 /* ─── Tab system ─── */
 .tab-panel { display: none; }
-.tab-panel.active { display: block; animation: fade-in 0.35s ease-out; }
-
-/* ─── Funnel strip ─── */
-.funnel-step {
-  position: relative;
-  flex: 1;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.funnel-step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  right: -14px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0; height: 0;
-  border-top: 28px solid transparent;
-  border-bottom: 28px solid transparent;
-  border-left: 14px solid currentColor;
-  z-index: 2;
-}
-
-/* ─── SVG bar chart ─── */
-.bar-label { font-size: 11px; font-family: var(--font-sans); fill: #64748b; }
-.bar-value { font-size: 12px; font-weight: 600; font-family: var(--font-sans); }
+.tab-panel.active { display: block; animation: fade-in 0.3s ease-out; }
 
 /* ─── Stagger helpers ─── */
-@utility stagger-1 { animation-delay: 0.08s; animation-fill-mode: both; }
-@utility stagger-2 { animation-delay: 0.16s; animation-fill-mode: both; }
-@utility stagger-3 { animation-delay: 0.24s; animation-fill-mode: both; }
-@utility stagger-4 { animation-delay: 0.32s; animation-fill-mode: both; }
-@utility stagger-5 { animation-delay: 0.40s; animation-fill-mode: both; }
-@utility stagger-6 { animation-delay: 0.48s; animation-fill-mode: both; }
+@utility stagger-1 { animation-delay: 0.06s; animation-fill-mode: both; }
+@utility stagger-2 { animation-delay: 0.12s; animation-fill-mode: both; }
+@utility stagger-3 { animation-delay: 0.18s; animation-fill-mode: both; }
+@utility stagger-4 { animation-delay: 0.24s; animation-fill-mode: both; }
+@utility stagger-5 { animation-delay: 0.30s; animation-fill-mode: both; }
+@utility stagger-6 { animation-delay: 0.36s; animation-fill-mode: both; }
+
+/* ─── Ashoka stripe (3px top border on header) ─── */
+.ashoka-stripe {
+  background: linear-gradient(90deg, #f77f17 33.33%, #ffffff 33.33% 66.66%, #138808 66.66%);
+  height: 4px;
+  width: 100%;
+}
+
+/* ─── Legacy compat ─── */
+@utility glass { background:#fff; border:1.5px solid #dee2e6; border-radius:6px; box-shadow:0 1px 4px rgba(12,27,58,0.06); }
+@utility glass-hover { transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s; &:hover { border-color:#5680af; box-shadow:0 4px 14px rgba(12,27,58,0.10); transform:translateY(-1px); } }

@@ -1,42 +1,42 @@
 [
   {
     "id": "app-001",
-    "problem_id": "prob-002",
-    "startup_name": "AquaNet Solutions",
-    "pitch": "Our IoT pipe sensors + ML anomaly detection can cut interruption durations by 70% within 3 months. We've deployed in 4 tier-2 cities already.",
+    "problem_id": "prob-001",
+    "startup_name": "EcoWaste Dynamics",
+    "pitch": "Modular automated waste sorting & biomethanation units capable of processing 45 MT/day of MSW directly in Gandhinagar, raising recycling rate from 15 MT/day to 60+ MT/day.",
     "status": "shortlisted",
-    "created_at": "2026-08-22T10:00:00Z"
+    "created_at": "2026-06-20T08:00:00Z"
   },
   {
     "id": "app-002",
     "problem_id": "prob-002",
-    "startup_name": "FlowGuard AI",
-    "pitch": "Acoustic leak detection using AI on existing SCADA infrastructure. No new hardware needed. 60-day pilot, 3 wards.",
-    "status": "submitted",
-    "created_at": "2026-08-23T14:00:00Z"
-  },
-  {
-    "id": "app-003",
-    "problem_id": "prob-001",
-    "startup_name": "SmartBin Labs",
-    "pitch": "GPS-tracked vehicles + fill-level sensors + route optimizer. We guarantee 95% pickup compliance in 21 days across any 2 zones.",
+    "startup_name": "GridFlow AI",
+    "pitch": "Computer-vision AI signal controllers fitted to 25 of Bangalore's 353 traffic lights to dynamically adjust green lights based on real-time queue lengths.",
     "status": "shortlisted",
     "created_at": "2026-08-15T09:00:00Z"
   },
   {
-    "id": "app-004",
-    "problem_id": "prob-005",
-    "startup_name": "HealthRoute",
-    "pitch": "WhatsApp-first clinic scheduling + community health worker app. Piloted in Telangana — lifted utilization from 28% to 71% in 6 weeks.",
+    "id": "app-003",
+    "problem_id": "prob-003",
+    "startup_name": "SmartClean ULB Tech",
+    "pitch": "IoT-monitored smart collection bins and dynamic route optimization for Gandhinagar's waste collection fleet to eliminate the 30 MT/day uncollected waste deficit.",
     "status": "shortlisted",
     "created_at": "2026-07-25T11:00:00Z"
   },
   {
-    "id": "app-005",
-    "problem_id": "prob-006",
-    "startup_name": "ClearSky Sensors",
-    "pitch": "Low-cost AQI nodes (₹8,000/unit) with city dashboard and public SMS alerts. 40 nodes in 30 days, 60-day pilot in 2 districts.",
+    "id": "app-004",
+    "problem_id": "prob-004",
+    "startup_name": "UrbanPulse Mobility",
+    "pitch": "Corridor-wide green wave synchronization for 12 adjacent intersections in Bangalore to slash peak wait times from 14.5 mins down to under 5 mins.",
     "status": "shortlisted",
-    "created_at": "2026-06-20T08:00:00Z"
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  {
+    "id": "app-005",
+    "problem_id": "prob-005",
+    "startup_name": "SignalWatch IoT",
+    "pitch": "Low-power current monitoring sensors installed on traffic light control boxes across Bangalore's 353 intersections to alert maintenance teams in under 15 minutes of any signal outage.",
+    "status": "submitted",
+    "created_at": "2026-09-03T14:00:00Z"
   }
 ]

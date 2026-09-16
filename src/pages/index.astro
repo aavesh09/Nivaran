@@ -7,9 +7,8 @@ import scaleDecisions_seed from '../data/scaleDecisions.json';
 
 const categories = ['Sanitation', 'Water', 'Electrical', 'Roads', 'Health', 'Other civic issue'];
 
-// Counts for SSR-rendered funnel (JS will update live after hydration)
 const counts = {
-  posted: problems_seed.length,
+  posted:  problems_seed.length,
   matched: problems_seed.filter(p => ['matched','pilot_running','pilot_complete','approved_for_scale','not_approved'].includes(p.status)).length,
   running: problems_seed.filter(p => p.status === 'pilot_running').length,
   decided: problems_seed.filter(p => ['pilot_complete','approved_for_scale','not_approved'].includes(p.status)).length,
@@ -17,263 +16,272 @@ const counts = {
 ---
 
 <Layout pageTitle="Dashboard">
-  <!-- ═══════════════════════════════════════════════════════ TOP NAV -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm">
-    <div class="max-w-screen-xl mx-auto px-4 flex items-center gap-4 h-16">
-      <!-- Brand -->
-      <a href="/" class="flex items-center gap-2.5 shrink-0 mr-2">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-navy-700 to-navy-900 flex items-center justify-center shadow-md">
-          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-          </svg>
-        </div>
-        <div class="leading-tight">
-          <div class="font-display font-800 text-navy-900 text-lg leading-none">PilotSetu</div>
-          <div class="text-xs text-gray-400 font-medium leading-none mt-0.5 hidden sm:block">Proof before scale</div>
-        </div>
-      </a>
 
-      <!-- Tab pills -->
-      <nav class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar" id="tab-nav">
+  <!-- ══════════════════════ GOV HEADER ══════════════════════ -->
+  <div class="ashoka-stripe"></div>
+
+  <header class="bg-navy-900 text-white shadow-lg">
+    <div class="max-w-screen-xl mx-auto px-4 lg:px-6">
+      <!-- Top identity bar -->
+      <div class="flex items-center justify-between py-3 border-b border-navy-700">
+        <!-- Brand — text only, no icon -->
+        <a href="/" class="flex flex-col leading-tight">
+          <span class="font-display font-900 text-2xl tracking-tight text-white">Nivaran</span>
+          <span class="text-xs text-navy-300 font-medium tracking-wide uppercase">Government Pilot Marketplace</span>
+        </a>
+        <!-- Role switcher -->
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-navy-300 font-semibold hidden md:block">Viewing as:</span>
+          <select id="role-switcher"
+            class="text-sm font-semibold bg-navy-800 border border-navy-600 text-white rounded px-3 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-saffron-400">
+            <option value="gov">🏛️ Government Official</option>
+            <option value="startup">🚀 Startup</option>
+            <option value="admin">🛡️ Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tab navigation -->
+      <nav class="flex items-center gap-1 overflow-x-auto py-1" id="tab-nav" aria-label="Main navigation">
         {[
-          { id: 'overview',    label: 'Overview',             icon: '🏠' },
-          { id: 'gov',         label: 'Gov Console',          icon: '🏛️' },
-          { id: 'marketplace', label: 'Startup Marketplace',  icon: '🚀' },
-          { id: 'command',     label: 'Pilot Command',        icon: '📋' },
-          { id: 'ledger',      label: 'Proof Ledger',         icon: '📊' },
-        ].map((tab, i) => (
+          { id: 'overview',    label: 'Overview'            },
+          { id: 'gov',         label: 'Government Console'  },
+          { id: 'marketplace', label: 'Startup Marketplace' },
+          { id: 'command',     label: 'Pilot Command'       },
+          { id: 'ledger',      label: 'Proof Ledger'        },
+        ].map((tab) => (
           <button
-            class="tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-gray-500 hover:text-navy-800 hover:bg-gray-100"
+            class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 border-transparent text-navy-300 hover:text-white hover:border-saffron-400 transition-all"
             data-tab={tab.id}
             id={`tab-btn-${tab.id}`}
           >
-            <span>{tab.icon}</span>
-            <span class="hidden sm:inline">{tab.label}</span>
+            {tab.label}
           </button>
         ))}
       </nav>
-
-      <!-- Role switcher -->
-      <div class="shrink-0 flex items-center gap-2">
-        <label class="text-xs text-gray-500 font-medium hidden md:block">Role:</label>
-        <select id="role-switcher" class="text-sm font-semibold bg-navy-50 border border-navy-200 text-navy-800 rounded-lg px-3 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-400">
-          <option value="gov">🏛️ Gov Official</option>
-          <option value="startup">🚀 Startup</option>
-          <option value="admin">🛡️ Admin</option>
-        </select>
-      </div>
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════════════════ MAIN -->
-  <main class="flex-1 max-w-screen-xl mx-auto w-full px-4 py-6">
+  <!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+  <main class="flex-1 max-w-screen-xl mx-auto w-full px-4 lg:px-6 py-6">
 
-    <!-- ─────────────────────────── TAB 1: OVERVIEW ─────────────────────────── -->
+    <!-- ─── TAB 1: OVERVIEW ─── -->
     <div class="tab-panel active" id="panel-overview">
 
-      <!-- Explainer banner -->
-      <div class="mb-6 glass p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 border-l-4 border-orange-500">
-        <div class="w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-2xl shadow-md">⚡</div>
-        <div>
-          <h1 class="font-display text-xl font-bold text-navy-900">PilotSetu — <span class="gradient-text">Proof before scale</span></h1>
-          <p class="text-sm text-gray-600 mt-0.5">A marketplace between government departments and startups. Departments post real problems. Startups pitch solutions. One startup runs a small, time-boxed pilot. Data decides who scales.</p>
+      <!-- Mission banner -->
+      <div class="mb-6 bg-navy-900 text-white rounded-md p-5 flex flex-col sm:flex-row items-start gap-4">
+        <div class="flex-1">
+          <h1 class="font-display text-xl font-800 text-white">Nivaran — <span style="color:#f77f17;">Proof before scale</span></h1>
+          <p class="text-navy-200 text-sm mt-1.5 leading-relaxed max-w-2xl">
+            A structured marketplace between government departments and startups.
+            Departments post real civic problems with a measurable baseline.
+            Startups pitch solutions. One startup runs a small, time-boxed pilot.
+            Hard data decides who scales — not promises.
+          </p>
+        </div>
+        <div class="shrink-0 text-center hidden sm:block border-l border-navy-700 pl-5">
+          <div class="text-3xl font-display font-900 text-saffron-400">{counts.posted}</div>
+          <div class="text-xs text-navy-300 font-semibold uppercase tracking-wide mt-0.5">Active problems</div>
         </div>
       </div>
 
-      <!-- 4-stage funnel strip -->
-      <div class="mb-6 glass p-4">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Problem lifecycle</p>
-        <div class="flex gap-2 items-stretch" id="funnel-strip">
+      <!-- 4-stage funnel -->
+      <div class="mb-6 bg-white border border-gray-200 rounded-md p-4">
+        <p class="text-xs font-700 text-gray-500 uppercase tracking-widest mb-3">Problem Lifecycle</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="funnel-strip">
           {[
-            { key: 'posted',  label: 'Problem posted',    color: 'from-gray-400 to-gray-500',     count: counts.posted  },
-            { key: 'matched', label: 'Startup matched',   color: 'from-blue-500 to-blue-600',     count: counts.matched },
-            { key: 'running', label: 'Pilot running',     color: 'from-orange-400 to-orange-500', count: counts.running },
-            { key: 'decided', label: 'Scale decision',    color: 'from-green-500 to-green-600',   count: counts.decided },
-          ].map((step, i) => (
+            { key: 'posted',  label: 'Problem posted',  count: counts.posted,  color: '#6c757d', bg: '#f8f9fa' },
+            { key: 'matched', label: 'Startup matched',  count: counts.matched, color: '#2563eb', bg: '#dbeafe' },
+            { key: 'running', label: 'Pilot running',    count: counts.running, color: '#c2410c', bg: '#ffedd5' },
+            { key: 'decided', label: 'Scale decision',   count: counts.decided, color: '#16a34a', bg: '#dcfce7' },
+          ].map((step) => (
             <button
-              class="funnel-step flex-1 rounded-lg py-3 px-2 text-center bg-gradient-to-br text-white transition-all hover:scale-[1.03] hover:shadow-lg"
-              style={`background-image: linear-gradient(135deg, var(--tw-gradient-stops));`}
+              class="funnel-step text-left rounded p-3 border-2 transition-all hover:shadow-md"
+              style={`border-color:${step.color}20; background:${step.bg};`}
               data-funnel={step.key}
             >
-              <div class={`inline-flex flex-col items-center w-full bg-gradient-to-br ${step.color} rounded-lg py-3 px-2`}>
-                <span class="text-2xl font-display font-800 leading-none" data-funnel-count={step.key}>{step.count}</span>
-                <span class="text-xs font-semibold mt-1 opacity-90">{step.label}</span>
-              </div>
+              <div class="text-3xl font-display font-900 leading-none" style={`color:${step.color};`} data-funnel-count={step.key}>{step.count}</div>
+              <div class="text-xs font-600 mt-1" style={`color:${step.color};`}>{step.label}</div>
             </button>
           ))}
         </div>
       </div>
 
       <!-- Stat cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="stat-cards">
-        <div class="glass p-4 animate-slide-up stagger-1">
-          <div class="text-3xl font-display font-800 text-navy-900" id="stat-total-problems">{problems_seed.length}</div>
-          <div class="text-sm text-gray-500 mt-1 font-medium">Total problems</div>
-          <div class="text-xs text-gray-400 mt-0.5">on platform</div>
-        </div>
-        <div class="glass p-4 animate-slide-up stagger-2">
-          <div class="text-3xl font-display font-800 text-blue-600" id="stat-applications">{applications_seed.length}</div>
-          <div class="text-sm text-gray-500 mt-1 font-medium">Applications</div>
-          <div class="text-xs text-gray-400 mt-0.5">from startups</div>
-        </div>
-        <div class="glass p-4 animate-slide-up stagger-3">
-          <div class="text-3xl font-display font-800 text-orange-500" id="stat-pilots-running">{problems_seed.filter(p=>p.status==='pilot_running').length}</div>
-          <div class="text-sm text-gray-500 mt-1 font-medium">Pilots running</div>
-          <div class="text-xs text-gray-400 mt-0.5">right now</div>
-        </div>
-        <div class="glass p-4 animate-slide-up stagger-4">
-          <div class="text-3xl font-display font-800 text-green-600" id="stat-avg-improvement">—</div>
-          <div class="text-sm text-gray-500 mt-1 font-medium">Avg. improvement</div>
-          <div class="text-xs text-gray-400 mt-0.5">across completed pilots</div>
-        </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {[
+          { label: 'Total Problems',      id: 'stat-total-problems',   value: problems_seed.length,                                                     sub: 'on platform' },
+          { label: 'Applications Filed',  id: 'stat-applications',     value: applications_seed.length,                                                  sub: 'from startups' },
+          { label: 'Pilots Running',      id: 'stat-pilots-running',   value: problems_seed.filter(p=>p.status==='pilot_running').length,                sub: 'active pilots' },
+          { label: 'Avg. Improvement',    id: 'stat-avg-improvement',  value: '—',                                                                       sub: 'completed pilots' },
+        ].map((s, i) => (
+          <div class={`bg-white border border-gray-200 rounded-md p-4 animate-slide-up stagger-${i+1}`}>
+            <div class="text-2xl font-display font-800 text-navy-900" id={s.id}>{s.value}</div>
+            <div class="text-sm font-600 text-gray-700 mt-1">{s.label}</div>
+            <div class="text-xs text-gray-400 mt-0.5">{s.sub}</div>
+          </div>
+        ))}
       </div>
 
-      <!-- All problems list -->
+      <!-- All problems -->
       <div>
         <div class="flex items-center justify-between mb-3">
-          <h2 class="font-display text-lg font-bold text-navy-900">All problems on the platform</h2>
-          <span class="text-xs text-gray-400" id="overview-filter-label"></span>
+          <h2 class="font-display text-base font-700 text-navy-900 uppercase tracking-wide">All Problems on Platform</h2>
+          <span class="text-xs text-gray-400 font-medium" id="overview-filter-label"></span>
         </div>
         <div class="space-y-3" id="overview-problem-list">
-          <!-- rendered by JS -->
-          <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+          <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
         </div>
       </div>
     </div>
 
-    <!-- ─────────────────────────── TAB 2: GOV CONSOLE ─────────────────────────── -->
+    <!-- ─── TAB 2: GOV CONSOLE ─── -->
     <div class="tab-panel" id="panel-gov">
-      <h1 class="font-display text-2xl font-bold text-navy-900 mb-6">🏛️ Government Console</h1>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <h1 class="font-display text-xl font-800 text-navy-900 mb-1">Government Console</h1>
+      <p class="text-gray-500 text-sm mb-6">Post civic problems for the marketplace. Shortlist startups for pilots.</p>
 
-        <!-- Post a problem form -->
-        <div class="glass p-6">
-          <h2 class="font-display text-lg font-bold text-navy-800 mb-4 flex items-center gap-2">
-            <span class="w-7 h-7 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-base">+</span>
-            Post a new problem
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Form -->
+        <div class="bg-white border border-gray-200 rounded-md p-6">
+          <h2 class="font-display text-base font-700 text-navy-900 mb-4 pb-3 border-b border-gray-100">
+            Post a New Problem
           </h2>
           <form id="post-problem-form" class="space-y-4" novalidate>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Problem title *</label>
-              <input id="f-title" type="text" required placeholder="e.g. Missed garbage pickups" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent" />
+              <label class="block text-sm font-600 text-gray-700 mb-1.5">Problem Title <span class="text-red-500">*</span></label>
+              <input id="f-title" type="text" required placeholder="e.g. Missed garbage pickups"
+                class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Department *</label>
-                <input id="f-department" type="text" required placeholder="e.g. Solid Waste Dept." class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                <label class="block text-sm font-600 text-gray-700 mb-1.5">Department <span class="text-red-500">*</span></label>
+                <input id="f-department" type="text" required placeholder="e.g. Solid Waste Dept."
+                  class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
               </div>
               <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">City / ULB *</label>
-                <input id="f-city" type="text" required placeholder="e.g. Nagpur MC" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                <label class="block text-sm font-600 text-gray-700 mb-1.5">City / ULB <span class="text-red-500">*</span></label>
+                <input id="f-city" type="text" required placeholder="e.g. Nagpur MC"
+                  class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
               </div>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Category *</label>
-              <select id="f-category" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
+              <label class="block text-sm font-600 text-gray-700 mb-1.5">Category <span class="text-red-500">*</span></label>
+              <select id="f-category"
+                class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200">
                 {categories.map(c => <option value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Description *</label>
-              <textarea id="f-description" required rows="3" placeholder="Describe the civic problem in detail…" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"></textarea>
+              <label class="block text-sm font-600 text-gray-700 mb-1.5">Problem Description <span class="text-red-500">*</span></label>
+              <textarea id="f-description" required rows="3"
+                placeholder="Describe the civic problem in detail. Include current situation, impact, and what success looks like."
+                class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 resize-none placeholder:text-gray-400"></textarea>
             </div>
-            <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
-              <p class="text-xs font-semibold text-blue-700 mb-2 uppercase tracking-wide">Baseline metric</p>
-              <div class="grid grid-cols-3 gap-2">
+
+            <fieldset class="border border-navy-200 rounded p-3 bg-navy-50">
+              <legend class="text-xs font-700 text-navy-800 uppercase tracking-wide px-1">Baseline Metric</legend>
+              <div class="grid grid-cols-3 gap-2 mt-2">
                 <div class="col-span-3 sm:col-span-1">
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Metric name *</label>
-                  <input id="f-metric-name" type="text" required placeholder="e.g. Missed pickups" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                  <label class="block text-xs font-600 text-gray-600 mb-1">Metric Name <span class="text-red-500">*</span></label>
+                  <input id="f-metric-name" type="text" required placeholder="e.g. Missed pickups"
+                    class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Unit *</label>
-                  <input id="f-metric-unit" type="text" required placeholder="%, hrs, days" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                  <label class="block text-xs font-600 text-gray-600 mb-1">Unit <span class="text-red-500">*</span></label>
+                  <input id="f-metric-unit" type="text" required placeholder="%, hrs, days"
+                    class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Baseline value *</label>
-                  <input id="f-baseline" type="number" required placeholder="e.g. 40" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                  <label class="block text-xs font-600 text-gray-600 mb-1">Baseline Value <span class="text-red-500">*</span></label>
+                  <input id="f-baseline" type="number" required placeholder="e.g. 40"
+                    class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200 placeholder:text-gray-400" />
                 </div>
               </div>
               <div class="mt-2">
-                <label class="block text-xs font-semibold text-gray-600 mb-1">Direction</label>
-                <select id="f-direction" class="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
-                  <option value="lower_is_better">⬇️ Lower is better</option>
-                  <option value="higher_is_better">⬆️ Higher is better</option>
+                <label class="block text-xs font-600 text-gray-600 mb-1">Improvement Direction</label>
+                <select id="f-direction"
+                  class="w-full border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-200">
+                  <option value="lower_is_better">Lower is better (e.g. fewer incidents, less time)</option>
+                  <option value="higher_is_better">Higher is better (e.g. coverage %, satisfaction)</option>
                 </select>
               </div>
-            </div>
-            <div id="form-error" class="hidden text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2"></div>
-            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-              Post problem to marketplace
+            </fieldset>
+
+            <div id="form-error" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded px-3 py-2"></div>
+            <button type="submit"
+              class="w-full bg-navy-800 hover:bg-navy-900 text-white font-700 py-2.5 rounded text-sm transition-colors flex items-center justify-center gap-2">
+              + Post Problem to Marketplace
             </button>
           </form>
-          <div id="form-success" class="hidden mt-3 text-sm text-green-700 bg-green-50 rounded-lg px-3 py-2 flex items-center gap-2">
-            ✅ Problem posted successfully!
+          <div id="form-success" class="hidden mt-3 text-sm text-green-800 bg-green-50 border border-green-200 rounded px-3 py-2">
+            ✅ Problem posted successfully and is now live on the marketplace.
           </div>
         </div>
 
-        <!-- Dept problems list -->
+        <!-- Dept list -->
         <div>
-          <h2 class="font-display text-lg font-bold text-navy-800 mb-4 flex items-center gap-2">
-            <span class="w-7 h-7 rounded-lg bg-navy-100 text-navy-700 flex items-center justify-center text-sm">📋</span>
-            Posted by your department
-          </h2>
+          <h2 class="font-display text-base font-700 text-navy-900 mb-4">Posted by Your Department</h2>
           <div class="space-y-3" id="dept-problem-list">
-            <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+            <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ─────────────────────────── TAB 3: STARTUP MARKETPLACE ─────────────────────────── -->
+    <!-- ─── TAB 3: STARTUP MARKETPLACE ─── -->
     <div class="tab-panel" id="panel-marketplace">
       <div class="mb-6">
-        <h1 class="font-display text-2xl font-bold text-navy-900">🚀 Startup Marketplace</h1>
-        <p class="text-gray-500 text-sm mt-1">Open problems, looking for a pilot partner. Apply with a short pitch. The department shortlists one startup for a small pilot — not a full contract.</p>
+        <h1 class="font-display text-xl font-800 text-navy-900">Startup Marketplace</h1>
+        <p class="text-gray-600 text-sm mt-1 leading-relaxed max-w-2xl">
+          Open problems seeking a pilot partner. Apply with a short pitch — the department shortlists
+          one startup for a small, time-boxed pilot. Not a full contract. Proof first.
+        </p>
       </div>
       <div class="space-y-4" id="marketplace-list">
-        <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+        <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
       </div>
     </div>
 
-    <!-- ─────────────────────────── TAB 4: PILOT COMMAND ─────────────────────────── -->
+    <!-- ─── TAB 4: PILOT COMMAND ─── -->
     <div class="tab-panel" id="panel-command">
       <div class="mb-6">
-        <h1 class="font-display text-2xl font-bold text-navy-900">📋 Pilot Command</h1>
-        <p class="text-gray-500 text-sm mt-1">Pilots in progress — record results when the pilot period ends.</p>
+        <h1 class="font-display text-xl font-800 text-navy-900">Pilot Command</h1>
+        <p class="text-gray-600 text-sm mt-1">Active pilots — monitor progress and record results when the pilot period ends.</p>
       </div>
       <div class="space-y-4" id="command-list">
-        <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+        <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
       </div>
     </div>
 
-    <!-- ─────────────────────────── TAB 5: PROOF LEDGER ─────────────────────────── -->
+    <!-- ─── TAB 5: PROOF LEDGER ─── -->
     <div class="tab-panel" id="panel-ledger">
       <div class="mb-6">
-        <h1 class="font-display text-2xl font-bold text-navy-900">📊 Proof Ledger</h1>
-        <p class="text-gray-500 text-sm mt-1">Completed pilots — decision pending or made. The numbers speak.</p>
+        <h1 class="font-display text-xl font-800 text-navy-900">Proof Ledger</h1>
+        <p class="text-gray-600 text-sm mt-1">Completed pilots — all decisions and results recorded here for accountability.</p>
       </div>
       <div class="space-y-4" id="ledger-list">
-        <div class="glass p-6 text-center text-gray-400 text-sm">Loading…</div>
+        <div class="bg-white border border-gray-200 rounded-md p-6 text-center text-gray-400 text-sm">Loading…</div>
       </div>
     </div>
 
   </main>
 
-  <footer class="max-w-screen-xl mx-auto w-full px-4 py-4 border-t border-gray-200 text-center text-xs text-gray-400">
-    PilotSetu © 2026 — Proof before scale · Government × Startup Innovation Marketplace
+  <footer class="bg-navy-900 text-navy-300 text-xs py-4 mt-6">
+    <div class="max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>Nivaran © 2026 — Government Pilot Marketplace · Ministry of Urban Development</span>
+      <span class="text-navy-400">Built for accountability · Proof before scale</span>
+    </div>
   </footer>
+
 </Layout>
 
 <script>
-// ─── Imports ─────────────────────────────────────────────────────────────────
 import {
-  initStore, getStore, resetStore,
+  initStore, getStore,
   addProblem, deleteProblem,
   addApplication, shortlistApplication,
   startPilot, recordPilotResult,
-  makeScaleDecision,
-  avgImprovement,
+  makeScaleDecision, avgImprovement,
 } from '../scripts/store.js';
 
 import problemsSeed       from '../data/problems.json';
@@ -281,499 +289,413 @@ import applicationsSeed   from '../data/applications.json';
 import pilotRunsSeed      from '../data/pilotRuns.json';
 import scaleDecisionsSeed from '../data/scaleDecisions.json';
 
-// ─── Init store ───────────────────────────────────────────────────────────────
 initStore(problemsSeed, applicationsSeed, pilotRunsSeed, scaleDecisionsSeed);
 
-// ─── Role ─────────────────────────────────────────────────────────────────────
-let currentRole = 'gov'; // gov | startup | admin
+// ── Role ──────────────────────────────────────────────────────────────────────
+let currentRole: string = 'gov';
 const roleSelect = document.getElementById('role-switcher') as HTMLSelectElement;
-roleSelect?.addEventListener('change', () => {
-  currentRole = roleSelect.value;
-  renderAll();
-});
+roleSelect?.addEventListener('change', () => { currentRole = roleSelect.value; renderAll(); });
 
-// ─── Tab switching ────────────────────────────────────────────────────────────
-const tabBtns  = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+// ── Tab switching ─────────────────────────────────────────────────────────────
+const tabBtns   = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
 const tabPanels = document.querySelectorAll<HTMLElement>('.tab-panel');
-
 let activeTab = 'overview';
 
 function activateTab(id: string) {
   activeTab = id;
   tabBtns.forEach(btn => {
-    const isActive = btn.dataset.tab === id;
-    btn.classList.toggle('bg-orange-500', isActive);
-    btn.classList.toggle('text-white', isActive);
-    btn.classList.toggle('shadow-md', isActive);
-    btn.classList.toggle('text-gray-500', !isActive);
-    btn.classList.toggle('hover:bg-gray-100', !isActive);
+    const on = btn.dataset.tab === id;
+    btn.classList.toggle('text-white',          on);
+    btn.classList.toggle('border-saffron-400',  on);
+    btn.style.borderBottomColor = on ? '#f77f17' : '';
+    btn.classList.toggle('text-navy-300',       !on);
+    btn.classList.toggle('border-transparent',  !on);
   });
-  tabPanels.forEach(panel => {
-    panel.classList.toggle('active', panel.id === `panel-${id}`);
-  });
+  tabPanels.forEach(p => p.classList.toggle('active', p.id === `panel-${id}`));
   renderAll();
 }
+tabBtns.forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab!)));
 
-tabBtns.forEach(btn => {
-  btn.addEventListener('click', () => activateTab(btn.dataset.tab!));
-});
-
-// ─── Status badge HTML ────────────────────────────────────────────────────────
-function statusBadge(status: string) {
-  const map: Record<string, [string, string]> = {
-    open:              ['⬜ Open — awaiting startups', 'bg-gray-100 text-gray-600 border border-gray-300'],
-    matched:           ['🔵 Startup matched',          'bg-blue-100 text-blue-800 border border-blue-200'],
-    pilot_running:     ['🟠 Pilot running',             'bg-orange-100 text-orange-800 border border-orange-200'],
-    pilot_complete:    ['🟡 Pilot complete',            'bg-yellow-100 text-yellow-800 border border-yellow-200'],
-    approved_for_scale:['🟢 Approved for scale',       'bg-green-100 text-green-800 border border-green-200'],
-    not_approved:      ['🔴 Not approved',              'bg-red-100 text-red-800 border border-red-200'],
-  };
-  const [label, cls] = map[status] ?? ['Unknown', 'bg-gray-100 text-gray-500'];
-  return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${cls}">${label}</span>`;
+// ── Status badge ──────────────────────────────────────────────────────────────
+const STATUS_MAP: Record<string,[string,string]> = {
+  open:              ['Open — Awaiting startups', 'background:#f1f3f5;color:#495057;border:1px solid #ced4da;'],
+  matched:           ['Startup Matched',          'background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;'],
+  pilot_running:     ['Pilot Running',            'background:#ffedd5;color:#c2410c;border:1px solid #fed7aa;'],
+  pilot_complete:    ['Pilot Complete',           'background:#fef9c3;color:#a16207;border:1px solid #fde68a;'],
+  approved_for_scale:['Approved for Scale',       'background:#dcfce7;color:#166534;border:1px solid #bbf7d0;'],
+  not_approved:      ['Not Approved',             'background:#fee2e2;color:#991b1b;border:1px solid #fecaca;'],
+};
+function badge(status: string) {
+  const [label, style] = STATUS_MAP[status] ?? ['Unknown',''];
+  return `<span style="${style}padding:2px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap;">${label}</span>`;
 }
 
-// ─── Category icon ────────────────────────────────────────────────────────────
-function catIcon(cat: string) {
-  const m: Record<string,string> = { Sanitation:'🗑️', Water:'💧', Electrical:'⚡', Roads:'🛣️', Health:'🏥', 'Other civic issue':'🏙️' };
-  return m[cat] ?? '📋';
-}
+// ── Category icon ─────────────────────────────────────────────────────────────
+const CAT_ICON: Record<string,string> = {
+  Sanitation:'🗑️', Water:'💧', Electrical:'⚡', Roads:'🛣️', Health:'🏥', 'Other civic issue':'🏙️'
+};
 
-// ─── Problem card HTML ────────────────────────────────────────────────────────
-function problemCardHtml(p: any, opts: { showDelete?: boolean, showApply?: boolean, showShortlist?: boolean } = {}) {
-  const canDelete = opts.showDelete && (currentRole === 'admin' || currentRole === 'gov');
-  const deleteBtn = canDelete
-    ? `<button class="delete-problem-btn text-red-400 hover:text-red-600 transition-colors ml-2 shrink-0" data-id="${p.id}" title="Delete problem">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.021-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
-       </button>`
-    : '';
+// ── Problem card ──────────────────────────────────────────────────────────────
+function problemCard(p: any, opts: {del?:boolean,apply?:boolean,shortlist?:boolean} = {}) {
+  const canDel = opts.del && (currentRole==='admin'||currentRole==='gov');
+  const delBtn = canDel
+    ? `<button class="delete-problem-btn text-gray-400 hover:text-red-600 transition-colors" data-id="${p.id}" title="Delete problem" style="padding:4px;">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.021-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+       </button>` : '';
+
+  const store = getStore();
+  const shortlistSection = (opts.shortlist && p.status==='matched' && (currentRole==='gov'||currentRole==='admin'))
+    ? shortlistBlock(p, store) : '';
+  const applySection = (opts.apply && p.status==='open' && currentRole==='startup')
+    ? applyBlock(p) : '';
 
   return `
-  <div class="glass glass-hover p-4 rounded-xl" data-problem-id="${p.id}">
+  <div class="bg-white border border-gray-200 rounded-md p-4 transition-all hover:border-navy-400 hover:shadow-sm" data-problem-id="${p.id}">
     <div class="flex items-start gap-3">
-      <div class="w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br from-navy-100 to-navy-200 flex items-center justify-center text-lg">${catIcon(p.category)}</div>
+      <div style="font-size:22px;width:36px;text-align:center;padding-top:2px;">${CAT_ICON[p.category]??'📋'}</div>
       <div class="flex-1 min-w-0">
-        <div class="flex items-start justify-between gap-2 flex-wrap">
-          <h3 class="font-display font-bold text-navy-900 text-base leading-tight">${p.title}</h3>
-          <div class="flex items-center gap-1 shrink-0">
-            ${statusBadge(p.status)}
-            ${deleteBtn}
-          </div>
+        <div class="flex items-start justify-between gap-2 flex-wrap mb-1.5">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#0c1b3a;margin:0;">${p.title}</h3>
+          <div class="flex items-center gap-2 shrink-0">${badge(p.status)}${delBtn}</div>
         </div>
-        <p class="text-xs text-gray-500 mt-0.5 font-medium">${p.department} · ${p.city_ulb}</p>
-        <p class="text-sm text-gray-600 mt-1.5 line-clamp-2">${p.description}</p>
-        <div class="mt-2 inline-flex items-center gap-1.5 bg-navy-50 border border-navy-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-navy-700">
-          <span>📏</span>
-          <span>${p.metric_name}: <strong>${p.baseline_value}${p.metric_unit}</strong> baseline</span>
-          <span class="text-gray-400">(${p.metric_direction === 'lower_is_better' ? '⬇️ lower is better' : '⬆️ higher is better'})</span>
+        <p style="font-size:12px;color:#6c757d;font-weight:600;margin:0 0 6px 0;">${p.department} &nbsp;·&nbsp; ${p.city_ulb} &nbsp;·&nbsp; ${p.category}</p>
+        <p style="font-size:14px;color:#343a40;margin:0 0 10px 0;line-height:1.6;">${p.description}</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:#f0f4f8;border:1px solid #b8cde3;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:600;color:#163561;">
+          Baseline metric: <strong>${p.metric_name}</strong> = ${p.baseline_value}${p.metric_unit}
+          &nbsp;<span style="color:#6c757d;">(${p.metric_direction==='lower_is_better'?'lower is better':'higher is better'})</span>
         </div>
-        ${opts.showApply && p.status === 'open' && currentRole === 'startup' ? applyFormHtml(p) : ''}
-        ${opts.showShortlist && p.status === 'matched' && currentRole === 'gov' ? shortlistSectionHtml(p) : ''}
+        ${applySection}${shortlistSection}
       </div>
     </div>
   </div>`;
 }
 
-function applyFormHtml(p: any) {
+function applyBlock(p: any) {
   return `
-  <div class="mt-3 border-t border-gray-100 pt-3">
-    <div id="apply-form-${p.id}" class="space-y-2">
-      <input type="text" placeholder="Your startup name" id="apply-name-${p.id}"
-        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"/>
-      <textarea placeholder="Your pitch (3–5 sentences — what you'll do and why it'll work)" id="apply-pitch-${p.id}"
-        rows="2" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"></textarea>
-      <button class="apply-submit-btn w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-2 rounded-lg text-sm hover:from-orange-600 hover:to-orange-700 transition-all" data-pid="${p.id}">
-        🚀 Apply with a solution
-      </button>
-      <div id="apply-msg-${p.id}" class="hidden text-sm text-green-700 bg-green-50 rounded px-2 py-1">Application submitted!</div>
-    </div>
+  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #dee2e6;">
+    <p style="font-size:12px;font-weight:700;color:#343a40;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.05em;">Apply with a Solution</p>
+    <input type="text" id="apply-name-${p.id}" placeholder="Your startup / organisation name"
+      style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:8px 10px;font-size:13px;color:#212529;margin-bottom:8px;box-sizing:border-box;" />
+    <textarea id="apply-pitch-${p.id}" placeholder="Describe your approach in 3–5 sentences. What will you do and why will it work?" rows="2"
+      style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:8px 10px;font-size:13px;color:#212529;resize:none;box-sizing:border-box;"></textarea>
+    <button class="apply-submit-btn" data-pid="${p.id}"
+      style="margin-top:8px;width:100%;background:#f77f17;color:#fff;font-weight:700;font-size:13px;padding:9px;border:none;border-radius:4px;cursor:pointer;">
+      Submit Application →
+    </button>
+    <div id="apply-msg-${p.id}" style="display:none;margin-top:6px;font-size:13px;color:#166534;background:#dcfce7;border:1px solid #bbf7d0;border-radius:4px;padding:6px 10px;">Application submitted successfully.</div>
   </div>`;
 }
 
-function shortlistSectionHtml(p: any) {
-  const store = getStore();
+function shortlistBlock(p: any, store: any) {
   const apps = store.applications.filter((a: any) => a.problem_id === p.id);
-  if (!apps.length) return '';
+  if (!apps.length) return `<div style="margin-top:10px;font-size:12px;color:#6c757d;">No applications yet.</div>`;
   return `
-  <div class="mt-3 border-t border-gray-100 pt-3">
-    <p class="text-xs font-bold text-gray-600 mb-2 uppercase tracking-wide">Applications (${apps.length})</p>
-    <div class="space-y-2">
-      ${apps.map((a: any) => `
-        <div class="bg-gray-50 rounded-lg p-2.5 border border-gray-200">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <span class="font-semibold text-sm text-navy-800">${a.startup_name}</span>
-            ${a.status === 'shortlisted'
-              ? `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-semibold">⭐ Shortlisted</span>`
-              : `<button class="shortlist-btn text-xs bg-navy-700 text-white px-3 py-1 rounded-lg font-semibold hover:bg-navy-900 transition-colors" data-aid="${a.id}" data-pid="${p.id}">Shortlist → Start pilot</button>`
-            }
-          </div>
-          <p class="text-xs text-gray-600 mt-1">${a.pitch}</p>
+  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #dee2e6;">
+    <p style="font-size:12px;font-weight:700;color:#343a40;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.05em;">Applications (${apps.length})</p>
+    ${apps.map((a: any) => `
+      <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;padding:10px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <span style="font-weight:700;font-size:13px;color:#0c1b3a;">${a.startup_name}</span>
+          ${a.status==='shortlisted'
+            ? `<span style="font-size:11px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;border-radius:3px;padding:2px 8px;font-weight:600;">Shortlisted</span>`
+            : `<button class="shortlist-btn" data-aid="${a.id}" data-pid="${p.id}"
+                style="font-size:12px;background:#1e4478;color:#fff;border:none;border-radius:4px;padding:4px 12px;cursor:pointer;font-weight:600;">
+                Shortlist &amp; Start Pilot →
+               </button>`}
         </div>
-      `).join('')}
-    </div>
+        <p style="font-size:13px;color:#495057;margin:6px 0 0 0;line-height:1.5;">${a.pitch}</p>
+      </div>`).join('')}
   </div>`;
 }
 
-// ─── SVG Bar chart ────────────────────────────────────────────────────────────
+// ── SVG bar chart ─────────────────────────────────────────────────────────────
 function barChart(p: any, pilot: any) {
-  const baseline = p.baseline_value;
-  const after = pilot.after_value;
-  const unit = p.metric_unit;
-  const maxVal = Math.max(baseline, after) * 1.2;
-  const W = 180, H = 100, barW = 50, gap = 30, padLeft = 20, padBottom = 28;
-  const toY = (v: number) => H - padBottom - ((v / maxVal) * (H - padBottom - 8));
-  const bH = H - padBottom - toY(baseline);
-  const aH = H - padBottom - toY(after);
-  const bX = padLeft;
-  const aX = padLeft + barW + gap;
-
-  let impText = '';
-  if (p.metric_direction === 'lower_is_better') {
-    const imp = Math.round(((baseline - after) / baseline) * 100);
-    impText = `<text x="${W/2}" y="12" text-anchor="middle" font-size="11" font-weight="700" fill="${imp > 0 ? '#16a34a' : '#dc2626'}">${imp > 0 ? '▲' : '▼'} ${Math.abs(imp)}% improvement</text>`;
-  } else {
-    const imp = Math.round(((after - baseline) / baseline) * 100);
-    impText = `<text x="${W/2}" y="12" text-anchor="middle" font-size="11" font-weight="700" fill="${imp > 0 ? '#16a34a' : '#dc2626'}">${imp > 0 ? '▲' : '▼'} ${Math.abs(imp)}% improvement</text>`;
-  }
-
+  const b = p.baseline_value, a = pilot.after_value, u = p.metric_unit;
+  const maxV = Math.max(b, a) * 1.25;
+  const H = 90, bW = 48, gap = 36, pL = 10, pB = 24;
+  const toY = (v: number) => H - pB - ((v/maxV)*(H-pB-10));
+  const bH = H-pB-toY(b), aH = H-pB-toY(a);
+  const aX = pL+bW+gap;
+  let impPct: number, better: boolean;
+  if (p.metric_direction==='lower_is_better') { impPct=Math.round(((b-a)/b)*100); better=impPct>0; }
+  else { impPct=Math.round(((a-b)/b)*100); better=impPct>0; }
+  const impColor = better ? '#16a34a' : '#dc2626';
+  const W = pL+bW+gap+bW+pL;
   return `
-  <svg viewBox="0 0 ${W} ${H+16}" width="${W}" height="${H+16}" xmlns="http://www.w3.org/2000/svg" class="mt-1" role="img" aria-label="Before/after chart">
-    ${impText}
-    <!-- Baseline bar -->
-    <rect x="${bX}" y="${toY(baseline)+16}" width="${barW}" height="${bH}" rx="4" fill="#94a3b8"/>
-    <text x="${bX + barW/2}" y="${toY(baseline)+14}" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">${baseline}${unit}</text>
-    <text x="${bX + barW/2}" y="${H+12}" text-anchor="middle" font-size="10" fill="#64748b">Before</text>
-    <!-- After bar -->
-    <rect x="${aX}" y="${toY(after)+16}" width="${barW}" height="${aH}" rx="4" fill="#f97316"/>
-    <text x="${aX + barW/2}" y="${toY(after)+14}" text-anchor="middle" font-size="11" font-weight="600" fill="#ea580c">${after}${unit}</text>
-    <text x="${aX + barW/2}" y="${H+12}" text-anchor="middle" font-size="10" fill="#64748b">After</text>
+  <svg viewBox="0 0 ${W} ${H+20}" width="${W}" height="${H+20}" xmlns="http://www.w3.org/2000/svg">
+    <text x="${W/2}" y="11" text-anchor="middle" font-size="11" font-weight="700" fill="${impColor}">${better?'▲':'▼'} ${Math.abs(impPct)}% ${better?'improvement':'regression'}</text>
+    <rect x="${pL}" y="${toY(b)+14}" width="${bW}" height="${bH}" rx="3" fill="#94a3b8"/>
+    <text x="${pL+bW/2}" y="${toY(b)+12}" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">${b}${u}</text>
+    <text x="${pL+bW/2}" y="${H+16}" text-anchor="middle" font-size="10" fill="#6c757d">Before</text>
+    <rect x="${aX}" y="${toY(a)+14}" width="${bW}" height="${aH}" rx="3" fill="${better?'#16a34a':'#dc2626'}"/>
+    <text x="${aX+bW/2}" y="${toY(a)+12}" text-anchor="middle" font-size="11" font-weight="600" fill="${better?'#14532d':'#7f1d1d'}">${a}${u}</text>
+    <text x="${aX+bW/2}" y="${H+16}" text-anchor="middle" font-size="10" fill="#6c757d">After</text>
   </svg>`;
 }
 
-// ─── RENDER FUNCTIONS ─────────────────────────────────────────────────────────
+// ── RENDERERS ─────────────────────────────────────────────────────────────────
+let funnelFilter: string|undefined;
 
-function renderOverview(funnelFilter?: string) {
+function renderOverview() {
   const store = getStore();
-  const problems = store.problems as any[];
-
-  // Update funnel counts
-  const funnelMap: Record<string, string[]> = {
+  const probs = store.problems as any[];
+  const fMap: Record<string,string[]> = {
     posted:  ['open','matched','pilot_running','pilot_complete','approved_for_scale','not_approved'],
     matched: ['matched','pilot_running','pilot_complete','approved_for_scale','not_approved'],
     running: ['pilot_running'],
     decided: ['pilot_complete','approved_for_scale','not_approved'],
   };
-  ['posted','matched','running','decided'].forEach(k => {
-    const el = document.querySelector(`[data-funnel-count="${k}"]`);
-    if (el) el.textContent = String(problems.filter(p => funnelMap[k].includes(p.status)).length);
+  ['posted','matched','running','decided'].forEach(k=>{
+    const el=document.querySelector(`[data-funnel-count="${k}"]`);
+    if(el) el.textContent=String(probs.filter(p=>fMap[k].includes(p.status)).length);
   });
-
-  // Stat cards
-  document.getElementById('stat-total-problems')!.textContent = String(problems.length);
-  document.getElementById('stat-applications')!.textContent = String(store.applications.length);
-  document.getElementById('stat-pilots-running')!.textContent = String(problems.filter((p:any) => p.status === 'pilot_running').length);
+  const s = (id: string, v: string|number) => { const el=document.getElementById(id); if(el) el.textContent=String(v); };
+  s('stat-total-problems', probs.length);
+  s('stat-applications', store.applications.length);
+  s('stat-pilots-running', probs.filter((p:any)=>p.status==='pilot_running').length);
   const avg = avgImprovement(store);
-  document.getElementById('stat-avg-improvement')!.textContent = avg !== null ? `${avg}%` : '—';
-
-  // Filter label
-  const filterLabel = document.getElementById('overview-filter-label');
-  if (filterLabel) filterLabel.textContent = funnelFilter ? `Filtered: ${funnelFilter}` : '';
-
-  // Problem list
-  let filtered = problems;
-  if (funnelFilter && funnelMap[funnelFilter]) {
-    filtered = problems.filter(p => funnelMap[funnelFilter].includes(p.status));
-  }
-
-  const container = document.getElementById('overview-problem-list')!;
-  if (!filtered.length) {
-    container.innerHTML = `<div class="glass p-8 text-center text-gray-400">No problems found.</div>`;
-    return;
-  }
-  container.innerHTML = filtered.map(p => problemCardHtml(p, { showDelete: true })).join('');
-  attachDeleteListeners(container);
+  s('stat-avg-improvement', avg!==null ? `${avg}%` : '—');
+  const lbl = document.getElementById('overview-filter-label');
+  if(lbl) lbl.textContent = funnelFilter ? `Showing: ${funnelFilter.replace('_',' ')}` : '';
+  let filtered = funnelFilter ? probs.filter(p=>fMap[funnelFilter!].includes(p.status)) : probs;
+  const c = document.getElementById('overview-problem-list')!;
+  c.innerHTML = filtered.length
+    ? filtered.map(p=>problemCard(p,{del:true})).join('')
+    : `<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No problems match this filter.</div>`;
+  attachDelete(c); attachShortlist(c);
 }
 
-function renderGovConsole() {
+function renderGov() {
   const store = getStore();
-  const problems = (store.problems as any[]);
-  const container = document.getElementById('dept-problem-list')!;
-  // For MVP, "department" filter = all problems posted (no real auth)
-  if (!problems.length) {
-    container.innerHTML = `<div class="glass p-8 text-center text-gray-400">No problems posted yet.</div>`;
-    return;
-  }
-  container.innerHTML = problems.map(p => problemCardHtml(p, { showDelete: true, showShortlist: true })).join('');
-  attachDeleteListeners(container);
-  attachShortlistListeners(container);
+  const probs = store.problems as any[];
+  const c = document.getElementById('dept-problem-list')!;
+  c.innerHTML = probs.length
+    ? probs.map(p=>problemCard(p,{del:true,shortlist:true})).join('')
+    : `<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No problems posted yet. Use the form to post your first problem.</div>`;
+  attachDelete(c); attachShortlist(c);
 }
 
 function renderMarketplace() {
   const store = getStore();
-  const problems = (store.problems as any[]).filter(p => p.status === 'open' || p.status === 'matched');
-  const container = document.getElementById('marketplace-list')!;
-  if (!problems.length) {
-    container.innerHTML = `<div class="glass p-8 text-center text-gray-400">No open problems right now. Check back later!</div>`;
-    return;
-  }
-  container.innerHTML = problems.map(p => problemCardHtml(p, { showApply: true })).join('');
-  attachApplyListeners(container);
+  const probs = (store.problems as any[]).filter(p=>p.status==='open'||p.status==='matched');
+  const c = document.getElementById('marketplace-list')!;
+  c.innerHTML = probs.length
+    ? probs.map(p=>problemCard(p,{apply:true})).join('')
+    : `<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No open problems at this time.</div>`;
+  attachApply(c);
 }
 
-function renderPilotCommand() {
+function renderCommand() {
   const store = getStore();
-  const problems = (store.problems as any[]).filter(p => p.status === 'pilot_running');
-  const container = document.getElementById('command-list')!;
-  if (!problems.length) {
-    container.innerHTML = `<div class="glass p-8 text-center text-gray-400 rounded-xl">No pilots currently running.</div>`;
+  const probs = (store.problems as any[]).filter(p=>p.status==='pilot_running');
+  const canRec = currentRole==='gov'||currentRole==='admin';
+  const c = document.getElementById('command-list')!;
+  if(!probs.length){
+    c.innerHTML=`<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No pilots currently running.</div>`;
     return;
   }
-  container.innerHTML = problems.map(p => {
-    const pilot = store.pilotRuns.find((r: any) => r.problem_id === p.id && r.status === 'running');
-    const app = pilot ? store.applications.find((a: any) => a.id === pilot.application_id) : null;
-    const canRecord = currentRole === 'gov' || currentRole === 'admin';
+  c.innerHTML = probs.map(p=>{
+    const pilot = store.pilotRuns.find((r:any)=>r.problem_id===p.id&&r.status==='running');
+    const app   = pilot ? store.applications.find((a:any)=>a.id===pilot.application_id) : null;
     return `
-    <div class="glass p-5 rounded-xl" data-problem-id="${p.id}">
-      <div class="flex items-start gap-3">
-        <div class="w-10 h-10 shrink-0 rounded-xl bg-orange-100 flex items-center justify-center text-lg">${catIcon(p.category)}</div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-start justify-between gap-2 flex-wrap">
-            <h3 class="font-display font-bold text-navy-900 text-base">${p.title}</h3>
-            ${statusBadge(p.status)}
+    <div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:20px;" data-problem-id="${p.id}">
+      <div style="display:flex;align-items:start;gap:12px;">
+        <div style="font-size:22px;width:36px;text-align:center;padding-top:2px;">${CAT_ICON[p.category]??'📋'}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#0c1b3a;margin:0;">${p.title}</h3>
+            ${badge(p.status)}
           </div>
-          <p class="text-xs text-gray-500 font-medium mt-0.5">${p.department} · ${p.city_ulb}</p>
-          <p class="text-sm text-gray-600 mt-1.5">${p.description}</p>
-          ${pilot ? `
-          <div class="mt-3 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm">
-            <span class="font-semibold text-orange-800">🏃 Pilot running:</span>
-            <span class="text-orange-700"> ${pilot.scope_notes} · ${pilot.duration_days} days</span>
-            ${app ? `<span class="text-orange-600"> · Partner: <strong>${app.startup_name}</strong></span>` : ''}
-          </div>` : ''}
-          <div class="mt-2 inline-flex items-center gap-1.5 bg-navy-50 border border-navy-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-navy-700">
-            📏 ${p.metric_name}: <strong>${p.baseline_value}${p.metric_unit}</strong> baseline
+          <p style="font-size:12px;color:#6c757d;font-weight:600;margin:0 0 8px 0;">${p.department} · ${p.city_ulb}</p>
+          <p style="font-size:14px;color:#343a40;margin:0 0 10px 0;line-height:1.6;">${p.description}</p>
+          ${pilot?`<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:4px;padding:8px 12px;font-size:13px;margin-bottom:10px;">
+            <strong style="color:#c2410c;">Pilot in progress:</strong>
+            <span style="color:#9a3412;"> ${pilot.scope_notes} &nbsp;·&nbsp; ${pilot.duration_days} days</span>
+            ${app?`&nbsp;·&nbsp;<strong style="color:#9a3412;">Partner: ${app.startup_name}</strong>`:''}
+          </div>`:''}
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#f0f4f8;border:1px solid #b8cde3;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:600;color:#163561;margin-bottom:${canRec?'16px':'0'};">
+            Baseline: <strong>${p.metric_name}</strong> = ${p.baseline_value}${p.metric_unit}
           </div>
-          ${canRecord ? `
-          <div class="mt-4 border-t border-gray-100 pt-4 space-y-3">
-            <p class="text-xs font-bold text-gray-600 uppercase tracking-wide">Record pilot result</p>
-            <div class="grid grid-cols-2 gap-3">
+          ${canRec?`
+          <div style="border-top:1px solid #dee2e6;padding-top:14px;">
+            <p style="font-size:12px;font-weight:700;color:#343a40;margin:0 0 10px 0;text-transform:uppercase;letter-spacing:0.05em;">Record Pilot Result</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
               <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1">After-pilot value *</label>
-                <input type="number" id="after-val-${p.id}" placeholder="Baseline was ${p.baseline_value}${p.metric_unit}"
-                  class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"/>
+                <label style="display:block;font-size:12px;font-weight:600;color:#495057;margin-bottom:4px;">After-pilot value *</label>
+                <input type="number" id="after-val-${p.id}" placeholder="Was ${p.baseline_value}${p.metric_unit}"
+                  style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:7px 10px;font-size:13px;box-sizing:border-box;" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1">Field notes</label>
-                <input type="text" id="field-notes-${p.id}" placeholder="Anything worth flagging?"
-                  class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"/>
+                <label style="display:block;font-size:12px;font-weight:600;color:#495057;margin-bottom:4px;">Field notes</label>
+                <input type="text" id="field-notes-${p.id}" placeholder="Observations from the field"
+                  style="width:100%;border:1.5px solid #ced4da;border-radius:4px;padding:7px 10px;font-size:13px;box-sizing:border-box;" />
               </div>
             </div>
-            <button class="record-result-btn w-full bg-gradient-to-r from-navy-700 to-navy-800 text-white font-bold py-2.5 rounded-lg text-sm hover:from-navy-800 hover:to-navy-900 transition-all shadow-md"
-              data-pid="${p.id}">📋 Record pilot result</button>
-            <div id="record-msg-${p.id}" class="hidden text-sm text-green-700 bg-green-50 rounded px-2 py-1">Result recorded! Problem moved to Proof Ledger.</div>
-          </div>` : ''}
+            <button class="record-result-btn" data-pid="${p.id}"
+              style="width:100%;background:#1e4478;color:#fff;font-weight:700;font-size:13px;padding:10px;border:none;border-radius:4px;cursor:pointer;">
+              Record Pilot Result →
+            </button>
+            <div id="record-msg-${p.id}" style="display:none;margin-top:8px;font-size:13px;color:#166534;background:#dcfce7;border:1px solid #bbf7d0;border-radius:4px;padding:7px 10px;">
+              Result recorded. Problem moved to Proof Ledger.
+            </div>
+          </div>`:''}
         </div>
       </div>
     </div>`;
   }).join('');
 
-  // Attach record result listeners
-  container.querySelectorAll<HTMLButtonElement>('.record-result-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const pid = btn.dataset.pid!;
-      const afterInput = document.getElementById(`after-val-${pid}`) as HTMLInputElement;
-      const notesInput = document.getElementById(`field-notes-${pid}`) as HTMLInputElement;
-      const afterVal = afterInput?.value.trim();
-      if (!afterVal) { afterInput?.focus(); return; }
-      recordPilotResult(pid, Number(afterVal), notesInput?.value ?? '');
-      const msg = document.getElementById(`record-msg-${pid}`);
-      if (msg) { msg.classList.remove('hidden'); }
-      setTimeout(() => renderAll(), 800);
+  c.querySelectorAll<HTMLButtonElement>('.record-result-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const pid=btn.dataset.pid!;
+      const av=(document.getElementById(`after-val-${pid}`) as HTMLInputElement)?.value.trim();
+      if(!av){ alert('Please enter the after-pilot value.'); return; }
+      const fn=(document.getElementById(`field-notes-${pid}`) as HTMLInputElement)?.value??'';
+      recordPilotResult(pid, Number(av), fn);
+      const msg=document.getElementById(`record-msg-${pid}`);
+      if(msg) msg.style.display='block';
+      setTimeout(()=>renderAll(), 700);
     });
   });
 }
 
-function renderProofLedger() {
+function renderLedger() {
   const store = getStore();
-  const problems = (store.problems as any[]).filter(p =>
-    ['pilot_complete','approved_for_scale','not_approved'].includes(p.status)
-  );
-  const container = document.getElementById('ledger-list')!;
-  if (!problems.length) {
-    container.innerHTML = `<div class="glass p-8 text-center text-gray-400 rounded-xl">No completed pilots yet. Results will appear here.</div>`;
+  const probs = (store.problems as any[]).filter(p=>['pilot_complete','approved_for_scale','not_approved'].includes(p.status));
+  const canDec = currentRole==='gov'||currentRole==='admin';
+  const c = document.getElementById('ledger-list')!;
+  if(!probs.length){
+    c.innerHTML=`<div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:40px;text-align:center;color:#6c757d;font-size:14px;">No completed pilots yet. Results will appear here once pilots are concluded.</div>`;
     return;
   }
-  const canDecide = currentRole === 'gov' || currentRole === 'admin';
-  container.innerHTML = problems.map(p => {
-    const pilot = store.pilotRuns.find((r: any) => r.problem_id === p.id && r.status === 'complete');
-    const decision = store.scaleDecisions.find((d: any) => d.problem_id === p.id);
-    const chart = pilot && pilot.after_value !== null ? barChart(p, pilot) : '';
-    const decisionBtns = canDecide && p.status === 'pilot_complete' ? `
-      <div class="flex gap-2 mt-3 flex-wrap">
-        <button class="scale-decision-btn flex-1 min-w-fit bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg text-sm transition-all shadow-md" data-pid="${p.id}" data-decision="approved_for_scale">✅ Approved for scale-up</button>
-        <button class="scale-decision-btn flex-1 min-w-fit bg-red-100 hover:bg-red-200 text-red-800 font-bold py-2.5 px-4 rounded-lg text-sm transition-all border border-red-200" data-pid="${p.id}" data-decision="not_approved">❌ Not approved</button>
-      </div>` : '';
-    const decisionBlock = decision ? `
-      <div class="mt-3 p-3 rounded-lg ${decision.decision === 'approved_for_scale' ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}">
-        <p class="text-sm font-bold ${decision.decision === 'approved_for_scale' ? 'text-green-800' : 'text-red-800'}">
-          ${decision.decision === 'approved_for_scale' ? '✅ Approved for scale-up' : '❌ Not approved'}
-        </p>
-        ${decision.notes ? `<p class="text-xs text-gray-600 mt-1">${decision.notes}</p>` : ''}
-      </div>` : '';
+  c.innerHTML = probs.map(p=>{
+    const pilot=store.pilotRuns.find((r:any)=>r.problem_id===p.id&&r.status==='complete');
+    const dec=store.scaleDecisions.find((d:any)=>d.problem_id===p.id);
+    const chart=pilot&&pilot.after_value!==null ? barChart(p,pilot) : '';
+    const decBlock=dec?`
+      <div style="margin-top:12px;padding:10px 14px;border-radius:4px;${dec.decision==='approved_for_scale'?'background:#dcfce7;border:1px solid #bbf7d0;':'background:#fee2e2;border:1px solid #fecaca;'}">
+        <p style="font-size:13px;font-weight:700;margin:0;color:${dec.decision==='approved_for_scale'?'#166534':'#991b1b'};">${dec.decision==='approved_for_scale'?'✅ Approved for Scale-Up':'❌ Not Approved for Scale'}</p>
+        ${dec.notes?`<p style="font-size:12px;color:#495057;margin:4px 0 0 0;">${dec.notes}</p>`:''}
+      </div>`:
+      (canDec&&p.status==='pilot_complete'?`
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="scale-decision-btn" data-pid="${p.id}" data-decision="approved_for_scale"
+          style="flex:1;min-width:160px;background:#138808;color:#fff;font-weight:700;font-size:13px;padding:9px 16px;border:none;border-radius:4px;cursor:pointer;">
+          ✅ Approve for Scale-Up
+        </button>
+        <button class="scale-decision-btn" data-pid="${p.id}" data-decision="not_approved"
+          style="flex:1;min-width:120px;background:#fff;color:#991b1b;font-weight:700;font-size:13px;padding:9px 16px;border:1.5px solid #fca5a5;border-radius:4px;cursor:pointer;">
+          ❌ Not Approved
+        </button>
+      </div>
+      <div id="ledger-msg-${p.id}" style="display:none;margin-top:8px;font-size:13px;color:#166534;background:#dcfce7;border:1px solid #bbf7d0;border-radius:4px;padding:7px 10px;">Decision recorded.</div>
+      `:'');
     return `
-    <div class="glass p-5 rounded-xl" data-problem-id="${p.id}">
-      <div class="flex items-start gap-3">
-        <div class="w-10 h-10 shrink-0 rounded-xl bg-gray-100 flex items-center justify-center text-lg">${catIcon(p.category)}</div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-start justify-between gap-2 flex-wrap">
-            <h3 class="font-display font-bold text-navy-900 text-base">${p.title}</h3>
-            ${statusBadge(p.status)}
+    <div style="background:#fff;border:1px solid #dee2e6;border-radius:6px;padding:20px;" data-problem-id="${p.id}">
+      <div style="display:flex;align-items:start;gap:12px;">
+        <div style="font-size:22px;width:36px;text-align:center;padding-top:2px;">${CAT_ICON[p.category]??'📋'}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:#0c1b3a;margin:0;">${p.title}</h3>
+            ${badge(p.status)}
           </div>
-          <p class="text-xs text-gray-500 font-medium mt-0.5">${p.department} · ${p.city_ulb}</p>
-          <p class="text-sm text-gray-600 mt-1.5">${p.description}</p>
-          <div class="mt-2 inline-flex items-center gap-1.5 bg-navy-50 border border-navy-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-navy-700">
-            📏 ${p.metric_name}: <strong>${p.baseline_value}${p.metric_unit}</strong> baseline
+          <p style="font-size:12px;color:#6c757d;font-weight:600;margin:0 0 8px 0;">${p.department} · ${p.city_ulb}</p>
+          <p style="font-size:14px;color:#343a40;margin:0 0 10px 0;line-height:1.6;">${p.description}</p>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#f0f4f8;border:1px solid #b8cde3;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:600;color:#163561;">
+            Baseline: <strong>${p.metric_name}</strong> = ${p.baseline_value}${p.metric_unit}
           </div>
-          ${chart ? `<div class="mt-3">${chart}</div>` : ''}
-          ${pilot?.field_notes ? `<p class="mt-2 text-xs text-gray-500 italic">"${pilot.field_notes}"</p>` : ''}
-          ${decisionBlock}
-          ${decisionBtns}
-          <div id="ledger-msg-${p.id}" class="hidden text-sm text-green-700 bg-green-50 rounded px-2 py-1 mt-2">Decision recorded!</div>
+          ${chart?`<div style="margin-top:12px;">${chart}</div>`:''}
+          ${pilot?.field_notes?`<p style="margin-top:8px;font-size:13px;color:#495057;font-style:italic;">Field note: "${pilot.field_notes}"</p>`:''}
+          ${decBlock}
         </div>
       </div>
     </div>`;
   }).join('');
 
-  container.querySelectorAll<HTMLButtonElement>('.scale-decision-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const pid = btn.dataset.pid!;
-      const dec = btn.dataset.decision!;
-      makeScaleDecision(pid, dec, '');
-      const msg = document.getElementById(`ledger-msg-${pid}`);
-      if (msg) { msg.classList.remove('hidden'); }
-      setTimeout(() => renderAll(), 600);
+  c.querySelectorAll<HTMLButtonElement>('.scale-decision-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const pid=btn.dataset.pid!, dec=btn.dataset.decision!;
+      makeScaleDecision(pid,dec,'');
+      const msg=document.getElementById(`ledger-msg-${pid}`);
+      if(msg) msg.style.display='block';
+      setTimeout(()=>renderAll(),600);
     });
   });
 }
 
-// ─── Attach listeners ─────────────────────────────────────────────────────────
-
-function attachDeleteListeners(container: HTMLElement) {
-  container.querySelectorAll<HTMLButtonElement>('.delete-problem-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+// ── Listener helpers ──────────────────────────────────────────────────────────
+function attachDelete(c: HTMLElement) {
+  c.querySelectorAll<HTMLButtonElement>('.delete-problem-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
       e.stopPropagation();
-      const id = btn.dataset.id!;
-      if (confirm('Delete this problem and all related data?')) {
-        deleteProblem(id);
-        renderAll();
-      }
+      if(confirm('Delete this problem and all related data?')){ deleteProblem(btn.dataset.id!); renderAll(); }
     });
   });
 }
-
-function attachApplyListeners(container: HTMLElement) {
-  container.querySelectorAll<HTMLButtonElement>('.apply-submit-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const pid = btn.dataset.pid!;
-      const nameEl = document.getElementById(`apply-name-${pid}`) as HTMLInputElement;
-      const pitchEl = document.getElementById(`apply-pitch-${pid}`) as HTMLTextAreaElement;
-      if (!nameEl?.value.trim() || !pitchEl?.value.trim()) {
-        alert('Please fill in your startup name and pitch.');
-        return;
-      }
-      addApplication(pid, nameEl.value.trim(), pitchEl.value.trim());
-      const msg = document.getElementById(`apply-msg-${pid}`);
-      if (msg) { msg.classList.remove('hidden'); }
-      btn.disabled = true;
-      btn.textContent = '✅ Applied!';
-      setTimeout(() => renderAll(), 800);
+function attachApply(c: HTMLElement) {
+  c.querySelectorAll<HTMLButtonElement>('.apply-submit-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const pid=btn.dataset.pid!;
+      const n=(document.getElementById(`apply-name-${pid}`) as HTMLInputElement)?.value.trim();
+      const pitch=(document.getElementById(`apply-pitch-${pid}`) as HTMLTextAreaElement)?.value.trim();
+      if(!n||!pitch){ alert('Please fill in both your name and pitch.'); return; }
+      addApplication(pid,n,pitch);
+      const msg=document.getElementById(`apply-msg-${pid}`);
+      if(msg) msg.style.display='block';
+      btn.disabled=true; btn.textContent='Application Submitted';
+      setTimeout(()=>renderAll(),800);
     });
   });
 }
-
-function attachShortlistListeners(container: HTMLElement) {
-  container.querySelectorAll<HTMLButtonElement>('.shortlist-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const aid = btn.dataset.aid!;
-      const pid = btn.dataset.pid!;
-      // Also start pilot automatically (basic MVP flow)
+function attachShortlist(c: HTMLElement) {
+  c.querySelectorAll<HTMLButtonElement>('.shortlist-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const aid=btn.dataset.aid!, pid=btn.dataset.pid!;
       shortlistApplication(aid);
-      const app = getStore().applications.find((a: any) => a.id === aid);
-      if (app) {
-        const scope = prompt('Pilot scope notes (e.g. "6 tankers, 2 wards"):') ?? 'To be defined';
-        const days = parseInt(prompt('Pilot duration in days:') ?? '21', 10) || 21;
-        startPilot(pid, aid, scope, days);
-      }
+      const scope=prompt('Enter pilot scope notes (e.g. "6 tankers, 2 wards"):')?? 'To be defined';
+      const days=parseInt(prompt('Pilot duration in days (e.g. 21):')?? '21',10)||21;
+      startPilot(pid,aid,scope,days);
       renderAll();
     });
   });
 }
 
-// ─── Post problem form ────────────────────────────────────────────────────────
-document.getElementById('post-problem-form')?.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const get = (id: string) => (document.getElementById(id) as HTMLInputElement)?.value?.trim();
-  const title = get('f-title');
-  const dept  = get('f-department');
-  const city  = get('f-city');
-  const desc  = get('f-description');
-  const metric = get('f-metric-name');
-  const unit  = get('f-metric-unit');
-  const baseline = parseFloat(get('f-baseline') || '');
-
-  const errEl = document.getElementById('form-error')!;
-  if (!title || !dept || !city || !desc || !metric || !unit || isNaN(baseline)) {
-    errEl.textContent = 'Please fill in all required fields.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  errEl.classList.add('hidden');
-
-  addProblem({
-    title, department: dept, city_ulb: city,
-    category: (document.getElementById('f-category') as HTMLSelectElement)?.value ?? 'Other civic issue',
-    description: desc,
-    metric_name: metric,
-    metric_unit: unit,
-    metric_direction: (document.getElementById('f-direction') as HTMLSelectElement)?.value ?? 'lower_is_better',
-    baseline_value: baseline,
-    posted_by: 'current-user',
+// ── Funnel filter ─────────────────────────────────────────────────────────────
+document.querySelectorAll<HTMLButtonElement>('[data-funnel]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const k=btn.dataset.funnel!;
+    funnelFilter = funnelFilter===k ? undefined : k;
+    if(activeTab!=='overview') activateTab('overview');
+    else renderOverview();
   });
+});
 
+// ── Form submit ───────────────────────────────────────────────────────────────
+document.getElementById('post-problem-form')?.addEventListener('submit',e=>{
+  e.preventDefault();
+  const g=(id:string)=>(document.getElementById(id) as HTMLInputElement)?.value?.trim();
+  const title=g('f-title'),dept=g('f-department'),city=g('f-city'),desc=g('f-description'),metric=g('f-metric-name'),unit=g('f-metric-unit');
+  const baseline=parseFloat(g('f-baseline')||'');
+  const err=document.getElementById('form-error')!;
+  if(!title||!dept||!city||!desc||!metric||!unit||isNaN(baseline)){
+    err.textContent='Please fill in all required fields marked with *.'; err.style.display='block'; return;
+  }
+  err.style.display='none';
+  addProblem({
+    title, department:dept, city_ulb:city,
+    category:(document.getElementById('f-category') as HTMLSelectElement)?.value??'Other civic issue',
+    description:desc, metric_name:metric, metric_unit:unit,
+    metric_direction:(document.getElementById('f-direction') as HTMLSelectElement)?.value??'lower_is_better',
+    baseline_value:baseline, posted_by:'current-user',
+  });
   (document.getElementById('post-problem-form') as HTMLFormElement).reset();
-  document.getElementById('form-success')!.classList.remove('hidden');
-  setTimeout(() => document.getElementById('form-success')!.classList.add('hidden'), 3000);
+  const ok=document.getElementById('form-success')!; ok.style.display='block';
+  setTimeout(()=>{ ok.style.display='none'; },3500);
   renderAll();
 });
 
-// ─── Funnel click filter ──────────────────────────────────────────────────────
-let funnelFilter: string | undefined;
-document.querySelectorAll<HTMLButtonElement>('[data-funnel]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const key = btn.dataset.funnel!;
-    if (funnelFilter === key) {
-      funnelFilter = undefined;
-      btn.style.opacity = '';
-    } else {
-      funnelFilter = key;
-    }
-    if (activeTab !== 'overview') activateTab('overview');
-    else renderOverview(funnelFilter);
-  });
-});
-
-// ─── Master render ────────────────────────────────────────────────────────────
+// ── Master render + init ──────────────────────────────────────────────────────
 function renderAll() {
-  renderOverview(funnelFilter);
-  renderGovConsole();
-  renderMarketplace();
-  renderPilotCommand();
-  renderProofLedger();
-  // Reattach role-gated visibility
-  const govOnlyEls = document.querySelectorAll<HTMLElement>('[data-role-gov]');
-  const startupOnlyEls = document.querySelectorAll<HTMLElement>('[data-role-startup]');
-  govOnlyEls.forEach(el => el.style.display = currentRole === 'gov' || currentRole === 'admin' ? '' : 'none');
-  startupOnlyEls.forEach(el => el.style.display = currentRole === 'startup' ? '' : 'none');
+  renderOverview(); renderGov(); renderMarketplace(); renderCommand(); renderLedger();
 }
-
-// ─── Initial render ───────────────────────────────────────────────────────────
 activateTab('overview');
 </script>

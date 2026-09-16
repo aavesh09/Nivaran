@@ -8,7 +8,7 @@ interface Props {
   breadcrumbs?: Array<{ label: string; href?: string }>;
 }
 
-const { title = 'GovPilot Admin', pageTitle, breadcrumbs = [] } = Astro.props;
+const { title = 'Nivaran Admin', pageTitle, breadcrumbs = [] } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 
@@ -34,7 +34,7 @@ const isActive = (href: string) => {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content="GovPilot — Government Innovation Management Platform" />
+    <meta name="description" content="Nivaran — Government Pilot Marketplace" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -67,7 +67,7 @@ const isActive = (href: string) => {
               </svg>
             </div>
             <div>
-              <span class="font-display font-bold text-lg text-navy-900">GovPilot</span>
+              <span class="font-display font-bold text-lg text-navy-900">Nivaran</span>
               <p class="text-xs text-sage-700 font-bold">Admin Portal</p>
             </div>
           </a>
@@ -154,7 +154,7 @@ const isActive = (href: string) => {
 
     <!-- Footer -->
     <footer class="px-4 lg:px-8 py-6 border-t-2 border-navy-200 text-center text-sm text-navy-600 relative z-10 bg-white/50">
-      <p class="font-semibold">GovPilot © 2026 — Government Innovation Management Platform</p>
+      <p class="font-semibold">Nivaran © 2026 — Government Pilot Marketplace</p>
     </footer>
   </body>
 </html>

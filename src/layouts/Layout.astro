@@ -6,7 +6,7 @@ interface Props {
   pageTitle?: string;
 }
 
-const { title = 'PilotSetu', pageTitle } = Astro.props;
+const { pageTitle } = Astro.props;
 ---
 
 <!doctype html>
@@ -17,25 +17,18 @@ const { title = 'PilotSetu', pageTitle } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content="PilotSetu — Proof before scale. A marketplace between government departments and startups." />
-    <meta name="title" content="PilotSetu — Proof before scale" />
+    <meta name="description" content="Nivaran — Government Pilot Marketplace. Proof before scale." />
+    <meta name="title" content="Nivaran — Government Pilot Marketplace" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <title>{pageTitle ? `${pageTitle} — PilotSetu` : 'PilotSetu — Proof before scale'}</title>
+    <title>{pageTitle ? `${pageTitle} — Nivaran` : 'Nivaran — Government Pilot Marketplace'}</title>
   </head>
-  <body>
-    <!-- Background blobs -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
-      <div class="blob blob-1"></div>
-      <div class="blob blob-2"></div>
-      <div class="blob blob-3"></div>
-    </div>
-
-    <div class="relative z-10 min-h-screen flex flex-col">
+  <body style="background:#f1f3f5;">
+    <div class="min-h-screen flex flex-col">
       <slot />
     </div>
   </body>

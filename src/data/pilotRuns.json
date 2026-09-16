@@ -1,10 +1,10 @@
 [
   {
     "id": "pilot-001",
-    "problem_id": "prob-001",
-    "application_id": "app-003",
-    "scope_notes": "2 wards, 6 collection vehicles, IoT sensors on 120 bins",
-    "duration_days": 21,
+    "problem_id": "prob-002",
+    "application_id": "app-002",
+    "scope_notes": "Pilot running on 25 traffic light intersections along the Outer Ring Road corridor in Bangalore (out of 353 total city intersections).",
+    "duration_days": 30,
     "start_date": "2026-08-25",
     "after_value": null,
     "field_notes": null,
@@ -12,24 +12,24 @@
   },
   {
     "id": "pilot-002",
-    "problem_id": "prob-005",
-    "application_id": "app-004",
-    "scope_notes": "3 mobile clinics, 5 wards, WhatsApp notification to 4,200 registered households",
-    "duration_days": 42,
+    "problem_id": "prob-003",
+    "application_id": "app-003",
+    "scope_notes": "Deployed smart bin sensors & vehicle GPS tracking across Sector 1 to Sector 10 in Gandhinagar to close the MSW collection gap.",
+    "duration_days": 45,
     "start_date": "2026-07-28",
-    "after_value": 71,
-    "field_notes": "Strong uptake in Wards 4 & 5. Ward 2 needed extra community outreach — added 2 health workers mid-pilot.",
+    "after_value": 6,
+    "field_notes": "Uncollected daily waste gap dropped dramatically from 30 MT/day baseline down to 6 MT/day during the 45-day trial period.",
     "status": "complete"
   },
   {
     "id": "pilot-003",
-    "problem_id": "prob-006",
-    "application_id": "app-005",
-    "scope_notes": "40 AQI nodes across 2 districts, public dashboard + SMS alerts",
+    "problem_id": "prob-001",
+    "application_id": "app-001",
+    "scope_notes": "30-day pilot facility established at Sector 30 waste dump site in Gandhinagar featuring automated segregation and rapid composting.",
     "duration_days": 60,
     "start_date": "2026-06-22",
-    "after_value": 58,
-    "field_notes": "Coverage jumped from 12% to 58% of wards. Node maintenance requires monthly calibration — factored into scale-up cost.",
+    "after_value": 65,
+    "field_notes": "MSW processing & recycling volume jumped from 15 MT/day (2017-18 baseline) to 65 MT/day, processing 68% of Gandhinagar's total generated waste.",
     "status": "complete"
   }
 ]

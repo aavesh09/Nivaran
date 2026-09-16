@@ -6,7 +6,7 @@
  * open → matched → pilot_running → pilot_complete → approved_for_scale | not_approved
  */
 
-const STORE_KEY = 'pilotsetu_store';
+const STORE_KEY = 'nivaran_store_v2';
 
 /** @returns {import('./store').Store} */
 export function getStore() {
